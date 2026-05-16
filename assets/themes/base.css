@@ -1,0 +1,267 @@
+/* Base Theme for Soplos Kernel Installer - GTK3 CSS */
+/* Structural styles only. Colors come from dark.css or light.css variables. */
+
+/* Application Window */
+window {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+}
+
+.soplos-window {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+}
+
+/* Main Content Area */
+.soplos-content {
+    padding: 20px;
+    background-color: @theme_base_color;
+    border-radius: 8px;
+}
+
+/* HeaderBar */
+headerbar,
+.titlebar {
+    background-color: @theme_base_color;
+    color: @theme_fg_color;
+    border-bottom: 1px solid @borders;
+    box-shadow: none;
+}
+
+headerbar button.titlebutton {
+    color: @theme_fg_color;
+    background: transparent;
+    border: none;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+headerbar button.titlebutton:hover {
+    background-color: @theme_unfocused_bg_color;
+}
+
+headerbar button.titlebutton.close:hover {
+    background-color: @error_color;
+    color: white;
+}
+
+/* Buttons */
+button {
+    border-radius: 6px;
+    padding: 8px 16px;
+    border: 1px solid @borders;
+    background-color: @theme_unfocused_bg_color;
+    color: @theme_fg_color;
+    font-weight: bold;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+button:hover {
+    background-color: @theme_unfocused_bg_color;
+    border-color: @theme_selected_bg_color;
+    color: @theme_fg_color;
+}
+
+button:active {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}
+
+button.suggested-action {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+    border: none;
+}
+
+button.suggested-action:hover {
+    opacity: 0.9;
+}
+
+button.destructive-action {
+    background-color: @error_color;
+    color: white;
+    border: none;
+}
+
+button.destructive-action:hover {
+    background-color: #ff6b6b;
+}
+
+/* Cards and Containers */
+.soplos-card {
+    background-color: @theme_base_color;
+    border: 1px solid @borders;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 3px 0;
+}
+
+/* Footer */
+.soplos-footer {
+    border-top: 1px solid @borders;
+}
+
+/* Section header */
+.section-header {
+    font-weight: bold;
+    font-size: 1.0em;
+    opacity: 0.9;
+}
+
+/* History list */
+.history-list row {
+    border-radius: 6px;
+    margin: 2px 0;
+}
+
+.current-kernel {
+    font-weight: bold;
+}
+
+/* Profile cards */
+.profile-card {
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid alpha(@theme_fg_color, 0.1);
+    background: alpha(@theme_bg_color, 0.5);
+    transition: all 200ms ease;
+    min-width: 130px;
+}
+
+.profile-card:hover {
+    border-color: alpha(@theme_selected_bg_color, 0.5);
+    background: alpha(@theme_selected_bg_color, 0.1);
+}
+
+.profile-card:checked {
+    border-color: @theme_selected_bg_color;
+    background: alpha(@theme_selected_bg_color, 0.15);
+    box-shadow: 0 0 0 3px alpha(@theme_selected_bg_color, 0.2);
+}
+
+.profile-name {
+    font-weight: bold;
+    font-size: 1.0em;
+}
+
+.profile-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    background: alpha(@theme_selected_bg_color, 0.2);
+}
+
+/* Status and Progress */
+.soplos-status-label {
+    color: @theme_fg_color;
+    font-size: 14px;
+}
+
+progressbar {
+    border-radius: 4px;
+}
+
+progressbar trough {
+    background-color: @theme_base_color;
+    border: 1px solid @borders;
+    border-radius: 4px;
+}
+
+progressbar progress {
+    background-color: @theme_selected_bg_color;
+    border-radius: 4px;
+}
+
+/* LevelBar — Soplos color offsets */
+levelbar {
+    border-radius: 4px;
+}
+
+levelbar trough {
+    background-color: @theme_base_color;
+    border: 1px solid @borders;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+levelbar block.low {
+    background-color: #4caf50;
+    border-radius: 3px;
+}
+
+levelbar block.high {
+    background-color: @soplos_orange;
+    border-radius: 3px;
+}
+
+levelbar block.full {
+    background-color: @error_color;
+    border-radius: 3px;
+}
+
+levelbar block.empty {
+    background-color: transparent;
+}
+
+/* Text styles */
+.dim-label {
+    color: @insensitive_fg_color;
+}
+
+label {
+    color: @theme_fg_color;
+}
+
+/* Separators */
+separator {
+    background-color: @borders;
+    margin: 6px 0;
+}
+
+/* Scrolled windows */
+scrolledwindow {
+    background-color: @theme_bg_color;
+}
+
+scrolledwindow viewport {
+    background-color: @theme_bg_color;
+}
+
+/* Frames */
+frame {
+    border: 1px solid @borders;
+    background-color: @theme_base_color;
+}
+
+frame > border {
+    border: none;
+}
+
+/* Lists */
+list {
+    background-color: @theme_base_color;
+    color: @theme_fg_color;
+}
+
+list row:hover {
+    background-color: @theme_unfocused_bg_color;
+}
+
+/* Entry fields */
+entry {
+    background-color: @theme_base_color;
+    color: @theme_fg_color;
+    border: 1px solid @borders;
+    box-shadow: none;
+}
+
+entry:focus {
+    border-color: @theme_selected_bg_color;
+}
+
+/* Remove focus outlines */
+* {
+    outline-color: alpha(@theme_selected_bg_color, 0.5);
+    outline-style: none;
+}

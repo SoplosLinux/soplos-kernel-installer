@@ -1,0 +1,873 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-22 00:00+0100\n"
+"Language: ro\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Soplos Kernel Installer"
+msgstr "Instalator Kernel Soplos"
+
+msgid "Soplos Linux"
+msgstr "Soplos Linux"
+
+msgid "Checking build environment..."
+msgstr "Se verifică mediul de compilare..."
+
+msgid "✓ Build environment ready"
+msgstr "✓ Mediul de compilare este gata"
+
+msgid "⚠ Some dependencies could not be installed"
+msgstr "⚠ Unele dependențe nu au putut fi instalate"
+
+msgid "Graphical interface for downloading, compiling and installing the Linux kernel with patches and optimized profiles on Soplos Linux."
+msgstr "Interfață grafică pentru descărcarea, compilarea și instalarea kernel-ului Linux cu patch-uri și profiluri optimizate pe Soplos Linux."
+
+msgid "Clean build files?"
+msgstr "Curățare fișiere de compilare?"
+
+msgid "All temporary files in ~/kernel_build will be deleted.\nThis will free up disk space."
+msgstr "Toate fișierele temporare din ~/kernel_build vor fi șterse.\nAcest lucru va elibera spațiu pe disc."
+
+msgid "Build files deleted."
+msgstr "Fișierele de compilare au fost șterse."
+
+msgid "Error cleaning files."
+msgstr "Eroare la curățarea fișierelor."
+
+msgid "Refresh versions (F5)"
+msgstr "Actualizare versiuni (F5)"
+
+msgid "Clean build files"
+msgstr "Curățare fișiere de compilare"
+
+msgid "About"
+msgstr "Despre"
+
+msgid "Quit (Ctrl+Q)"
+msgstr "Ieșire (Ctrl+Q)"
+
+msgid "Select kernel profile"
+msgstr "Selectare profil kernel"
+
+msgid "Gaming"
+msgstr "Gaming"
+
+msgid "Optimized for games with low input latency, high CPU performance and better GPU management."
+msgstr "Optimizat pentru jocuri cu latență mică, performanță CPU ridicată și gestionare mai bună a GPU."
+
+msgid "Audio / Video"
+msgstr "Audio / Video"
+
+msgid "Low-latency kernel for audio and video production. Optimized for DAWs, video editing and professional streaming."
+msgstr "Kernel cu latență mică pentru producție audio și video. Optimizat pentru DAW-uri, editare video și streaming profesional."
+
+msgid "Minimal / Office"
+msgstr "Minimal / Birou"
+
+msgid "Lightweight kernel for office work and general use. Low resource consumption, ideal for older hardware."
+msgstr "Kernel ușor pentru muncă de birou și utilizare generală. Consum redus de resurse, ideal pentru hardware mai vechi."
+
+msgid "Automatic"
+msgstr "Automat"
+
+msgid "Auto-detects your hardware to enable specific drivers and optimizations for maximum performance on your machine."
+msgstr "Detectează automat hardware-ul pentru a activa drivere și optimizări specifice pentru performanță maximă."
+
+msgid "Kernel version"
+msgstr "Versiunea kernel"
+
+msgid "Channel:"
+msgstr "Canal:"
+
+msgid "All"
+msgstr "Toate"
+
+msgid "Soplos"
+msgstr "Soplos"
+
+msgid "Stable"
+msgstr "Stabil"
+
+msgid "LTS"
+msgstr "LTS"
+
+msgid "RC"
+msgstr "RC"
+
+msgid "Refresh versions"
+msgstr "Actualizare versiuni"
+
+msgid "Loading..."
+msgstr "Se încarcă..."
+
+msgid "latest"
+msgstr "cel mai recent"
+
+msgid "Long-term support (LTS)"
+msgstr "Suport pe termen lung (LTS)"
+
+msgid "★ Soplos featured version"
+msgstr "★ Versiune recomandată Soplos"
+
+msgid "⚠ Experimental RC version"
+msgstr "⚠ Versiune RC experimentală"
+
+msgid "Latest stable version"
+msgstr "Cea mai recentă versiune stabilă"
+
+msgid "Stable version"
+msgstr "Versiune stabilă"
+
+msgid "Optional patches"
+msgstr "Patch-uri opționale"
+
+msgid "No patches available"
+msgstr "Nu există patch-uri disponibile"
+
+msgid "BORE"
+msgstr "BORE"
+
+msgid "Burst-Oriented Response Enhancer — improved CPU scheduler for responsiveness."
+msgstr "Burst-Oriented Response Enhancer — planificator CPU îmbunătățit pentru receptivitate."
+
+msgid "PREEMPT_RT"
+msgstr "PREEMPT_RT"
+
+msgid "Full real-time preemption — ultra-low latency for audio/video production."
+msgstr "Preemțiune în timp real completă — latență ultra-mică pentru producție audio/video."
+
+msgid "Zen"
+msgstr "Zen"
+
+msgid "Zen kernel optimizations — gaming and desktop performance."
+msgstr "Optimizări kernel Zen — performanță gaming și desktop."
+
+msgid "Applied patches: {}"
+msgstr "Patch-uri aplicate: {}"
+
+msgid "Kernel name (suffix)"
+msgstr "Numele kernel-ului (sufix)"
+
+msgid "e.g.: soplos, gaming, custom"
+msgstr "ex.: soplos, gaming, custom"
+
+msgid "Combined with profile: 6.x.x-soplos-gaming"
+msgstr "Combinat cu profilul: 6.x.x-soplos-gaming"
+
+msgid "Result: {}-{}-{}"
+msgstr "Rezultat: {}-{}-{}"
+
+msgid "Clean build directory after installation"
+msgstr "Curățare director de compilare după instalare"
+
+msgid "Reuse existing sources"
+msgstr "Reutilizare surse existente"
+
+msgid "Skip download if sources are already in ~/kernel_build"
+msgstr "Omitere descărcare dacă sursele există deja în ~/kernel_build"
+
+msgid "Sign kernel for Secure Boot (MOK)"
+msgstr "Semnare kernel pentru Secure Boot (MOK)"
+
+msgid "⚙ Manage MOK Keys"
+msgstr "⚙ Gestionare chei MOK"
+
+msgid "Manage Machine Owner Keys"
+msgstr "Gestionare chei proprietar mașină"
+
+msgid "Distribution:"
+msgstr "Distribuție:"
+
+msgid "Current kernel:"
+msgstr "Kernel curent:"
+
+msgid "Initramfs:"
+msgstr "Initramfs:"
+
+msgid "Details"
+msgstr "Detalii"
+
+msgid "Cancel"
+msgstr "Anulare"
+
+msgid "Download and install kernel"
+msgstr "Descărcare și instalare kernel"
+
+msgid "Installed kernels"
+msgstr "Kerneluri instalate"
+
+msgid "No kernels installed yet"
+msgstr "Nu există kerneluri instalate încă"
+
+msgid "Current kernel"
+msgstr "Kernel curent"
+
+msgid "Remove this kernel"
+msgstr "Eliminare acest kernel"
+
+msgid "← Back"
+msgstr "← Înapoi"
+
+msgid "Done"
+msgstr "Gata"
+
+msgid "MOK Key Management"
+msgstr "Gestionare chei MOK"
+
+msgid "Close"
+msgstr "Închidere"
+
+msgid "Secure Boot: {}"
+msgstr "Secure Boot: {}"
+
+msgid "Active"
+msgstr "Activ"
+
+msgid "Inactive"
+msgstr "Inactiv"
+
+msgid "MOK Keys: {}"
+msgstr "Chei MOK: {}"
+
+msgid "Present"
+msgstr "Prezente"
+
+msgid "Not generated"
+msgstr "Negенerate"
+
+msgid "Key enrolled: {}"
+msgstr "Cheie înregistrată: {}"
+
+msgid "Yes"
+msgstr "Da"
+
+msgid "No"
+msgstr "Nu"
+
+msgid "Generate MOK Keys"
+msgstr "Generare chei MOK"
+
+msgid "Enroll Key in BIOS"
+msgstr "Înregistrare cheie în BIOS"
+
+msgid "Delete Keys"
+msgstr "Ștergere chei"
+
+msgid "MOK keys generated successfully.\nYou must enroll them in BIOS before next boot."
+msgstr "Cheile MOK au fost generate cu succes.\nTrebuie să le înregistrați în BIOS înainte de următoarea pornire."
+
+msgid "Failed to generate MOK keys."
+msgstr "Generarea cheilor MOK a eșuat."
+
+msgid "Enroll MOK Key"
+msgstr "Înregistrare cheie MOK"
+
+msgid "The following command will be executed:\n\n{}\n\nYou will be asked to set a password.\nUse it during MOK enrollment on next reboot."
+msgstr "Va fi executată următoarea comandă:\n\n{}\n\nVi se va cere să setați o parolă.\nFolosiți-o la înregistrarea MOK la următoarea repornire."
+
+msgid "Select a kernel version first."
+msgstr "Selectați mai întâi o versiune de kernel."
+
+msgid "Select a kernel profile first."
+msgstr "Selectați mai întâi un profil de kernel."
+
+msgid "Secure Boot signing enabled but no MOK keys found."
+msgstr "Semnare Secure Boot activată dar nu s-au găsit chei MOK."
+
+msgid "Generate MOK keys now? (Required for Secure Boot signing)"
+msgstr "Generare chei MOK acum? (Necesar pentru semnarea Secure Boot)"
+
+msgid "Installation cancelled."
+msgstr "Instalare anulată."
+
+msgid "Remove kernel {}?"
+msgstr "Eliminare kernel {}?"
+
+msgid "This will remove the kernel and update GRUB.\nMake sure you have another kernel installed."
+msgstr "Aceasta va elimina kernel-ul și va actualiza GRUB.\nAsigurați-vă că aveți un alt kernel instalat."
+
+msgid "Failed to remove kernel."
+msgstr "Eliminarea kernel-ului a eșuat."
+
+msgid "Kernel installed successfully!"
+msgstr "Kernel instalat cu succes!"
+
+msgid "Installation failed. Check the log above."
+msgstr "Instalarea a eșuat. Verificați jurnalul de mai sus."
+
+msgid "Soplos Kernel Installer v{}"
+msgstr "Instalator Kernel Soplos v{}"
+
+msgid "Downloading kernel sources..."
+msgstr "Se descarcă sursele kernel..."
+
+msgid "Downloading patches..."
+msgstr "Se descarcă patch-urile..."
+
+msgid "Applying patches..."
+msgstr "Se aplică patch-urile..."
+
+msgid "Configuring kernel..."
+msgstr "Se configurează kernel-ul..."
+
+msgid "Building kernel..."
+msgstr "Se compilează kernel-ul..."
+
+msgid "Installing kernel..."
+msgstr "Se instalează kernel-ul..."
+
+msgid "Done!"
+msgstr "Gata!"
+
+msgid "e.g.: soplos"
+msgstr "ex.: soplos"
+
+msgid "Secure Boot (MOK)"
+msgstr "Pornire securizată (MOK)"
+
+msgid "⚙ MOK Keys"
+msgstr "⚙ Chei MOK"
+
+msgid "Secure Boot Key Management"
+msgstr "Gestionarea cheilor Secure Boot"
+
+msgid "Secure Boot Setup Wizard"
+msgstr "Expert configurare Secure Boot"
+
+msgid "Follow these steps to enable Secure Boot support for your custom kernels."
+msgstr "Urmați acești pași pentru a activa suportul Secure Boot pentru nucleele dvs. personalizate."
+
+msgid "Step 1: Generate MOK Keys"
+msgstr "Pasul 1: Generați cheile MOK"
+
+msgid "Create a key pair to sign your custom kernels."
+msgstr "Creați o pereche de chei pentru a semna nucleele dvs. personalizate."
+
+msgid "Failed to generate keys."
+msgstr "Generarea cheilor a eșuat."
+
+msgid "Keys already generated."
+msgstr "Cheile au fost deja generate."
+
+msgid "Delete MOK keys?"
+msgstr "Ștergeți cheile MOK?"
+
+msgid ""
+"The key is currently enrolled in BIOS.\n"
+"\n"
+"It will be queued for unenrollment on next reboot.\n"
+"You will need to enter a password to confirm."
+msgstr ""
+"Cheia este înregistrată în BIOS.\n"
+"\n"
+"Va fi pusă în coadă pentru dezînregistrare la următoarea repornire.\n"
+"Va trebui să introduceți o parolă pentru confirmare."
+
+msgid "This will delete your local key files."
+msgstr "Aceasta va șterge fișierele cheie locale."
+
+msgid "Step 2: Enable Kernel Signing"
+msgstr "Pasul 2: Activați semnarea nucleului"
+
+msgid ""
+"You already have your local keys. Now you can:\n"
+"1. Close this window\n"
+"2. Check 'Sign Kernel for Secure Boot (MOK)'\n"
+"3. <b>Start the Installation</b>"
+msgstr ""
+"Aveți deja cheile locale. Acum puteți:\n"
+"1. Închideți această fereastră\n"
+"2. Bifați 'Semnați nucleul pentru Secure Boot (MOK)'\n"
+"3. <b>Porniți instalarea</b>"
+
+msgid "Step 3: Enroll Key in BIOS (Required to Boot)"
+msgstr "Pasul 3: Înregistrați cheia în BIOS (necesar pentru pornire)"
+
+msgid ""
+"This step is only needed once. It is recommended to do it <b>after</b> "
+"installing your first kernel:\n"
+"1. Click 'Enroll Key' (enter a password)\n"
+"2. <b>Restart</b> and select 'Enroll MOK' in the blue menu."
+msgstr ""
+"Acest pas este necesar doar o singură dată. Se recomandă să îl efectuați <b>după</b> "
+"instalarea primului nucleu:\n"
+"1. Faceți clic pe 'Înregistrați cheia' (introduceți o parolă)\n"
+"2. <b>Reporniți</b> și selectați 'Enroll MOK' din meniul albastru."
+
+msgid "Step 4: Enable Secure Boot"
+msgstr "Pasul 4: Activați Secure Boot"
+
+msgid ""
+"After installing the signed kernel, enable Secure Boot in your BIOS/UEFI "
+"settings."
+msgstr "După instalarea nucleului semnat, activați Secure Boot în setările BIOS/UEFI."
+
+msgid "Reset MOK Database"
+msgstr "Resetați baza de date MOK"
+
+msgid "Removes ALL enrolled MOK keys from BIOS. Useful to clean up stale keys."
+msgstr "Elimină TOATE cheile MOK înregistrate din BIOS. Util pentru curățarea cheilor expirate."
+
+msgid "Create MOK Password"
+msgstr "Creați parola MOK"
+
+msgid "Enroll"
+msgstr "Înregistrați"
+
+msgid "Create a password for MOK enrollment"
+msgstr "Creați o parolă pentru înregistrarea MOK"
+
+msgid "You will need this password during the next reboot."
+msgstr "Veți avea nevoie de această parolă la următoarea repornire."
+
+msgid "Minimum 8 characters"
+msgstr "Minimum 8 caractere"
+
+msgid "Enter password (min 8 characters)"
+msgstr "Introduceți parola (min. 8 caractere)"
+
+msgid "Confirm password"
+msgstr "Confirmați parola"
+
+msgid "Passwords do not match."
+msgstr "Parolele nu se potrivesc."
+
+msgid "Password must be at least 8 characters."
+msgstr "Parola trebuie să aibă cel puțin 8 caractere."
+
+msgid "Error during MOK enrollment: {}"
+msgstr "Eroare la înregistrarea MOK: {}"
+
+msgid "Key enrollment scheduled!"
+msgstr "Înregistrarea cheii planificată!"
+
+msgid ""
+"Your MOK key has been queued for enrollment.\n"
+"It will take effect on the next system restart."
+msgstr ""
+"Cheia dvs. MOK a fost pusă în coadă pentru înregistrare.\n"
+"Va intra în vigoare la următoarea repornire a sistemului."
+
+msgid "Unknown error"
+msgstr "Eroare necunoscută"
+
+msgid ""
+"MOK enrollment failed:\n"
+"{}"
+msgstr ""
+"Înregistrarea MOK a eșuat:\n"
+"{}"
+
+msgid "Unenroll MOK Key"
+msgstr "Dezînregistrați cheia MOK"
+
+msgid "Unenroll"
+msgstr "Dezînregistrați"
+
+msgid "Set a password to confirm unenrollment"
+msgstr "Setați o parolă pentru a confirma dezînregistrarea"
+
+msgid ""
+"You will need this password on the next reboot to confirm\n"
+"removal of the key from the BIOS."
+msgstr ""
+"Veți avea nevoie de această parolă la următoarea repornire pentru a confirma\n"
+"eliminarea cheii din BIOS."
+
+msgid "Error during MOK unenrollment: {}"
+msgstr "Eroare la dezînregistrarea MOK: {}"
+
+msgid "Key unenrollment scheduled!"
+msgstr "Dezînregistrarea cheii planificată!"
+
+msgid ""
+"The MOK key has been queued for removal from BIOS.\n"
+"It will take effect on the next system restart."
+msgstr ""
+"Cheia MOK a fost pusă în coadă pentru eliminare din BIOS.\n"
+"Va intra în vigoare la următoarea repornire a sistemului."
+
+msgid ""
+"MOK unenrollment failed:\n"
+"{}"
+msgstr ""
+"Dezînregistrarea MOK a eșuat:\n"
+"{}"
+
+msgid "Reset MOK database?"
+msgstr "Resetați baza de date MOK?"
+
+msgid ""
+"This will remove ALL enrolled MOK keys from BIOS on next reboot.\n"
+"\n"
+"You will need to re-enroll your key after the reset."
+msgstr ""
+"Aceasta va elimina TOATE cheile MOK din BIOS la următoarea repornire.\n"
+"\n"
+"Va trebui să reînregistrați cheia după resetare."
+
+msgid "Confirm MOK Reset"
+msgstr "Confirmați resetarea MOK"
+
+msgid "Reset"
+msgstr "Resetați"
+
+msgid "Set a password to confirm the reset"
+msgstr "Setați o parolă pentru a confirma resetarea"
+
+msgid ""
+"You will need this password on the next reboot to confirm\n"
+"removal of all MOK keys from BIOS."
+msgstr ""
+"Veți avea nevoie de această parolă la următoarea repornire pentru a confirma\n"
+"eliminarea tuturor cheilor MOK din BIOS."
+
+msgid "Error during MOK reset: {}"
+msgstr "Eroare la resetarea MOK: {}"
+
+msgid "MOK reset scheduled!"
+msgstr "Resetarea MOK planificată!"
+
+msgid ""
+"All MOK keys will be removed from BIOS on the next reboot.\n"
+"Confirm with your password in the blue MOK manager screen."
+msgstr ""
+"Toate cheile MOK vor fi eliminate din BIOS la următoarea repornire.\n"
+"Confirmați cu parola dvs. în ecranul albastru al managerului MOK."
+
+msgid ""
+"MOK reset failed:\n"
+"{}"
+msgstr ""
+"Resetarea MOK a eșuat:\n"
+"{}"
+
+msgid "Existing build found"
+msgstr "Compilare existentă găsită"
+
+#, python-format
+msgid ""
+"A build directory for kernel %(version)s already exists.\n"
+"\n"
+"• Start Fresh: re-download sources and patches.\n"
+"• Reuse Sources: skip download, apply selected patches and recompile."
+msgstr ""
+"Un director de compilare pentru nucleul %(version)s există deja.\n"
+"\n"
+"• Reîncepeți: re-descărcați sursele și patch-urile.\n"
+"• Reutilizați sursele: omiteți descărcarea, aplicați patch-urile selectate și recompilați."
+
+msgid "Start Fresh"
+msgstr "Reîncepeți"
+
+msgid "Reuse Sources"
+msgstr "Reutilizați sursele"
+
+msgid "Kernel compilation in progress"
+msgstr "Compilarea nucleului în curs"
+
+msgid ""
+"\n"
+"✓ Kernel installed successfully!"
+msgstr ""
+"\n"
+"✓ Nucleul instalat cu succes!"
+
+msgid ""
+"\n"
+"✗ Installation failed. Check the log above."
+msgstr ""
+"\n"
+"✗ Instalarea a eșuat. Verificați jurnalul de mai sus."
+
+msgid "Cancel build?"
+msgstr "Anulați compilarea?"
+
+msgid ""
+"Do you want to keep the build folder?\n"
+"Keeping it allows reusing downloaded sources next time."
+msgstr ""
+"Doriți să păstrați folderul de compilare?\n"
+"Păstrarea acestuia permite reutilizarea surselor descărcate data viitoare."
+
+msgid "Delete build folder"
+msgstr "Ștergeți folderul de compilare"
+
+msgid "Keep build folder"
+msgstr "Păstrați folderul de compilare"
+
+msgid "Continue building"
+msgstr "Continuați compilarea"
+
+msgid ""
+"\n"
+"⚠ Installation cancelled."
+msgstr ""
+"\n"
+"⚠ Instalare anulată."
+
+msgid "Revoke MOK key?"
+msgstr "Revocați cheia MOK?"
+
+msgid ""
+"No more Secure Boot signed kernels are installed.\n"
+"Do you want to revoke the MOK key from the firmware?\n"
+"You will need to confirm on next reboot."
+msgstr ""
+"Nu mai sunt nuclee semnate Secure Boot instalate.\n"
+"Doriți să revocați cheia MOK din firmware?\n"
+"Va trebui să confirmați la următoarea repornire."
+
+msgid "Installation complete!"
+msgstr "Instalare completă!"
+
+msgid ""
+"The kernel has been installed successfully.\n"
+"\n"
+"Do you want to reboot now to use the new kernel?"
+msgstr ""
+"Nucleul a fost instalat cu succes.\n"
+"\n"
+"Doriți să reporniți acum pentru a utiliza noul nucleu?"
+
+msgid "Patches"
+msgstr "Patch-uri"
+
+msgid "NTSYNC requires kernel 6.14 or newer"
+msgstr "NTSYNC necesită nucleul 6.14 sau mai nou"
+
+msgid "CPU LOAD"
+msgstr "ÎNCĂRCARE CPU"
+
+msgid "MEMORY"
+msgstr "MEMORIE"
+
+msgid "DISK (Build)"
+msgstr "DISC (Compilare)"
+
+msgid "Free:"
+msgstr "Liber:"
+
+msgid "CPU TEMP"
+msgstr "TEMP. CPU"
+
+msgid "Cores:"
+msgstr "Nuclee:"
+
+msgid "Threads:"
+msgstr "Fire:"
+
+msgid "Cancelled"
+msgstr "Anulat"
+
+msgid "Failed"
+msgstr "Eșuat"
+
+msgid "Error opening log file: {}"
+msgstr "Eroare la deschiderea fișierului jurnal: {}"
+
+msgid "Time:"
+msgstr "Timp:"
+
+msgid "<span foreground='orange'>⚠ Experimental RC version</span>"
+msgstr "<span foreground='orange'>⚠ Versiune RC experimentală</span>"
+
+msgid "<b>✓ Latest stable version</b>"
+msgstr "<b>✓ Ultima versiune stabilă</b>"
+
+msgid "DKMS Key (NVIDIA / VirtualBox drivers)"
+msgstr "Cheie DKMS (drivere NVIDIA / VirtualBox)"
+
+msgid "DKMS modules are installed but the signing key is <b>missing</b>.\nReinstall your NVIDIA or VirtualBox drivers from soplos-welcome to regenerate it."
+msgstr "Modulele DKMS sunt instalate, dar cheia de semnare <b>lipsește</b>.\nReinstalați driverele NVIDIA sau VirtualBox din soplos-welcome pentru a o regenera."
+
+msgid "The DKMS signing key is enrolled. Kernel modules (NVIDIA etc.) will load correctly."
+msgstr "Cheia de semnare DKMS este înregistrată. Modulele kernel (NVIDIA etc.) se vor încărca corect."
+
+msgid "The DKMS signing key is <b>not enrolled</b>. Without it, NVIDIA and other DKMS drivers will fail to load with Secure Boot enabled.\nEnroll it now alongside your kernel key."
+msgstr "Cheia de semnare DKMS <b>nu este înregistrată</b>. Fără ea, NVIDIA și alte drivere DKMS nu se vor încărca cu Secure Boot activat.\nÎnregistrați-o acum alături de cheia kernelului."
+
+msgid "Enroll DKMS Key in BIOS"
+msgstr "Înregistrați cheia DKMS în BIOS"
+
+msgid "mainline"
+msgstr "mainline"
+
+msgid "Soplos Stock"
+msgstr "Soplos Stock"
+
+msgid "Generic Soplos kernel. Vanilla config with no profile modifications. Compatible with all Soplos distributions."
+msgstr "Nucleu generic Soplos. Configurație standard fără modificări de profil. Compatibil cu toate distribuțiile Soplos."
+
+msgid "Mainline kernel (not yet stable)"
+msgstr "Nucleu mainline (nu este încă stabil)"
+
+msgid "<span foreground='red'>✗ End-of-Life — no longer receives security updates</span>"
+msgstr "<span foreground='red'>✗ Sfârșit de ciclu de viață — nu mai primește actualizări de securitate</span>"
+
+msgid "Invalid kernel name '{}'. Only letters, numbers, dots, hyphens and underscores are allowed."
+msgstr "Nume de nucleu '{}' invalid. Sunt permise doar litere, cifre, puncte, cratime și caractere de subliniere."
+
+msgid "The DKMS signing key is enrolled. Each time a new kernel is installed, DKMS automatically rebuilds and signs the NVIDIA modules — they will load correctly with Secure Boot active."
+msgstr "Cheia de semnare DKMS este înregistrată. De fiecare dată când se instalează un kernel nou, DKMS reconstruiește și semnează automat modulele NVIDIA — acestea se vor încărca corect cu Secure Boot activ."
+
+msgid ""
+"Each time a new kernel is installed, DKMS automatically rebuilds your NVIDIA modules for that kernel. With Secure Boot active, those modules must be signed with this key to load.\n"
+"\n"
+"The DKMS signing key is <b>not enrolled</b>. Without it, NVIDIA and other DKMS drivers will fail to load.\n"
+"Enroll it now alongside your kernel key."
+msgstr ""
+"De fiecare dată când se instalează un kernel nou, DKMS reconstruiește automat modulele NVIDIA pentru acel kernel. Cu Secure Boot activ, acele module trebuie semnate cu această cheie pentru a se încărca.\n"
+"\n"
+"Cheia de semnare DKMS <b>nu este înregistrată</b>. Fără ea, NVIDIA și alți drivere DKMS nu se vor încărca.\n"
+"Înregistreaz-o acum împreună cu cheia de kernel."
+
+msgid ""
+"Installing the new kernel triggered an automatic rebuild of your NVIDIA modules (DKMS).\n"
+"\n"
+"These newly built modules must be signed to work with Secure Boot active. The DKMS signing key must be enrolled in the firmware so that NVIDIA modules (nvidia-uvm, NVENC, CUDA) load correctly.\n"
+"\n"
+"Without this step, NVENC and CUDA will not work after reboot.\n"
+"\n"
+"Do you want to enroll the DKMS key now?"
+msgstr ""
+"Instalarea noului kernel a declanșat o reconstruire automată a modulelor NVIDIA (DKMS).\n"
+"\n"
+"Aceste module nou compilate trebuie semnate pentru a funcționa cu Secure Boot activ. Cheia de semnare DKMS trebuie înregistrată în firmware pentru ca modulele NVIDIA (nvidia-uvm, NVENC, CUDA) să se încarce corect.\n"
+"\n"
+"Fără acest pas, NVENC și CUDA nu vor funcționa după repornire.\n"
+"\n"
+"Doriți să înregistrați cheia DKMS acum?"
+
+msgid "Build Kernel"
+msgstr "Compilați kernel"
+
+msgid "Soplos Kernels"
+msgstr "Kerneluri Soplos"
+
+msgid "Soplos Kernels Repository"
+msgstr "Depozit kerneluri Soplos"
+
+msgid "Available kernels"
+msgstr "Kerneluri disponibile"
+
+msgid "Add repository"
+msgstr "Adăugați depozitul"
+
+msgid "Adding..."
+msgstr "Se adaugă..."
+
+msgid "Adding Soplos Kernels repository..."
+msgstr "Se adaugă depozitul de kerneluri Soplos..."
+
+msgid "Error adding repository"
+msgstr "Eroare la adăugarea depozitului"
+
+msgid "Refresh"
+msgstr "Reîmprospătare"
+
+msgid "Updating repository..."
+msgstr "Se actualizează depozitul..."
+
+msgid "Install"
+msgstr "Instalați"
+
+msgid "Remove"
+msgstr "Eliminați"
+
+msgid "Installing"
+msgstr "Se instalează"
+
+msgid "Removing"
+msgstr "Se elimină"
+
+msgid "Update"
+msgstr "Actualizați"
+
+msgid "Updating {pkg}..."
+msgstr "Se actualizează {pkg}..."
+
+msgid "No kernels available in repository"
+msgstr "Nu există kerneluri disponibile în depozit"
+
+msgid "Status: <b>Repository installed</b>"
+msgstr "Stare: <b>Depozit instalat</b>"
+
+msgid "Status: Repository not configured"
+msgstr "Stare: Depozit neconfigurat"
+
+msgid "Discard"
+msgstr "Renunțați"
+
+msgid "Save packages"
+msgstr "Salvați pachetele"
+
+msgid "Save .deb packages?"
+msgstr "Salvați pachetele .deb?"
+
+msgid "Choose destination folder"
+msgstr "Alegeți folderul de destinație"
+
+msgid "Select"
+msgstr "Selectați"
+
+msgid ""
+"Saved {n} package(s) to:\n"
+"{path}"
+msgstr ""
+"{n} pachet(e) salvat(e) în:\n"
+"{path}"
+
+msgid "Kernel build complete!"
+msgstr "Compilarea kernelului finalizată!"
+
+msgid ""
+"Build complete but no .deb packages were found.\n"
+"Check the build log for details."
+msgstr ""
+"Compilare finalizată dar nu s-au găsit pachete .deb.\n"
+"Verificați jurnalul de compilare pentru detalii."
+
+#, python-format
+msgid ""
+"The following packages are ready:\n"
+"\n"
+"%(pkgs)s\n"
+"\n"
+"Choose a folder to save them."
+msgstr ""
+"Următoarele pachete sunt gata:\n"
+"\n"
+"%(pkgs)s\n"
+"\n"
+"Alegeți un folder pentru a le salva."
+
+#, python-format
+msgid ""
+"The build directory contains %(n)d .deb package(s).\n"
+"Do you want to save them before deleting the build directory?"
+msgstr ""
+"Directorul de compilare conține %(n)d pachet(e) .deb.\n"
+"Doriți să le salvați înainte de a șterge directorul de compilare?"
+
+msgid "Operation failed"
+msgstr "Operațiune eșuată"
+
+msgid "Enroll DKMS signing key for NVIDIA?"
+msgstr "Înregistrați cheia de semnare DKMS pentru NVIDIA?"
+
+msgid "Stock"
+msgstr "Stoc"
+
+msgid "Result: {}"
+msgstr "Rezultat: {}"
+
+msgid ""
+"\n"
+"✓ Kernel build complete!"
+msgstr ""
+"\n"
+"✓ Compilarea kernelului finalizată!"

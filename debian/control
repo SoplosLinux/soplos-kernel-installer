@@ -1,0 +1,64 @@
+Source: soplos-kernel-installer
+Section: admin
+Priority: optional
+Maintainer: Sergi Perich <info@soploslinux.com>
+Build-Depends: debhelper-compat (= 13),
+               python3,
+               python3-setuptools,
+               gettext
+Standards-Version: 4.6.2
+Homepage: https://github.com/SoplosLinux/soplos-kernel-installer
+Rules-Requires-Root: no
+
+Package: soplos-kernel-installer
+Version: 1.0.0
+Architecture: all
+Depends: ${misc:Depends},
+         python3,
+         python3-gi,
+         python3-gi-cairo,
+         gir1.2-gtk-3.0,
+         wget,
+         binutils,
+         coreutils,
+         build-essential,
+         flex,
+         bison,
+         libssl-dev,
+         libelf-dev,
+         bc,
+         fakeroot,
+         rsync,
+         kmod,
+         pahole | dwarves,
+         cpio,
+         linux-libc-dev,
+         libncurses-dev,
+         pkg-config,
+         pkgconf,
+         gettext,
+         git,
+         tar,
+         xz-utils,
+         zstd,
+         curl,
+         g++,
+         grub-common,
+         mokutil,
+         sbsigntool,
+         patch,
+         dracut,
+         dkms
+Description: Soplos Linux Kernel Installer
+ A graphical frontend for downloading, patching, compiling and installing
+ the Linux kernel on Soplos Linux. Supports optimized profiles (Gaming,
+ Audio/Video, Minimal, Hardware Optimized) and optional patches including
+ BORE, PREEMPT_RT, Zen and NTSYNC.
+ .
+ Features:
+  - Download kernels from kernel.org (stable, LTS, RC)
+  - Patch support from official sources (BORE, PREEMPT_RT, Zen, NTSYNC)
+  - Dracut initramfs generation
+  - Secure Boot signing via MOK
+  - NVIDIA DKMS module signing
+  - 8-language interface

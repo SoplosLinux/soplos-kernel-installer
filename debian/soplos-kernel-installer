@@ -1,0 +1,13 @@
+#!/bin/bash
+# Soplos Kernel Installer launcher wrapper
+
+export WMCLASS="org.soplos.kernel-installer"
+
+INSTALL_DIR="/usr/share/soplos-kernel-installer"
+if [ -d "$INSTALL_DIR" ]; then
+    cd "$INSTALL_DIR"
+else
+    cd "$(dirname "$(readlink -f "$0")")"
+fi
+
+exec python3 main.py "$@"

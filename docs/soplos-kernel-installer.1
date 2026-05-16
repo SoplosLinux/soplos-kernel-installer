@@ -1,0 +1,75 @@
+.TH SOPLOS-KERNEL-INSTALLER 1 "2026-03-22" "1.0.0" "Soplos Linux"
+.SH NAME
+soplos-kernel-installer \- graphical kernel installer for Soplos Linux
+.SH SYNOPSIS
+.B soplos-kernel-installer
+[\fIOPTIONS\fR]
+.SH DESCRIPTION
+.B soplos-kernel-installer
+is a GTK3 graphical frontend for downloading, patching, compiling and
+installing the Linux kernel on Soplos Linux.
+.PP
+It supports optimized kernel profiles (Gaming, Audio/Video, Minimal,
+Hardware Optimized), optional patches from original upstream sources
+(BORE, PREEMPT_RT, Zen, and custom Soplos patches), Dracut initramfs
+generation, Secure Boot signing via MOK, and NVIDIA DKMS module signing.
+.SH OPTIONS
+.TP
+.B \-\-force
+Force a new instance, allowing multiple windows to be open simultaneously.
+.SH CHANNELS
+.TP
+.B Soplos
+Kernel versions curated by the Soplos Linux team with recommended patches.
+.TP
+.B Stable
+Latest stable kernel from kernel.org.
+.TP
+.B LTS
+Long-term support kernels from kernel.org.
+.TP
+.B RC
+Release candidate / mainline kernels (experimental).
+.SH PATCHES
+.TP
+.B BORE
+Burst-Oriented Response Enhancer — improved CPU scheduler for desktop responsiveness.
+Source: https://github.com/firelzrd/bore-scheduler
+.TP
+.B PREEMPT_RT
+Full real-time preemption patch — ultra-low latency for audio/video production.
+Source: https://cdn.kernel.org/pub/linux/kernel/projects/rt
+.TP
+.B Zen
+Zen kernel optimizations for gaming and desktop performance.
+Source: https://github.com/zen-kernel/zen-kernel
+.SH FILES
+.TP
+.I ~/kernel_build/
+Temporary directory for kernel sources and build artifacts.
+.TP
+.I ~/.config/soplos-kernel-installer/keys/
+MOK key storage directory.
+.TP
+.I ~/.soplos_kernel_installer_history.json
+Installation history.
+.SH SECURE BOOT
+When Secure Boot is active, the installer generates a Machine Owner Key (MOK)
+pair, signs the compiled kernel and EFI binaries, and can sign NVIDIA DKMS
+modules. The MOK must be enrolled in the BIOS using
+.BR mokutil (1)
+and a reboot into the MOK enrollment screen.
+.SH AUTHOR
+Written by Sergi Perich <info@soploslinux.com> for the Soplos Linux project.
+.SH COPYRIGHT
+Copyright \(co 2026 Sergi Perich.
+License: GPL-3.0-or-later <https://www.gnu.org/licenses/gpl-3.0.html>.
+.br
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+.SH SEE ALSO
+.BR soplos-welcome (1),
+.BR mokutil (1),
+.BR dracut (8),
+.BR dkms (8),
+.BR update-grub (8)

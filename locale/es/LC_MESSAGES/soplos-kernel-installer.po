@@ -1,0 +1,873 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-22 00:00+0100\n"
+"Language: es\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Soplos Kernel Installer"
+msgstr "Instalador de Kernel Soplos"
+
+msgid "Soplos Linux"
+msgstr "Soplos Linux"
+
+msgid "Checking build environment..."
+msgstr "Comprobando entorno de compilación..."
+
+msgid "✓ Build environment ready"
+msgstr "✓ Entorno de compilación listo"
+
+msgid "⚠ Some dependencies could not be installed"
+msgstr "⚠ Algunas dependencias no pudieron instalarse"
+
+msgid "Graphical interface for downloading, compiling and installing the Linux kernel with patches and optimized profiles on Soplos Linux."
+msgstr "Interfaz gráfica para descargar, compilar e instalar el kernel de Linux con parches y perfiles optimizados en Soplos Linux."
+
+msgid "Clean build files?"
+msgstr "¿Limpiar archivos de compilación?"
+
+msgid "All temporary files in ~/kernel_build will be deleted.\nThis will free up disk space."
+msgstr "Se eliminarán todos los archivos temporales en ~/kernel_build.\nEsto liberará espacio en disco."
+
+msgid "Build files deleted."
+msgstr "Archivos de compilación eliminados."
+
+msgid "Error cleaning files."
+msgstr "Error al limpiar archivos."
+
+msgid "Refresh versions (F5)"
+msgstr "Actualizar versiones (F5)"
+
+msgid "Clean build files"
+msgstr "Limpiar archivos de compilación"
+
+msgid "About"
+msgstr "Acerca de"
+
+msgid "Quit (Ctrl+Q)"
+msgstr "Salir (Ctrl+Q)"
+
+msgid "Select kernel profile"
+msgstr "Seleccionar perfil de kernel"
+
+msgid "Gaming"
+msgstr "Gaming"
+
+msgid "Optimized for games with low input latency, high CPU performance and better GPU management."
+msgstr "Optimizado para juegos con baja latencia, alto rendimiento de CPU y mejor gestión de GPU."
+
+msgid "Audio / Video"
+msgstr "Audio / Vídeo"
+
+msgid "Low-latency kernel for audio and video production. Optimized for DAWs, video editing and professional streaming."
+msgstr "Kernel de baja latencia para producción de audio y vídeo. Optimizado para DAWs, edición de vídeo y streaming profesional."
+
+msgid "Minimal / Office"
+msgstr "Minimal / Oficina"
+
+msgid "Lightweight kernel for office work and general use. Low resource consumption, ideal for older hardware."
+msgstr "Kernel ligero para trabajo de oficina y uso general. Bajo consumo de recursos, ideal para hardware antiguo."
+
+msgid "Automatic"
+msgstr "Automático"
+
+msgid "Auto-detects your hardware to enable specific drivers and optimizations for maximum performance on your machine."
+msgstr "Detecta automáticamente tu hardware para activar controladores y optimizaciones específicas para máximo rendimiento."
+
+msgid "Kernel version"
+msgstr "Versión del kernel"
+
+msgid "Channel:"
+msgstr "Canal:"
+
+msgid "All"
+msgstr "Todos"
+
+msgid "Soplos"
+msgstr "Soplos"
+
+msgid "Stable"
+msgstr "Estable"
+
+msgid "LTS"
+msgstr "LTS"
+
+msgid "RC"
+msgstr "RC"
+
+msgid "Refresh versions"
+msgstr "Actualizar versiones"
+
+msgid "Loading..."
+msgstr "Cargando..."
+
+msgid "latest"
+msgstr "último"
+
+msgid "Long-term support (LTS)"
+msgstr "Soporte a largo plazo (LTS)"
+
+msgid "★ Soplos featured version"
+msgstr "★ Versión destacada de Soplos"
+
+msgid "⚠ Experimental RC version"
+msgstr "⚠ Versión RC experimental"
+
+msgid "Latest stable version"
+msgstr "Última versión estable"
+
+msgid "Stable version"
+msgstr "Versión estable"
+
+msgid "Optional patches"
+msgstr "Parches opcionales"
+
+msgid "No patches available"
+msgstr "No hay parches disponibles"
+
+msgid "BORE"
+msgstr "BORE"
+
+msgid "Burst-Oriented Response Enhancer — improved CPU scheduler for responsiveness."
+msgstr "Burst-Oriented Response Enhancer — planificador de CPU mejorado para mayor respuesta."
+
+msgid "PREEMPT_RT"
+msgstr "PREEMPT_RT"
+
+msgid "Full real-time preemption — ultra-low latency for audio/video production."
+msgstr "Preempción en tiempo real completa — latencia ultra-baja para producción de audio/vídeo."
+
+msgid "Zen"
+msgstr "Zen"
+
+msgid "Zen kernel optimizations — gaming and desktop performance."
+msgstr "Optimizaciones del kernel Zen — rendimiento para gaming y escritorio."
+
+msgid "Applied patches: {}"
+msgstr "Parches aplicados: {}"
+
+msgid "Kernel name (suffix)"
+msgstr "Nombre del kernel (sufijo)"
+
+msgid "e.g.: soplos, gaming, custom"
+msgstr "Ej.: soplos, gaming, custom"
+
+msgid "Combined with profile: 6.x.x-soplos-gaming"
+msgstr "Combinado con perfil: 6.x.x-soplos-gaming"
+
+msgid "Result: {}-{}-{}"
+msgstr "Resultado: {}-{}-{}"
+
+msgid "Clean build directory after installation"
+msgstr "Limpiar directorio de compilación tras la instalación"
+
+msgid "Reuse existing sources"
+msgstr "Reutilizar fuentes existentes"
+
+msgid "Skip download if sources are already in ~/kernel_build"
+msgstr "Omitir descarga si las fuentes ya están en ~/kernel_build"
+
+msgid "Sign kernel for Secure Boot (MOK)"
+msgstr "Firmar kernel para Secure Boot (MOK)"
+
+msgid "⚙ Manage MOK Keys"
+msgstr "⚙ Gestionar claves MOK"
+
+msgid "Manage Machine Owner Keys"
+msgstr "Gestionar claves de propietario de máquina"
+
+msgid "Distribution:"
+msgstr "Distribución:"
+
+msgid "Current kernel:"
+msgstr "Kernel actual:"
+
+msgid "Initramfs:"
+msgstr "Initramfs:"
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Download and install kernel"
+msgstr "Descargar e instalar kernel"
+
+msgid "Installed kernels"
+msgstr "Kernels instalados"
+
+msgid "No kernels installed yet"
+msgstr "No hay kernels instalados aún"
+
+msgid "Current kernel"
+msgstr "Kernel actual"
+
+msgid "Remove this kernel"
+msgstr "Eliminar este kernel"
+
+msgid "← Back"
+msgstr "← Volver"
+
+msgid "Done"
+msgstr "Hecho"
+
+msgid "MOK Key Management"
+msgstr "Gestión de claves MOK"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Secure Boot: {}"
+msgstr "Secure Boot: {}"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Inactive"
+msgstr "Inactivo"
+
+msgid "MOK Keys: {}"
+msgstr "Claves MOK: {}"
+
+msgid "Present"
+msgstr "Presentes"
+
+msgid "Not generated"
+msgstr "No generadas"
+
+msgid "Key enrolled: {}"
+msgstr "Clave registrada: {}"
+
+msgid "Yes"
+msgstr "Sí"
+
+msgid "No"
+msgstr "No"
+
+msgid "Generate MOK Keys"
+msgstr "Generar claves MOK"
+
+msgid "Enroll Key in BIOS"
+msgstr "Registrar clave en BIOS"
+
+msgid "Delete Keys"
+msgstr "Eliminar claves"
+
+msgid "MOK keys generated successfully.\nYou must enroll them in BIOS before next boot."
+msgstr "Claves MOK generadas correctamente.\nDebes registrarlas en la BIOS antes del próximo arranque."
+
+msgid "Failed to generate MOK keys."
+msgstr "Error al generar las claves MOK."
+
+msgid "Enroll MOK Key"
+msgstr "Registrar clave MOK"
+
+msgid "The following command will be executed:\n\n{}\n\nYou will be asked to set a password.\nUse it during MOK enrollment on next reboot."
+msgstr "Se ejecutará el siguiente comando:\n\n{}\n\nSe te pedirá establecer una contraseña.\nÚsala durante el registro MOK en el próximo arranque."
+
+msgid "Select a kernel version first."
+msgstr "Selecciona primero una versión del kernel."
+
+msgid "Select a kernel profile first."
+msgstr "Selecciona primero un perfil de kernel."
+
+msgid "Secure Boot signing enabled but no MOK keys found."
+msgstr "Firma Secure Boot activada pero no se encontraron claves MOK."
+
+msgid "Generate MOK keys now? (Required for Secure Boot signing)"
+msgstr "¿Generar claves MOK ahora? (Necesario para la firma Secure Boot)"
+
+msgid "Installation cancelled."
+msgstr "Instalación cancelada."
+
+msgid "Remove kernel {}?"
+msgstr "¿Eliminar el kernel {}?"
+
+msgid "This will remove the kernel and update GRUB.\nMake sure you have another kernel installed."
+msgstr "Esto eliminará el kernel y actualizará GRUB.\nAsegúrate de tener otro kernel instalado."
+
+msgid "Failed to remove kernel."
+msgstr "Error al eliminar el kernel."
+
+msgid "Kernel installed successfully!"
+msgstr "¡Kernel instalado correctamente!"
+
+msgid "Installation failed. Check the log above."
+msgstr "La instalación falló. Revisa el registro superior."
+
+msgid "Soplos Kernel Installer v{}"
+msgstr "Instalador de Kernel Soplos v{}"
+
+msgid "Downloading kernel sources..."
+msgstr "Descargando fuentes del kernel..."
+
+msgid "Downloading patches..."
+msgstr "Descargando parches..."
+
+msgid "Applying patches..."
+msgstr "Aplicando parches..."
+
+msgid "Configuring kernel..."
+msgstr "Configurando kernel..."
+
+msgid "Building kernel..."
+msgstr "Compilando kernel..."
+
+msgid "Installing kernel..."
+msgstr "Instalando kernel..."
+
+msgid "Done!"
+msgstr "¡Hecho!"
+
+msgid "e.g.: soplos"
+msgstr "Ej.: soplos"
+
+msgid "Secure Boot (MOK)"
+msgstr "Arranque seguro (MOK)"
+
+msgid "⚙ MOK Keys"
+msgstr "⚙ Claves MOK"
+
+msgid "Secure Boot Key Management"
+msgstr "Gestión de claves Secure Boot"
+
+msgid "Secure Boot Setup Wizard"
+msgstr "Asistente de configuración Secure Boot"
+
+msgid "Follow these steps to enable Secure Boot support for your custom kernels."
+msgstr "Sigue estos pasos para activar el soporte Secure Boot en tus kernels personalizados."
+
+msgid "Step 1: Generate MOK Keys"
+msgstr "Paso 1: Generar claves MOK"
+
+msgid "Create a key pair to sign your custom kernels."
+msgstr "Crea un par de claves para firmar tus kernels personalizados."
+
+msgid "Failed to generate keys."
+msgstr "Error al generar las claves."
+
+msgid "Keys already generated."
+msgstr "Claves ya generadas."
+
+msgid "Delete MOK keys?"
+msgstr "¿Eliminar claves MOK?"
+
+msgid ""
+"The key is currently enrolled in BIOS.\n"
+"\n"
+"It will be queued for unenrollment on next reboot.\n"
+"You will need to enter a password to confirm."
+msgstr ""
+"La clave está actualmente registrada en la BIOS.\n"
+"\n"
+"Se pondrá en cola para desregistrarse en el próximo reinicio.\n"
+"Necesitarás introducir una contraseña para confirmar."
+
+msgid "This will delete your local key files."
+msgstr "Esto eliminará tus archivos de clave locales."
+
+msgid "Step 2: Enable Kernel Signing"
+msgstr "Paso 2: Activar firma del kernel"
+
+msgid ""
+"You already have your local keys. Now you can:\n"
+"1. Close this window\n"
+"2. Check 'Sign Kernel for Secure Boot (MOK)'\n"
+"3. <b>Start the Installation</b>"
+msgstr ""
+"Ya tienes tus claves locales. Ahora puedes:\n"
+"1. Cerrar esta ventana\n"
+"2. Marcar 'Firmar kernel para Secure Boot (MOK)'\n"
+"3. <b>Iniciar la instalación</b>"
+
+msgid "Step 3: Enroll Key in BIOS (Required to Boot)"
+msgstr "Paso 3: Registrar clave en BIOS (necesario para arrancar)"
+
+msgid ""
+"This step is only needed once. It is recommended to do it <b>after</b> "
+"installing your first kernel:\n"
+"1. Click 'Enroll Key' (enter a password)\n"
+"2. <b>Restart</b> and select 'Enroll MOK' in the blue menu."
+msgstr ""
+"Este paso solo es necesario una vez. Se recomienda hacerlo <b>después</b> "
+"de instalar tu primer kernel:\n"
+"1. Haz clic en 'Registrar clave' (introduce una contraseña)\n"
+"2. <b>Reinicia</b> y selecciona 'Enroll MOK' en el menú azul."
+
+msgid "Step 4: Enable Secure Boot"
+msgstr "Paso 4: Activar Secure Boot"
+
+msgid ""
+"After installing the signed kernel, enable Secure Boot in your BIOS/UEFI "
+"settings."
+msgstr "Tras instalar el kernel firmado, activa Secure Boot en la configuración de tu BIOS/UEFI."
+
+msgid "Reset MOK Database"
+msgstr "Restablecer base de datos MOK"
+
+msgid "Removes ALL enrolled MOK keys from BIOS. Useful to clean up stale keys."
+msgstr "Elimina TODAS las claves MOK registradas en la BIOS. Útil para limpiar claves obsoletas."
+
+msgid "Create MOK Password"
+msgstr "Crear contraseña MOK"
+
+msgid "Enroll"
+msgstr "Registrar"
+
+msgid "Create a password for MOK enrollment"
+msgstr "Crea una contraseña para el registro MOK"
+
+msgid "You will need this password during the next reboot."
+msgstr "Necesitarás esta contraseña en el próximo reinicio."
+
+msgid "Minimum 8 characters"
+msgstr "Mínimo 8 caracteres"
+
+msgid "Enter password (min 8 characters)"
+msgstr "Introduce la contraseña (mín. 8 caracteres)"
+
+msgid "Confirm password"
+msgstr "Confirmar contraseña"
+
+msgid "Passwords do not match."
+msgstr "Las contraseñas no coinciden."
+
+msgid "Password must be at least 8 characters."
+msgstr "La contraseña debe tener al menos 8 caracteres."
+
+msgid "Error during MOK enrollment: {}"
+msgstr "Error durante el registro MOK: {}"
+
+msgid "Key enrollment scheduled!"
+msgstr "¡Registro de clave programado!"
+
+msgid ""
+"Your MOK key has been queued for enrollment.\n"
+"It will take effect on the next system restart."
+msgstr ""
+"Tu clave MOK está en cola para registrarse.\n"
+"Surtirá efecto en el próximo reinicio del sistema."
+
+msgid "Unknown error"
+msgstr "Error desconocido"
+
+msgid ""
+"MOK enrollment failed:\n"
+"{}"
+msgstr ""
+"Falló el registro MOK:\n"
+"{}"
+
+msgid "Unenroll MOK Key"
+msgstr "Desregistrar clave MOK"
+
+msgid "Unenroll"
+msgstr "Desregistrar"
+
+msgid "Set a password to confirm unenrollment"
+msgstr "Establece una contraseña para confirmar el desregistro"
+
+msgid ""
+"You will need this password on the next reboot to confirm\n"
+"removal of the key from the BIOS."
+msgstr ""
+"Necesitarás esta contraseña en el próximo reinicio para confirmar\n"
+"la eliminación de la clave de la BIOS."
+
+msgid "Error during MOK unenrollment: {}"
+msgstr "Error durante el desregistro MOK: {}"
+
+msgid "Key unenrollment scheduled!"
+msgstr "¡Desregistro de clave programado!"
+
+msgid ""
+"The MOK key has been queued for removal from BIOS.\n"
+"It will take effect on the next system restart."
+msgstr ""
+"La clave MOK está en cola para su eliminación de la BIOS.\n"
+"Surtirá efecto en el próximo reinicio del sistema."
+
+msgid ""
+"MOK unenrollment failed:\n"
+"{}"
+msgstr ""
+"Falló el desregistro MOK:\n"
+"{}"
+
+msgid "Reset MOK database?"
+msgstr "¿Restablecer la base de datos MOK?"
+
+msgid ""
+"This will remove ALL enrolled MOK keys from BIOS on next reboot.\n"
+"\n"
+"You will need to re-enroll your key after the reset."
+msgstr ""
+"Esto eliminará TODAS las claves MOK de la BIOS en el próximo reinicio.\n"
+"\n"
+"Necesitarás volver a registrar tu clave después del restablecimiento."
+
+msgid "Confirm MOK Reset"
+msgstr "Confirmar restablecimiento MOK"
+
+msgid "Reset"
+msgstr "Restablecer"
+
+msgid "Set a password to confirm the reset"
+msgstr "Establece una contraseña para confirmar el restablecimiento"
+
+msgid ""
+"You will need this password on the next reboot to confirm\n"
+"removal of all MOK keys from BIOS."
+msgstr ""
+"Necesitarás esta contraseña en el próximo reinicio para confirmar\n"
+"la eliminación de todas las claves MOK de la BIOS."
+
+msgid "Error during MOK reset: {}"
+msgstr "Error durante el restablecimiento MOK: {}"
+
+msgid "MOK reset scheduled!"
+msgstr "¡Restablecimiento MOK programado!"
+
+msgid ""
+"All MOK keys will be removed from BIOS on the next reboot.\n"
+"Confirm with your password in the blue MOK manager screen."
+msgstr ""
+"Todas las claves MOK serán eliminadas de la BIOS en el próximo reinicio.\n"
+"Confirma con tu contraseña en la pantalla azul del gestor MOK."
+
+msgid ""
+"MOK reset failed:\n"
+"{}"
+msgstr ""
+"Falló el restablecimiento MOK:\n"
+"{}"
+
+msgid "Existing build found"
+msgstr "Compilación existente encontrada"
+
+#, python-format
+msgid ""
+"A build directory for kernel %(version)s already exists.\n"
+"\n"
+"• Start Fresh: re-download sources and patches.\n"
+"• Reuse Sources: skip download, apply selected patches and recompile."
+msgstr ""
+"Ya existe un directorio de compilación para el kernel %(version)s.\n"
+"\n"
+"• Empezar desde cero: volver a descargar fuentes y parches.\n"
+"• Reutilizar fuentes: omitir descarga, aplicar parches seleccionados y recompilar."
+
+msgid "Start Fresh"
+msgstr "Empezar desde cero"
+
+msgid "Reuse Sources"
+msgstr "Reutilizar fuentes"
+
+msgid "Kernel compilation in progress"
+msgstr "Compilación del kernel en curso"
+
+msgid ""
+"\n"
+"✓ Kernel installed successfully!"
+msgstr ""
+"\n"
+"✓ ¡Kernel instalado correctamente!"
+
+msgid ""
+"\n"
+"✗ Installation failed. Check the log above."
+msgstr ""
+"\n"
+"✗ La instalación falló. Revisa el registro superior."
+
+msgid "Cancel build?"
+msgstr "¿Cancelar compilación?"
+
+msgid ""
+"Do you want to keep the build folder?\n"
+"Keeping it allows reusing downloaded sources next time."
+msgstr ""
+"¿Deseas conservar la carpeta de compilación?\n"
+"Conservarla permite reutilizar las fuentes descargadas la próxima vez."
+
+msgid "Delete build folder"
+msgstr "Eliminar carpeta de compilación"
+
+msgid "Keep build folder"
+msgstr "Mantener carpeta de compilación"
+
+msgid "Continue building"
+msgstr "Continuar compilando"
+
+msgid ""
+"\n"
+"⚠ Installation cancelled."
+msgstr ""
+"\n"
+"⚠ Instalación cancelada."
+
+msgid "Revoke MOK key?"
+msgstr "¿Revocar clave MOK?"
+
+msgid ""
+"No more Secure Boot signed kernels are installed.\n"
+"Do you want to revoke the MOK key from the firmware?\n"
+"You will need to confirm on next reboot."
+msgstr ""
+"No hay más kernels firmados con Secure Boot instalados.\n"
+"¿Deseas revocar la clave MOK del firmware?\n"
+"Necesitarás confirmar en el próximo reinicio."
+
+msgid "Installation complete!"
+msgstr "¡Instalación completada!"
+
+msgid ""
+"The kernel has been installed successfully.\n"
+"\n"
+"Do you want to reboot now to use the new kernel?"
+msgstr ""
+"El kernel se ha instalado correctamente.\n"
+"\n"
+"¿Deseas reiniciar ahora para usar el nuevo kernel?"
+
+msgid "Patches"
+msgstr "Parches"
+
+msgid "NTSYNC requires kernel 6.14 or newer"
+msgstr "NTSYNC requiere kernel 6.14 o superior"
+
+msgid "CPU LOAD"
+msgstr "CARGA CPU"
+
+msgid "MEMORY"
+msgstr "MEMORIA"
+
+msgid "DISK (Build)"
+msgstr "DISCO (Compilación)"
+
+msgid "Free:"
+msgstr "Libre:"
+
+msgid "CPU TEMP"
+msgstr "TEMP. CPU"
+
+msgid "Cores:"
+msgstr "Núcleos:"
+
+msgid "Threads:"
+msgstr "Hilos:"
+
+msgid "Cancelled"
+msgstr "Cancelado"
+
+msgid "Failed"
+msgstr "Error"
+
+msgid "Error opening log file: {}"
+msgstr "Error al abrir el registro: {}"
+
+msgid "Time:"
+msgstr "Tiempo:"
+
+msgid "<span foreground='orange'>⚠ Experimental RC version</span>"
+msgstr "<span foreground='orange'>⚠ Versión RC experimental</span>"
+
+msgid "<b>✓ Latest stable version</b>"
+msgstr "<b>✓ Última versión estable</b>"
+
+msgid "DKMS Key (NVIDIA / VirtualBox drivers)"
+msgstr "Clave DKMS (controladores NVIDIA / VirtualBox)"
+
+msgid "DKMS modules are installed but the signing key is <b>missing</b>.\nReinstall your NVIDIA or VirtualBox drivers from soplos-welcome to regenerate it."
+msgstr "Los módulos DKMS están instalados pero la clave de firma no existe (<b>falta</b>).\nReinstala los controladores NVIDIA o VirtualBox desde soplos-welcome para regenerarla."
+
+msgid "The DKMS signing key is enrolled. Kernel modules (NVIDIA etc.) will load correctly."
+msgstr "La clave de firma DKMS está registrada. Los módulos del kernel (NVIDIA, etc.) se cargarán correctamente."
+
+msgid "The DKMS signing key is <b>not enrolled</b>. Without it, NVIDIA and other DKMS drivers will fail to load with Secure Boot enabled.\nEnroll it now alongside your kernel key."
+msgstr "La clave de firma DKMS <b>no está registrada</b>. Sin ella, NVIDIA y otros controladores DKMS no se cargarán con Secure Boot activo.\nRegístrala ahora junto con tu clave de kernel."
+
+msgid "Enroll DKMS Key in BIOS"
+msgstr "Registrar clave DKMS en el BIOS"
+
+msgid "mainline"
+msgstr "mainline"
+
+msgid "Soplos Stock"
+msgstr "Soplos Stock"
+
+msgid "Generic Soplos kernel. Vanilla config with no profile modifications. Compatible with all Soplos distributions."
+msgstr "Kernel genérico de Soplos. Configuración estándar sin modificaciones de perfil. Compatible con todas las distribuciones Soplos."
+
+msgid "Mainline kernel (not yet stable)"
+msgstr "Kernel mainline (aún no estable)"
+
+msgid "<span foreground='red'>✗ End-of-Life — no longer receives security updates</span>"
+msgstr "<span foreground='red'>✗ Fin de vida — ya no recibe actualizaciones de seguridad</span>"
+
+msgid "Invalid kernel name '{}'. Only letters, numbers, dots, hyphens and underscores are allowed."
+msgstr "Nombre de kernel '{}' no válido. Solo se permiten letras, números, puntos, guiones y guiones bajos."
+
+msgid "The DKMS signing key is enrolled. Each time a new kernel is installed, DKMS automatically rebuilds and signs the NVIDIA modules — they will load correctly with Secure Boot active."
+msgstr "La clave de firma DKMS está registrada. Cada vez que se instala un nuevo kernel, DKMS reconstruye y firma automáticamente los módulos NVIDIA — se cargarán correctamente con Secure Boot activo."
+
+msgid ""
+"Each time a new kernel is installed, DKMS automatically rebuilds your NVIDIA modules for that kernel. With Secure Boot active, those modules must be signed with this key to load.\n"
+"\n"
+"The DKMS signing key is <b>not enrolled</b>. Without it, NVIDIA and other DKMS drivers will fail to load.\n"
+"Enroll it now alongside your kernel key."
+msgstr ""
+"Cada vez que se instala un nuevo kernel, DKMS reconstruye automáticamente los módulos NVIDIA para ese kernel. Con Secure Boot activo, esos módulos deben estar firmados con esta clave para cargarse.\n"
+"\n"
+"La clave de firma DKMS <b>no está registrada</b>. Sin ella, NVIDIA y otros drivers DKMS no se cargarán.\n"
+"Regístrala ahora junto con tu clave de kernel."
+
+msgid ""
+"Installing the new kernel triggered an automatic rebuild of your NVIDIA modules (DKMS).\n"
+"\n"
+"These newly built modules must be signed to work with Secure Boot active. The DKMS signing key must be enrolled in the firmware so that NVIDIA modules (nvidia-uvm, NVENC, CUDA) load correctly.\n"
+"\n"
+"Without this step, NVENC and CUDA will not work after reboot.\n"
+"\n"
+"Do you want to enroll the DKMS key now?"
+msgstr ""
+"La instalación del nuevo kernel ha activado una reconstrucción automática de los módulos NVIDIA (DKMS).\n"
+"\n"
+"Estos módulos recién compilados deben estar firmados para funcionar con Secure Boot activo. La clave de firma DKMS debe estar registrada en el firmware para que los módulos NVIDIA (nvidia-uvm, NVENC, CUDA) se carguen correctamente.\n"
+"\n"
+"Sin este paso, NVENC y CUDA no funcionarán tras el reinicio.\n"
+"\n"
+"¿Deseas registrar la clave DKMS ahora?"
+
+msgid "Build Kernel"
+msgstr "Compilar kernel"
+
+msgid "Soplos Kernels"
+msgstr "Kernels Soplos"
+
+msgid "Soplos Kernels Repository"
+msgstr "Repositorio de kernels Soplos"
+
+msgid "Available kernels"
+msgstr "Kernels disponibles"
+
+msgid "Add repository"
+msgstr "Añadir repositorio"
+
+msgid "Adding..."
+msgstr "Añadiendo..."
+
+msgid "Adding Soplos Kernels repository..."
+msgstr "Añadiendo repositorio de kernels Soplos..."
+
+msgid "Error adding repository"
+msgstr "Error al añadir el repositorio"
+
+msgid "Refresh"
+msgstr "Actualizar"
+
+msgid "Updating repository..."
+msgstr "Actualizando repositorio..."
+
+msgid "Install"
+msgstr "Instalar"
+
+msgid "Remove"
+msgstr "Eliminar"
+
+msgid "Installing"
+msgstr "Instalando"
+
+msgid "Removing"
+msgstr "Eliminando"
+
+msgid "Update"
+msgstr "Actualizar"
+
+msgid "Updating {pkg}..."
+msgstr "Actualizando {pkg}..."
+
+msgid "No kernels available in repository"
+msgstr "No hay kernels disponibles en el repositorio"
+
+msgid "Status: <b>Repository installed</b>"
+msgstr "Estado: <b>Repositorio instalado</b>"
+
+msgid "Status: Repository not configured"
+msgstr "Estado: Repositorio no configurado"
+
+msgid "Discard"
+msgstr "Descartar"
+
+msgid "Save packages"
+msgstr "Guardar paquetes"
+
+msgid "Save .deb packages?"
+msgstr "¿Guardar paquetes .deb?"
+
+msgid "Choose destination folder"
+msgstr "Elegir carpeta de destino"
+
+msgid "Select"
+msgstr "Seleccionar"
+
+msgid ""
+"Saved {n} package(s) to:\n"
+"{path}"
+msgstr ""
+"Se guardaron {n} paquete(s) en:\n"
+"{path}"
+
+msgid "Kernel build complete!"
+msgstr "¡Compilación del kernel completa!"
+
+msgid ""
+"Build complete but no .deb packages were found.\n"
+"Check the build log for details."
+msgstr ""
+"Compilación completada pero no se encontraron paquetes .deb.\n"
+"Revise el registro de compilación para más detalles."
+
+#, python-format
+msgid ""
+"The following packages are ready:\n"
+"\n"
+"%(pkgs)s\n"
+"\n"
+"Choose a folder to save them."
+msgstr ""
+"Los siguientes paquetes están listos:\n"
+"\n"
+"%(pkgs)s\n"
+"\n"
+"Elija una carpeta para guardarlos."
+
+#, python-format
+msgid ""
+"The build directory contains %(n)d .deb package(s).\n"
+"Do you want to save them before deleting the build directory?"
+msgstr ""
+"El directorio de compilación contiene %(n)d paquete(s) .deb.\n"
+"¿Desea guardarlos antes de eliminar el directorio de compilación?"
+
+msgid "Operation failed"
+msgstr "Operación fallida"
+
+msgid "Enroll DKMS signing key for NVIDIA?"
+msgstr "¿Registrar clave de firma DKMS para NVIDIA?"
+
+msgid "Stock"
+msgstr "Stock"
+
+msgid "Result: {}"
+msgstr "Resultado: {}"
+
+msgid ""
+"\n"
+"✓ Kernel build complete!"
+msgstr ""
+"\n"
+"✓ ¡Compilación del kernel completa!"

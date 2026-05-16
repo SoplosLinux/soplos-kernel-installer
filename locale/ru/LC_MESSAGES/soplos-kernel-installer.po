@@ -1,0 +1,873 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-22 00:00+0100\n"
+"Language: ru\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Soplos Kernel Installer"
+msgstr "Установщик ядра Soplos"
+
+msgid "Soplos Linux"
+msgstr "Soplos Linux"
+
+msgid "Checking build environment..."
+msgstr "Проверка среды сборки..."
+
+msgid "✓ Build environment ready"
+msgstr "✓ Среда сборки готова"
+
+msgid "⚠ Some dependencies could not be installed"
+msgstr "⚠ Некоторые зависимости не удалось установить"
+
+msgid "Graphical interface for downloading, compiling and installing the Linux kernel with patches and optimized profiles on Soplos Linux."
+msgstr "Графический интерфейс для загрузки, компиляции и установки ядра Linux с патчами и оптимизированными профилями в Soplos Linux."
+
+msgid "Clean build files?"
+msgstr "Очистить файлы сборки?"
+
+msgid "All temporary files in ~/kernel_build will be deleted.\nThis will free up disk space."
+msgstr "Все временные файлы в ~/kernel_build будут удалены.\nЭто освободит место на диске."
+
+msgid "Build files deleted."
+msgstr "Файлы сборки удалены."
+
+msgid "Error cleaning files."
+msgstr "Ошибка при очистке файлов."
+
+msgid "Refresh versions (F5)"
+msgstr "Обновить версии (F5)"
+
+msgid "Clean build files"
+msgstr "Очистить файлы сборки"
+
+msgid "About"
+msgstr "О программе"
+
+msgid "Quit (Ctrl+Q)"
+msgstr "Выход (Ctrl+Q)"
+
+msgid "Select kernel profile"
+msgstr "Выбрать профиль ядра"
+
+msgid "Gaming"
+msgstr "Игровой"
+
+msgid "Optimized for games with low input latency, high CPU performance and better GPU management."
+msgstr "Оптимизирован для игр с низкой задержкой ввода, высокой производительностью ЦП и лучшим управлением GPU."
+
+msgid "Audio / Video"
+msgstr "Аудио / Видео"
+
+msgid "Low-latency kernel for audio and video production. Optimized for DAWs, video editing and professional streaming."
+msgstr "Ядро с низкой задержкой для производства аудио и видео. Оптимизировано для DAW, редактирования видео и профессионального стриминга."
+
+msgid "Minimal / Office"
+msgstr "Минимальный / Офис"
+
+msgid "Lightweight kernel for office work and general use. Low resource consumption, ideal for older hardware."
+msgstr "Лёгкое ядро для офисной работы и общего использования. Низкое потребление ресурсов, идеально для старого железа."
+
+msgid "Automatic"
+msgstr "Автоматический"
+
+msgid "Auto-detects your hardware to enable specific drivers and optimizations for maximum performance on your machine."
+msgstr "Автоматически определяет оборудование для активации специфических драйверов и оптимизаций для максимальной производительности."
+
+msgid "Kernel version"
+msgstr "Версия ядра"
+
+msgid "Channel:"
+msgstr "Канал:"
+
+msgid "All"
+msgstr "Все"
+
+msgid "Soplos"
+msgstr "Soplos"
+
+msgid "Stable"
+msgstr "Стабильный"
+
+msgid "LTS"
+msgstr "LTS"
+
+msgid "RC"
+msgstr "RC"
+
+msgid "Refresh versions"
+msgstr "Обновить версии"
+
+msgid "Loading..."
+msgstr "Загрузка..."
+
+msgid "latest"
+msgstr "последний"
+
+msgid "Long-term support (LTS)"
+msgstr "Долгосрочная поддержка (LTS)"
+
+msgid "★ Soplos featured version"
+msgstr "★ Рекомендованная версия Soplos"
+
+msgid "⚠ Experimental RC version"
+msgstr "⚠ Экспериментальная версия RC"
+
+msgid "Latest stable version"
+msgstr "Последняя стабильная версия"
+
+msgid "Stable version"
+msgstr "Стабильная версия"
+
+msgid "Optional patches"
+msgstr "Дополнительные патчи"
+
+msgid "No patches available"
+msgstr "Патчи недоступны"
+
+msgid "BORE"
+msgstr "BORE"
+
+msgid "Burst-Oriented Response Enhancer — improved CPU scheduler for responsiveness."
+msgstr "Burst-Oriented Response Enhancer — улучшенный планировщик ЦП для отзывчивости системы."
+
+msgid "PREEMPT_RT"
+msgstr "PREEMPT_RT"
+
+msgid "Full real-time preemption — ultra-low latency for audio/video production."
+msgstr "Полное вытеснение в реальном времени — ультра-низкая задержка для аудио/видеопроизводства."
+
+msgid "Zen"
+msgstr "Zen"
+
+msgid "Zen kernel optimizations — gaming and desktop performance."
+msgstr "Оптимизации ядра Zen — производительность для игр и рабочего стола."
+
+msgid "Applied patches: {}"
+msgstr "Применённые патчи: {}"
+
+msgid "Kernel name (suffix)"
+msgstr "Имя ядра (суффикс)"
+
+msgid "e.g.: soplos, gaming, custom"
+msgstr "напр.: soplos, gaming, custom"
+
+msgid "Combined with profile: 6.x.x-soplos-gaming"
+msgstr "В сочетании с профилем: 6.x.x-soplos-gaming"
+
+msgid "Result: {}-{}-{}"
+msgstr "Результат: {}-{}-{}"
+
+msgid "Clean build directory after installation"
+msgstr "Очистить каталог сборки после установки"
+
+msgid "Reuse existing sources"
+msgstr "Повторно использовать существующие исходники"
+
+msgid "Skip download if sources are already in ~/kernel_build"
+msgstr "Пропустить загрузку, если исходники уже находятся в ~/kernel_build"
+
+msgid "Sign kernel for Secure Boot (MOK)"
+msgstr "Подписать ядро для Secure Boot (MOK)"
+
+msgid "⚙ Manage MOK Keys"
+msgstr "⚙ Управление ключами MOK"
+
+msgid "Manage Machine Owner Keys"
+msgstr "Управление ключами владельца машины"
+
+msgid "Distribution:"
+msgstr "Дистрибутив:"
+
+msgid "Current kernel:"
+msgstr "Текущее ядро:"
+
+msgid "Initramfs:"
+msgstr "Initramfs:"
+
+msgid "Details"
+msgstr "Подробности"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Download and install kernel"
+msgstr "Загрузить и установить ядро"
+
+msgid "Installed kernels"
+msgstr "Установленные ядра"
+
+msgid "No kernels installed yet"
+msgstr "Ядра ещё не установлены"
+
+msgid "Current kernel"
+msgstr "Текущее ядро"
+
+msgid "Remove this kernel"
+msgstr "Удалить это ядро"
+
+msgid "← Back"
+msgstr "← Назад"
+
+msgid "Done"
+msgstr "Готово"
+
+msgid "MOK Key Management"
+msgstr "Управление ключами MOK"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "Secure Boot: {}"
+msgstr "Secure Boot: {}"
+
+msgid "Active"
+msgstr "Активен"
+
+msgid "Inactive"
+msgstr "Неактивен"
+
+msgid "MOK Keys: {}"
+msgstr "Ключи MOK: {}"
+
+msgid "Present"
+msgstr "Присутствуют"
+
+msgid "Not generated"
+msgstr "Не сгенерированы"
+
+msgid "Key enrolled: {}"
+msgstr "Ключ зарегистрирован: {}"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "Generate MOK Keys"
+msgstr "Сгенерировать ключи MOK"
+
+msgid "Enroll Key in BIOS"
+msgstr "Зарегистрировать ключ в BIOS"
+
+msgid "Delete Keys"
+msgstr "Удалить ключи"
+
+msgid "MOK keys generated successfully.\nYou must enroll them in BIOS before next boot."
+msgstr "Ключи MOK успешно сгенерированы.\nНеобходимо зарегистрировать их в BIOS до следующей загрузки."
+
+msgid "Failed to generate MOK keys."
+msgstr "Не удалось сгенерировать ключи MOK."
+
+msgid "Enroll MOK Key"
+msgstr "Зарегистрировать ключ MOK"
+
+msgid "The following command will be executed:\n\n{}\n\nYou will be asked to set a password.\nUse it during MOK enrollment on next reboot."
+msgstr "Будет выполнена следующая команда:\n\n{}\n\nВас попросят задать пароль.\nИспользуйте его при регистрации MOK при следующей перезагрузке."
+
+msgid "Select a kernel version first."
+msgstr "Сначала выберите версию ядра."
+
+msgid "Select a kernel profile first."
+msgstr "Сначала выберите профиль ядра."
+
+msgid "Secure Boot signing enabled but no MOK keys found."
+msgstr "Подпись Secure Boot включена, но ключи MOK не найдены."
+
+msgid "Generate MOK keys now? (Required for Secure Boot signing)"
+msgstr "Сгенерировать ключи MOK сейчас? (Необходимо для подписи Secure Boot)"
+
+msgid "Installation cancelled."
+msgstr "Установка отменена."
+
+msgid "Remove kernel {}?"
+msgstr "Удалить ядро {}?"
+
+msgid "This will remove the kernel and update GRUB.\nMake sure you have another kernel installed."
+msgstr "Это удалит ядро и обновит GRUB.\nУбедитесь, что у вас установлено другое ядро."
+
+msgid "Failed to remove kernel."
+msgstr "Не удалось удалить ядро."
+
+msgid "Kernel installed successfully!"
+msgstr "Ядро успешно установлено!"
+
+msgid "Installation failed. Check the log above."
+msgstr "Установка не удалась. Проверьте журнал выше."
+
+msgid "Soplos Kernel Installer v{}"
+msgstr "Установщик ядра Soplos v{}"
+
+msgid "Downloading kernel sources..."
+msgstr "Загрузка исходников ядра..."
+
+msgid "Downloading patches..."
+msgstr "Загрузка патчей..."
+
+msgid "Applying patches..."
+msgstr "Применение патчей..."
+
+msgid "Configuring kernel..."
+msgstr "Настройка ядра..."
+
+msgid "Building kernel..."
+msgstr "Компиляция ядра..."
+
+msgid "Installing kernel..."
+msgstr "Установка ядра..."
+
+msgid "Done!"
+msgstr "Готово!"
+
+msgid "e.g.: soplos"
+msgstr "напр.: soplos"
+
+msgid "Secure Boot (MOK)"
+msgstr "Безопасная загрузка (MOK)"
+
+msgid "⚙ MOK Keys"
+msgstr "⚙ Ключи MOK"
+
+msgid "Secure Boot Key Management"
+msgstr "Управление ключами Secure Boot"
+
+msgid "Secure Boot Setup Wizard"
+msgstr "Мастер настройки Secure Boot"
+
+msgid "Follow these steps to enable Secure Boot support for your custom kernels."
+msgstr "Следуйте этим шагам для включения поддержки Secure Boot для ваших ядер."
+
+msgid "Step 1: Generate MOK Keys"
+msgstr "Шаг 1: Создание ключей MOK"
+
+msgid "Create a key pair to sign your custom kernels."
+msgstr "Создайте пару ключей для подписи ваших ядер."
+
+msgid "Failed to generate keys."
+msgstr "Не удалось создать ключи."
+
+msgid "Keys already generated."
+msgstr "Ключи уже созданы."
+
+msgid "Delete MOK keys?"
+msgstr "Удалить ключи MOK?"
+
+msgid ""
+"The key is currently enrolled in BIOS.\n"
+"\n"
+"It will be queued for unenrollment on next reboot.\n"
+"You will need to enter a password to confirm."
+msgstr ""
+"Ключ в данный момент зарегистрирован в BIOS.\n"
+"\n"
+"Он будет поставлен в очередь на отмену регистрации при следующей перезагрузке.\n"
+"Вам потребуется ввести пароль для подтверждения."
+
+msgid "This will delete your local key files."
+msgstr "Это удалит ваши локальные файлы ключей."
+
+msgid "Step 2: Enable Kernel Signing"
+msgstr "Шаг 2: Включение подписи ядра"
+
+msgid ""
+"You already have your local keys. Now you can:\n"
+"1. Close this window\n"
+"2. Check 'Sign Kernel for Secure Boot (MOK)'\n"
+"3. <b>Start the Installation</b>"
+msgstr ""
+"У вас уже есть локальные ключи. Теперь вы можете:\n"
+"1. Закрыть это окно\n"
+"2. Отметить 'Подписать ядро для Secure Boot (MOK)'\n"
+"3. <b>Запустить установку</b>"
+
+msgid "Step 3: Enroll Key in BIOS (Required to Boot)"
+msgstr "Шаг 3: Зарегистрировать ключ в BIOS (необходимо для загрузки)"
+
+msgid ""
+"This step is only needed once. It is recommended to do it <b>after</b> "
+"installing your first kernel:\n"
+"1. Click 'Enroll Key' (enter a password)\n"
+"2. <b>Restart</b> and select 'Enroll MOK' in the blue menu."
+msgstr ""
+"Этот шаг нужно выполнить только один раз. Рекомендуется сделать это <b>после</b> "
+"установки первого ядра:\n"
+"1. Нажмите 'Зарегистрировать ключ' (введите пароль)\n"
+"2. <b>Перезагрузитесь</b> и выберите 'Enroll MOK' в синем меню."
+
+msgid "Step 4: Enable Secure Boot"
+msgstr "Шаг 4: Включить Secure Boot"
+
+msgid ""
+"After installing the signed kernel, enable Secure Boot in your BIOS/UEFI "
+"settings."
+msgstr "После установки подписанного ядра включите Secure Boot в настройках BIOS/UEFI."
+
+msgid "Reset MOK Database"
+msgstr "Сбросить базу данных MOK"
+
+msgid "Removes ALL enrolled MOK keys from BIOS. Useful to clean up stale keys."
+msgstr "Удаляет ВСЕ зарегистрированные ключи MOK из BIOS. Полезно для очистки устаревших ключей."
+
+msgid "Create MOK Password"
+msgstr "Создать пароль MOK"
+
+msgid "Enroll"
+msgstr "Зарегистрировать"
+
+msgid "Create a password for MOK enrollment"
+msgstr "Создайте пароль для регистрации MOK"
+
+msgid "You will need this password during the next reboot."
+msgstr "Этот пароль потребуется при следующей перезагрузке."
+
+msgid "Minimum 8 characters"
+msgstr "Минимум 8 символов"
+
+msgid "Enter password (min 8 characters)"
+msgstr "Введите пароль (мин. 8 символов)"
+
+msgid "Confirm password"
+msgstr "Подтвердите пароль"
+
+msgid "Passwords do not match."
+msgstr "Пароли не совпадают."
+
+msgid "Password must be at least 8 characters."
+msgstr "Пароль должен содержать не менее 8 символов."
+
+msgid "Error during MOK enrollment: {}"
+msgstr "Ошибка при регистрации MOK: {}"
+
+msgid "Key enrollment scheduled!"
+msgstr "Регистрация ключа запланирована!"
+
+msgid ""
+"Your MOK key has been queued for enrollment.\n"
+"It will take effect on the next system restart."
+msgstr ""
+"Ваш ключ MOK поставлен в очередь на регистрацию.\n"
+"Изменения вступят в силу после следующей перезагрузки системы."
+
+msgid "Unknown error"
+msgstr "Неизвестная ошибка"
+
+msgid ""
+"MOK enrollment failed:\n"
+"{}"
+msgstr ""
+"Регистрация MOK не выполнена:\n"
+"{}"
+
+msgid "Unenroll MOK Key"
+msgstr "Отменить регистрацию ключа MOK"
+
+msgid "Unenroll"
+msgstr "Отменить регистрацию"
+
+msgid "Set a password to confirm unenrollment"
+msgstr "Установите пароль для подтверждения отмены регистрации"
+
+msgid ""
+"You will need this password on the next reboot to confirm\n"
+"removal of the key from the BIOS."
+msgstr ""
+"Этот пароль потребуется при следующей перезагрузке для подтверждения\n"
+"удаления ключа из BIOS."
+
+msgid "Error during MOK unenrollment: {}"
+msgstr "Ошибка при отмене регистрации MOK: {}"
+
+msgid "Key unenrollment scheduled!"
+msgstr "Отмена регистрации ключа запланирована!"
+
+msgid ""
+"The MOK key has been queued for removal from BIOS.\n"
+"It will take effect on the next system restart."
+msgstr ""
+"Ключ MOK поставлен в очередь на удаление из BIOS.\n"
+"Изменения вступят в силу после следующей перезагрузки системы."
+
+msgid ""
+"MOK unenrollment failed:\n"
+"{}"
+msgstr ""
+"Отмена регистрации MOK не выполнена:\n"
+"{}"
+
+msgid "Reset MOK database?"
+msgstr "Сбросить базу данных MOK?"
+
+msgid ""
+"This will remove ALL enrolled MOK keys from BIOS on next reboot.\n"
+"\n"
+"You will need to re-enroll your key after the reset."
+msgstr ""
+"При следующей перезагрузке будут удалены ВСЕ ключи MOK из BIOS.\n"
+"\n"
+"После сброса потребуется повторная регистрация ключа."
+
+msgid "Confirm MOK Reset"
+msgstr "Подтвердить сброс MOK"
+
+msgid "Reset"
+msgstr "Сбросить"
+
+msgid "Set a password to confirm the reset"
+msgstr "Установите пароль для подтверждения сброса"
+
+msgid ""
+"You will need this password on the next reboot to confirm\n"
+"removal of all MOK keys from BIOS."
+msgstr ""
+"Этот пароль потребуется при следующей перезагрузке для подтверждения\n"
+"удаления всех ключей MOK из BIOS."
+
+msgid "Error during MOK reset: {}"
+msgstr "Ошибка при сбросе MOK: {}"
+
+msgid "MOK reset scheduled!"
+msgstr "Сброс MOK запланирован!"
+
+msgid ""
+"All MOK keys will be removed from BIOS on the next reboot.\n"
+"Confirm with your password in the blue MOK manager screen."
+msgstr ""
+"Все ключи MOK будут удалены из BIOS при следующей перезагрузке.\n"
+"Подтвердите паролем на синем экране менеджера MOK."
+
+msgid ""
+"MOK reset failed:\n"
+"{}"
+msgstr ""
+"Сброс MOK не выполнен:\n"
+"{}"
+
+msgid "Existing build found"
+msgstr "Найдена существующая сборка"
+
+#, python-format
+msgid ""
+"A build directory for kernel %(version)s already exists.\n"
+"\n"
+"• Start Fresh: re-download sources and patches.\n"
+"• Reuse Sources: skip download, apply selected patches and recompile."
+msgstr ""
+"Директория сборки для ядра %(version)s уже существует.\n"
+"\n"
+"• Начать заново: повторно загрузить исходники и патчи.\n"
+"• Использовать исходники: пропустить загрузку, применить выбранные патчи и перекомпилировать."
+
+msgid "Start Fresh"
+msgstr "Начать заново"
+
+msgid "Reuse Sources"
+msgstr "Использовать исходники"
+
+msgid "Kernel compilation in progress"
+msgstr "Компиляция ядра выполняется"
+
+msgid ""
+"\n"
+"✓ Kernel installed successfully!"
+msgstr ""
+"\n"
+"✓ Ядро успешно установлено!"
+
+msgid ""
+"\n"
+"✗ Installation failed. Check the log above."
+msgstr ""
+"\n"
+"✗ Установка не выполнена. Проверьте журнал выше."
+
+msgid "Cancel build?"
+msgstr "Отменить сборку?"
+
+msgid ""
+"Do you want to keep the build folder?\n"
+"Keeping it allows reusing downloaded sources next time."
+msgstr ""
+"Хотите сохранить папку сборки?\n"
+"Сохранение позволит повторно использовать загруженные исходники в следующий раз."
+
+msgid "Delete build folder"
+msgstr "Удалить папку сборки"
+
+msgid "Keep build folder"
+msgstr "Сохранить папку сборки"
+
+msgid "Continue building"
+msgstr "Продолжить сборку"
+
+msgid ""
+"\n"
+"⚠ Installation cancelled."
+msgstr ""
+"\n"
+"⚠ Установка отменена."
+
+msgid "Revoke MOK key?"
+msgstr "Отозвать ключ MOK?"
+
+msgid ""
+"No more Secure Boot signed kernels are installed.\n"
+"Do you want to revoke the MOK key from the firmware?\n"
+"You will need to confirm on next reboot."
+msgstr ""
+"Больше нет ядер, подписанных Secure Boot.\n"
+"Хотите отозвать ключ MOK из прошивки?\n"
+"Потребуется подтверждение при следующей перезагрузке."
+
+msgid "Installation complete!"
+msgstr "Установка завершена!"
+
+msgid ""
+"The kernel has been installed successfully.\n"
+"\n"
+"Do you want to reboot now to use the new kernel?"
+msgstr ""
+"Ядро успешно установлено.\n"
+"\n"
+"Хотите перезагрузиться сейчас, чтобы использовать новое ядро?"
+
+msgid "Patches"
+msgstr "Патчи"
+
+msgid "NTSYNC requires kernel 6.14 or newer"
+msgstr "NTSYNC требует ядро 6.14 или новее"
+
+msgid "CPU LOAD"
+msgstr "НАГРУЗКА ЦП"
+
+msgid "MEMORY"
+msgstr "ПАМЯТЬ"
+
+msgid "DISK (Build)"
+msgstr "ДИСК (Сборка)"
+
+msgid "Free:"
+msgstr "Свободно:"
+
+msgid "CPU TEMP"
+msgstr "ТЕМП. ЦП"
+
+msgid "Cores:"
+msgstr "Ядра:"
+
+msgid "Threads:"
+msgstr "Потоки:"
+
+msgid "Cancelled"
+msgstr "Отменено"
+
+msgid "Failed"
+msgstr "Ошибка"
+
+msgid "Error opening log file: {}"
+msgstr "Ошибка при открытии файла журнала: {}"
+
+msgid "Time:"
+msgstr "Время:"
+
+msgid "<span foreground='orange'>⚠ Experimental RC version</span>"
+msgstr "<span foreground='orange'>⚠ Экспериментальная RC-версия</span>"
+
+msgid "<b>✓ Latest stable version</b>"
+msgstr "<b>✓ Последняя стабильная версия</b>"
+
+msgid "DKMS Key (NVIDIA / VirtualBox drivers)"
+msgstr "Ключ DKMS (драйверы NVIDIA / VirtualBox)"
+
+msgid "DKMS modules are installed but the signing key is <b>missing</b>.\nReinstall your NVIDIA or VirtualBox drivers from soplos-welcome to regenerate it."
+msgstr "Модули DKMS установлены, но ключ подписи <b>отсутствует</b>.\nПереустановите драйверы NVIDIA или VirtualBox через soplos-welcome для его восстановления."
+
+msgid "The DKMS signing key is enrolled. Kernel modules (NVIDIA etc.) will load correctly."
+msgstr "Ключ подписи DKMS зарегистрирован. Модули ядра (NVIDIA и др.) будут загружаться корректно."
+
+msgid "The DKMS signing key is <b>not enrolled</b>. Without it, NVIDIA and other DKMS drivers will fail to load with Secure Boot enabled.\nEnroll it now alongside your kernel key."
+msgstr "Ключ подписи DKMS <b>не зарегистрирован</b>. Без него NVIDIA и другие драйверы DKMS не загрузятся при включённой Secure Boot.\nЗарегистрируйте его вместе с ключом ядра."
+
+msgid "Enroll DKMS Key in BIOS"
+msgstr "Зарегистрировать ключ DKMS в BIOS"
+
+msgid "mainline"
+msgstr "mainline"
+
+msgid "Soplos Stock"
+msgstr "Soplos Stock"
+
+msgid "Generic Soplos kernel. Vanilla config with no profile modifications. Compatible with all Soplos distributions."
+msgstr "Универсальное ядро Soplos. Стандартная конфигурация без изменений профиля. Совместимо со всеми дистрибутивами Soplos."
+
+msgid "Mainline kernel (not yet stable)"
+msgstr "Ядро mainline (ещё не стабильное)"
+
+msgid "<span foreground='red'>✗ End-of-Life — no longer receives security updates</span>"
+msgstr "<span foreground='red'>✗ Конец жизненного цикла — больше не получает обновлений безопасности</span>"
+
+msgid "Invalid kernel name '{}'. Only letters, numbers, dots, hyphens and underscores are allowed."
+msgstr "Недопустимое имя ядра '{}'. Разрешены только буквы, цифры, точки, дефисы и знаки подчёркивания."
+
+msgid "The DKMS signing key is enrolled. Each time a new kernel is installed, DKMS automatically rebuilds and signs the NVIDIA modules — they will load correctly with Secure Boot active."
+msgstr "Ключ подписи DKMS зарегистрирован. При каждой установке нового ядра DKMS автоматически пересобирает и подписывает модули NVIDIA — они будут корректно загружаться при активном Secure Boot."
+
+msgid ""
+"Each time a new kernel is installed, DKMS automatically rebuilds your NVIDIA modules for that kernel. With Secure Boot active, those modules must be signed with this key to load.\n"
+"\n"
+"The DKMS signing key is <b>not enrolled</b>. Without it, NVIDIA and other DKMS drivers will fail to load.\n"
+"Enroll it now alongside your kernel key."
+msgstr ""
+"При каждой установке нового ядра DKMS автоматически пересобирает модули NVIDIA для этого ядра. При активном Secure Boot эти модули должны быть подписаны данным ключом для загрузки.\n"
+"\n"
+"Ключ подписи DKMS <b>не зарегистрирован</b>. Без него NVIDIA и другие DKMS-драйверы не будут загружаться.\n"
+"Зарегистрируйте его сейчас вместе с ключом ядра."
+
+msgid ""
+"Installing the new kernel triggered an automatic rebuild of your NVIDIA modules (DKMS).\n"
+"\n"
+"These newly built modules must be signed to work with Secure Boot active. The DKMS signing key must be enrolled in the firmware so that NVIDIA modules (nvidia-uvm, NVENC, CUDA) load correctly.\n"
+"\n"
+"Without this step, NVENC and CUDA will not work after reboot.\n"
+"\n"
+"Do you want to enroll the DKMS key now?"
+msgstr ""
+"Установка нового ядра запустила автоматическую пересборку модулей NVIDIA (DKMS).\n"
+"\n"
+"Эти вновь собранные модули должны быть подписаны для работы при активном Secure Boot. Ключ подписи DKMS должен быть зарегистрирован в прошивке, чтобы модули NVIDIA (nvidia-uvm, NVENC, CUDA) загружались корректно.\n"
+"\n"
+"Без этого шага NVENC и CUDA не будут работать после перезагрузки.\n"
+"\n"
+"Хотите зарегистрировать ключ DKMS сейчас?"
+
+msgid "Build Kernel"
+msgstr "Сборка ядра"
+
+msgid "Soplos Kernels"
+msgstr "Ядра Soplos"
+
+msgid "Soplos Kernels Repository"
+msgstr "Репозиторий ядер Soplos"
+
+msgid "Available kernels"
+msgstr "Доступные ядра"
+
+msgid "Add repository"
+msgstr "Добавить репозиторий"
+
+msgid "Adding..."
+msgstr "Добавление..."
+
+msgid "Adding Soplos Kernels repository..."
+msgstr "Добавление репозитория ядер Soplos..."
+
+msgid "Error adding repository"
+msgstr "Ошибка при добавлении репозитория"
+
+msgid "Refresh"
+msgstr "Обновить"
+
+msgid "Updating repository..."
+msgstr "Обновление репозитория..."
+
+msgid "Install"
+msgstr "Установить"
+
+msgid "Remove"
+msgstr "Удалить"
+
+msgid "Installing"
+msgstr "Установка"
+
+msgid "Removing"
+msgstr "Удаление"
+
+msgid "Update"
+msgstr "Обновить"
+
+msgid "Updating {pkg}..."
+msgstr "Обновление {pkg}..."
+
+msgid "No kernels available in repository"
+msgstr "В репозитории нет доступных ядер"
+
+msgid "Status: <b>Repository installed</b>"
+msgstr "Статус: <b>Репозиторий установлен</b>"
+
+msgid "Status: Repository not configured"
+msgstr "Статус: Репозиторий не настроен"
+
+msgid "Discard"
+msgstr "Отклонить"
+
+msgid "Save packages"
+msgstr "Сохранить пакеты"
+
+msgid "Save .deb packages?"
+msgstr "Сохранить пакеты .deb?"
+
+msgid "Choose destination folder"
+msgstr "Выбрать папку назначения"
+
+msgid "Select"
+msgstr "Выбрать"
+
+msgid ""
+"Saved {n} package(s) to:\n"
+"{path}"
+msgstr ""
+"Сохранено {n} пакет(ов) в:\n"
+"{path}"
+
+msgid "Kernel build complete!"
+msgstr "Сборка ядра завершена!"
+
+msgid ""
+"Build complete but no .deb packages were found.\n"
+"Check the build log for details."
+msgstr ""
+"Сборка завершена, но пакеты .deb не найдены.\n"
+"Проверьте журнал сборки для подробностей."
+
+#, python-format
+msgid ""
+"The following packages are ready:\n"
+"\n"
+"%(pkgs)s\n"
+"\n"
+"Choose a folder to save them."
+msgstr ""
+"Следующие пакеты готовы:\n"
+"\n"
+"%(pkgs)s\n"
+"\n"
+"Выберите папку для сохранения."
+
+#, python-format
+msgid ""
+"The build directory contains %(n)d .deb package(s).\n"
+"Do you want to save them before deleting the build directory?"
+msgstr ""
+"Каталог сборки содержит %(n)d пакет(ов) .deb.\n"
+"Хотите сохранить их перед удалением каталога сборки?"
+
+msgid "Operation failed"
+msgstr "Ошибка операции"
+
+msgid "Enroll DKMS signing key for NVIDIA?"
+msgstr "Зарегистрировать ключ подписи DKMS для NVIDIA?"
+
+msgid "Stock"
+msgstr "Стандартный"
+
+msgid "Result: {}"
+msgstr "Результат: {}"
+
+msgid ""
+"\n"
+"✓ Kernel build complete!"
+msgstr ""
+"\n"
+"✓ Сборка ядра завершена!"

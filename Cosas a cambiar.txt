@@ -1,0 +1,13 @@
+[X] Revisar la anchura del programa
+[X] Quitar subtítulo en el headerbar de gnome
+[X] Revisar la lista de kernels que se vean las celdas igual y todo en columnas para que no se vea descentrado.
+[X] Al desinstalar kernels con Soplos Sys Cleaner y abrir después kernel installer aún muestra los kernels aunque ya no existan.
+[X] En la caja de la ventana principal donde muestra limpiar directorio, añadir alguna función útil para que no se vea tan vacía
+[X] La ventana de logs no muestra todos los logs
+[X] La barra de progreso parece colgada cuando descomprime el tarball y cuando empaqueta e instala los .deb
+[X] Revisar en una vmware con secure boot si funciona mok
+[X] Revisar los parches de Zen que no se descargan
+[X] Crear los 8 diccionarios completos.
+[X] Al abrir el programa por primera vez me pide varias veces la contraseña. Mostrando ese error siempre.
+[X] Al marcar mok no me pide contraseña de firma como lo hacía legacy
+[X] Revisar el enroll que no lo hace
