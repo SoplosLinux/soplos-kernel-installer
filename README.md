@@ -64,11 +64,11 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 
 | Main window | Download progress | Build logs |
 | :---: | :---: | :---: |
-| ![Main](assets/screenshots/screenshot4.png) | ![Progress](assets/screenshots/screenshot2.png) | ![Build](assets/screenshots/screenshot3.png) |
+| ![Main](assets/screenshots/screenshot1.png) | ![Progress](assets/screenshots/screenshot2.png) | ![Build](assets/screenshots/screenshot3.png) |
 
 | Soplos Kernels tab | Soplos Stock profile |
 | :---: | :---: |
-| ![Soplos Kernels](assets/screenshots/screenshot5.png) | ![Stock](assets/screenshots/screenshot1.png) |
+| ![Soplos Kernels](assets/screenshots/screenshot5.png) | ![Stock](assets/screenshots/screenshot4.png) |
 
 ## 🔧 Installation
 
