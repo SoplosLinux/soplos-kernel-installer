@@ -19,7 +19,7 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
   - [PREEMPT_RT](https://cdn.kernel.org/pub/linux/kernel/projects/rt) — Full real-time preemption
   - [Zen](https://github.com/zen-kernel/zen-kernel) — Desktop/gaming optimizations
   - [NTSYNC](https://www.kernel.org) — NT synchronization primitives
-- 🎯 **Kernel profiles**: Gaming · Audio/Video · Minimal/Office · Hardware Optimized
+- 🎯 **Kernel profiles**: Gaming · Audio/Video · Minimal/Office · Automatic
 - 🔄 **Source reuse**: Recycle existing kernel sources for faster recompilation
 - 🛡️ **Secure Boot** signing via MOK (generate keys, enroll in BIOS, sign kernel + EFI)
 - 🎮 **NVIDIA DKMS** module signing for Secure Boot
@@ -62,9 +62,13 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 
 ## 📸 Screenshots
 
-| Main window | Installation progress | Build logs |
+| Main window | Download progress | Build logs |
 | :---: | :---: | :---: |
-| ![Main](https://raw.githubusercontent.com/SoplosLinux/tyron/main/media/soplos-kernel-installer/screenshots/screenshot01.png) | ![Progress](https://raw.githubusercontent.com/SoplosLinux/tyron/main/media/soplos-kernel-installer/screenshots/screenshot02.png) | ![Build](https://raw.githubusercontent.com/SoplosLinux/tyron/main/media/soplos-kernel-installer/screenshots/screenshot03.png) |
+| ![Main](assets/screenshots/screenshot4.png) | ![Progress](assets/screenshots/screenshot2.png) | ![Build](assets/screenshots/screenshot3.png) |
+
+| Soplos Kernels tab | Soplos Stock profile |
+| :---: | :---: |
+| ![Soplos Kernels](assets/screenshots/screenshot5.png) | ![Stock](assets/screenshots/screenshot1.png) |
 
 ## 🔧 Installation
 
