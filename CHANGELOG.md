@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.0-2] - 2026-06-02
+
+### Fixed
+- **Soplos Kernels Update button**: `apt-cache show` returns multiple stanzas when more than one version of a package is available (candidate first, installed second). The code was processing all stanzas and the last `Version:` field overwrote the first, resulting in the old version being stored. Now stops at the first blank line after reading the first stanza, so the candidate version is always used.
+- **Stale package list after action**: After installing, updating or removing a Soplos kernel, the tab was refreshed using cached apt data. Replaced `_refresh_soplos_kernels_tab()` with `_fetch_soplos_packages()` in `_on_soplos_kernel_action_done` so the list is fully re-fetched from apt after every action.
+- **Locale-dependent apt-cache output**: `apt-cache policy` and `apt-cache show` output field names in the system language (e.g. `Instalados:` / `Candidato:` in Spanish) instead of English. The code was looking for `Installed:` and `Candidate:` and never matching them, causing `updates[pkg]` to always be `False` and the Update button to never appear. Fixed by forcing `LC_ALL=C` on all apt-cache subprocess calls.
+
 ## [1.0.0-1] - 2026-06-02
 
 ### ✨ Added
