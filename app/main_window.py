@@ -395,6 +395,11 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._refresh_repo_btn.connect('clicked', self._on_refresh_soplos_repo_clicked)
         repo_row.pack_start(self._refresh_repo_btn, False, False, 0)
 
+        self._remove_repo_btn = Gtk.Button(label=_("Remove repository"))
+        self._remove_repo_btn.get_style_context().add_class('destructive-action')
+        self._remove_repo_btn.connect('clicked', self._on_remove_soplos_repo_clicked)
+        repo_row.pack_start(self._remove_repo_btn, False, False, 0)
+
         self._add_repo_btn = Gtk.Button(label=_("Add repository"))
         self._add_repo_btn.get_style_context().add_class('suggested-action')
         self._add_repo_btn.connect('clicked', self._on_add_soplos_repo_clicked)
@@ -563,10 +568,12 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             self._repo_status_label.set_markup(_("Status: <b>Repository installed</b>"))
             self._add_repo_btn.hide()
             self._refresh_repo_btn.show()
+            self._remove_repo_btn.show()
         else:
             self._repo_status_label.set_markup(_("Status: Repository not configured"))
             self._add_repo_btn.show()
             self._refresh_repo_btn.hide()
+            self._remove_repo_btn.hide()
 
         for pkg, _name, _desc, pattern in self._soplos_packages:
             btn = self._kernel_action_btns.get(pkg)
@@ -646,6 +653,52 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             )
             dialog.run()
             dialog.destroy()
+
+    def _on_remove_soplos_repo_clicked(self, btn) -> None:
+        dialog = Gtk.MessageDialog(
+            transient_for=self, modal=True,
+            message_type=Gtk.MessageType.WARNING,
+            buttons=Gtk.ButtonsType.YES_NO,
+            text=_("Remove Soplos Kernels repository?")
+        )
+        dialog.format_secondary_text(
+            _("The repository and its GPG key will be removed.\n"
+              "Already installed kernels will not be affected.")
+        )
+        resp = dialog.run()
+        dialog.destroy()
+        if resp != Gtk.ResponseType.YES:
+            return
+
+        cmd = (
+            f'rm -f "{self._SOPLOS_KERNELS_REPO_FILE}" "{self._SOPLOS_KERNELS_GPG_FILE}" && '
+            f'apt-get update -qq'
+        )
+        btn.set_sensitive(False)
+        self._show_sk_progress(_("Removing Soplos Kernels repository..."))
+
+        def run():
+            from utils.system import run_privileged
+            result = run_privileged(cmd)
+            GLib.idle_add(self._on_repo_remove_done, result.returncode == 0)
+
+        threading.Thread(target=run, daemon=True).start()
+
+    def _on_repo_remove_done(self, success: bool) -> None:
+        self._hide_sk_progress()
+        self._remove_repo_btn.set_sensitive(True)
+        if success:
+            self._fetch_soplos_packages()
+        else:
+            dialog = Gtk.MessageDialog(
+                transient_for=self, modal=True,
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.OK,
+                text=_("Error removing repository")
+            )
+            dialog.run()
+            dialog.destroy()
+            self._refresh_soplos_kernels_tab()
 
     def _on_soplos_kernel_update(self, btn, package: str) -> None:
         suffix = next((s for pkg, _n, _d, s in self._soplos_packages if pkg == package), "")

@@ -766,6 +766,21 @@ msgstr "Добавление репозитория ядер Soplos..."
 msgid "Error adding repository"
 msgstr "Ошибка при добавлении репозитория"
 
+msgid "Remove repository"
+msgstr "Удалить репозиторий"
+
+msgid "Remove Soplos Kernels repository?"
+msgstr "Удалить репозиторий ядер Soplos?"
+
+msgid "The repository and its GPG key will be removed.\nAlready installed kernels will not be affected."
+msgstr "Репозиторий и его GPG-ключ будут удалены.\nУже установленные ядра не будут затронуты."
+
+msgid "Removing Soplos Kernels repository..."
+msgstr "Удаление репозитория ядер Soplos..."
+
+msgid "Error removing repository"
+msgstr "Ошибка при удалении репозитория"
+
 msgid "Refresh"
 msgstr "Обновить"
 

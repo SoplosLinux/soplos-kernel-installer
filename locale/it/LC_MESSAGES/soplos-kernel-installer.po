@@ -766,6 +766,21 @@ msgstr "Aggiunta del repository kernel Soplos..."
 msgid "Error adding repository"
 msgstr "Errore durante l'aggiunta del repository"
 
+msgid "Remove repository"
+msgstr "Rimuovi repository"
+
+msgid "Remove Soplos Kernels repository?"
+msgstr "Rimuovere il repository dei kernel Soplos?"
+
+msgid "The repository and its GPG key will be removed.\nAlready installed kernels will not be affected."
+msgstr "Il repository e la sua chiave GPG verranno rimossi.\nI kernel già installati non saranno interessati."
+
+msgid "Removing Soplos Kernels repository..."
+msgstr "Rimozione del repository dei kernel Soplos..."
+
+msgid "Error removing repository"
+msgstr "Errore durante la rimozione del repository"
+
 msgid "Refresh"
 msgstr "Aggiorna"
 

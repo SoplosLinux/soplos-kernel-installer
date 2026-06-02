@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.0-1] - 2026-06-02
+
+### ✨ Added
+- **Remove repository button**: New "Remove repository" button in the Soplos Kernels tab — removes `/etc/apt/sources.list.d/soplos-kernels.sources` and `/usr/share/keyrings/soplos-kernels.gpg`, then runs `apt-get update`. Already installed kernels are not affected. UI updates instantly.
+
 ## [1.0.0] - 2026-04-05
 
 ### ✨ Added

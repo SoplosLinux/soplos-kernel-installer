@@ -766,6 +766,21 @@ msgstr "Se adaugă depozitul de kerneluri Soplos..."
 msgid "Error adding repository"
 msgstr "Eroare la adăugarea depozitului"
 
+msgid "Remove repository"
+msgstr "Elimină depozitul"
+
+msgid "Remove Soplos Kernels repository?"
+msgstr "Eliminați depozitul de kerneluri Soplos?"
+
+msgid "The repository and its GPG key will be removed.\nAlready installed kernels will not be affected."
+msgstr "Depozitul și cheia GPG vor fi eliminate.\nKernelurile deja instalate nu vor fi afectate."
+
+msgid "Removing Soplos Kernels repository..."
+msgstr "Se elimină depozitul de kerneluri Soplos..."
+
+msgid "Error removing repository"
+msgstr "Eroare la eliminarea depozitului"
+
 msgid "Refresh"
 msgstr "Reîmprospătare"
 

@@ -766,6 +766,21 @@ msgstr "Ajout du dépôt des noyaux Soplos..."
 msgid "Error adding repository"
 msgstr "Erreur lors de l'ajout du dépôt"
 
+msgid "Remove repository"
+msgstr "Supprimer le dépôt"
+
+msgid "Remove Soplos Kernels repository?"
+msgstr "Supprimer le dépôt des noyaux Soplos ?"
+
+msgid "The repository and its GPG key will be removed.\nAlready installed kernels will not be affected."
+msgstr "Le dépôt et sa clé GPG seront supprimés.\nLes noyaux déjà installés ne seront pas affectés."
+
+msgid "Removing Soplos Kernels repository..."
+msgstr "Suppression du dépôt des noyaux Soplos..."
+
+msgid "Error removing repository"
+msgstr "Erreur lors de la suppression du dépôt"
+
 msgid "Refresh"
 msgstr "Actualiser"
 
