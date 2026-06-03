@@ -90,7 +90,7 @@ def get_nvidia_dkms_patch_commands() -> str:
         "    continue; "
         "  fi; "
         "  echo \"Applying NVIDIA VMA lock patch to ${NVIDIA_SRC}...\"; "
-        f"  printf '%s' '{patch_content}' | patch -p1 -d \"$NVIDIA_SRC\" && "
+        f"  printf '%s' '{patch_content}' | patch --fuzz=5 -p1 -d \"$NVIDIA_SRC\" && "
         "  echo \"NVIDIA VMA patch applied successfully.\" || "
         "  echo \"Warning: NVIDIA VMA patch failed for ${NVIDIA_SRC} — DKMS may fail.\"; "
         "done"

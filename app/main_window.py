@@ -22,6 +22,7 @@ from widgets.patch_selector import PatchSelector
 from widgets.build_progress import BuildProgress
 from widgets.history_view import HistoryView
 from core.nvidia import has_nvidia_gpu
+from core.nvidia_dkms_patch import get_nvidia_dkms_patch_commands
 from core.i18n_manager import _
 from core.profiles import ProfileType
 from config.constants import APP_VERSION as VERSION
@@ -724,7 +725,8 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
         def run():
             from utils.system import run_privileged
-            ret = run_privileged(f"apt install -y --only-upgrade {package}").returncode
+            nvidia_patch = get_nvidia_dkms_patch_commands() + " && " if has_nvidia_gpu() else ""
+            ret = run_privileged(f"{nvidia_patch}apt install -y --only-upgrade {package}").returncode
             if ret == 0 and suffix:
                 # Purge old kernel image/headers (all but newest, skipping running kernel)
                 cleanup = (
@@ -743,7 +745,8 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         action_label = _("Installing") if not installed else _("Removing")
 
         if not installed:
-            cmd = f"apt install -y {package}"
+            nvidia_patch = get_nvidia_dkms_patch_commands() + " && " if has_nvidia_gpu() else ""
+            cmd = f"{nvidia_patch}apt install -y {package}"
         else:
             suffix = next((s for pkg, _n, _d, s in self._soplos_packages if pkg == package), "")
             extra_pkgs = []

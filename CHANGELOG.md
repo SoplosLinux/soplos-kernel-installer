@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.0-4] - 2026-06-02
+
+### Fixed
+- **NVIDIA patch in Soplos Kernels tab**: The NVIDIA VMA compatibility patch was only applied when compiling kernels from source. Now also applied before `apt install` and `apt install --only-upgrade` in the Soplos Kernels repository tab, preventing DKMS build failures on NVIDIA systems when installing or updating pre-built kernels.
+- **NVIDIA VMA patch fuzz**: Added `--fuzz=5` to the patch command so the same patch applies correctly to driver versions with minor line offset differences (e.g. 580 vs 590).
+
 ## [1.0.0-3] - 2026-06-02
 
 ### Fixed

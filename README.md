@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.0--3-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.0--4-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -27,7 +27,11 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.0-3)
+### 🚀 Recent Updates (v1.0.0-4)
+- **Fixed**: NVIDIA DKMS patch now also applied when installing or updating kernels from the Soplos Kernels repository tab — previously only ran when compiling from source.
+- **Fixed**: NVIDIA VMA patch now uses `--fuzz=5` to cover driver versions with minor line offset differences (e.g. 590.x).
+
+### Previous Updates (v1.0.0-3)
 - **Fixed**: Update button appearing incorrectly after updating a kernel — the old vmlinuz still present in `/boot` before reboot was being detected as an outdated version. The vmlinuz fallback now only activates when the metapackage is not registered in apt at all.
 
 ### Previous Updates (v1.0.0-2)
@@ -132,6 +136,10 @@ Contact: info@soploslinux.com
 - [Help](https://soplos.org)
 
 ## 📦 Versions
+
+### v1.0.0-4 (02/06/2026)
+- **Fixed**: NVIDIA DKMS patch now also applied when installing or updating kernels from the Soplos Kernels repository tab — previously only ran when compiling from source.
+- **Fixed**: NVIDIA VMA patch uses `--fuzz=5` to cover driver versions with minor line offset differences (e.g. 590.x vs 580.x).
 
 ### v1.0.0-1 (02/06/2026)
 - **Added**: "Remove repository" button in the Soplos Kernels tab — removes the repository source file and its GPG key without affecting already installed kernels
