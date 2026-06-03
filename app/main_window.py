@@ -366,6 +366,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._kernel_update_btns = {}
         self._soplos_updates = {}
         self._soplos_versions = {}
+        self._soplos_apt_registered = {}
 
         scroll = Gtk.ScrolledWindow()
         scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -441,6 +442,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             packages = []
             updates = {}
             versions = {}
+            apt_registered = {}
             try:
                 _lc_env = {**os.environ, 'LC_ALL': 'C', 'LANG': 'C'}
                 names = subprocess.run(
@@ -493,6 +495,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
                             if v != '(none)':
                                 candidate_ver = v
                     updates[pkg] = bool(installed_ver and candidate_ver and installed_ver != candidate_ver)
+                    apt_registered[pkg] = bool(installed_ver)
                     versions[pkg] = pkg_version
 
                     name = self._soplos_pkg_display_name(pkg)
@@ -500,14 +503,15 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
                 packages.sort(key=lambda x: (0 if x[0] == 'linux-soplos' else 1, x[0]))
             except Exception:
                 pass
-            GLib.idle_add(self._on_soplos_packages_fetched, packages, updates, versions)
+            GLib.idle_add(self._on_soplos_packages_fetched, packages, updates, versions, apt_registered)
 
         threading.Thread(target=fetch, daemon=True).start()
 
-    def _on_soplos_packages_fetched(self, packages, updates, versions) -> None:
+    def _on_soplos_packages_fetched(self, packages, updates, versions, apt_registered) -> None:
         self._soplos_packages = packages
         self._soplos_updates = updates
         self._soplos_versions = versions
+        self._soplos_apt_registered = apt_registered
         self._rebuild_kernels_list()
         self._refresh_soplos_kernels_tab()
 
@@ -597,7 +601,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             upd_btn = self._kernel_update_btns.get(pkg)
             if upd_btn:
                 has_update = self._soplos_updates.get(pkg, False)
-                if not has_update and installed and pattern:
+                if not has_update and installed and pattern and not self._soplos_apt_registered.get(pkg, False):
                     vmlinuz_list = glob.glob(f"/boot/vmlinuz-*{pattern}")
                     if vmlinuz_list:
                         base = os.path.basename(vmlinuz_list[0])[len("vmlinuz-"):]

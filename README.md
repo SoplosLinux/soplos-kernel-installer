@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.0--2-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.0--3-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -27,7 +27,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.0-2)
+### 🚀 Recent Updates (v1.0.0-3)
+- **Fixed**: Update button appearing incorrectly after updating a kernel — the old vmlinuz still present in `/boot` before reboot was being detected as an outdated version. The vmlinuz fallback now only activates when the metapackage is not registered in apt at all.
+
+### Previous Updates (v1.0.0-2)
 - **Fixed**: Update button in Soplos Kernels tab not appearing when a newer kernel version was available — `apt-cache show` returns multiple stanzas when versions differ; the code was reading the last stanza (old version) instead of the first (candidate). Now stops at the first stanza.
 - **Fixed**: After installing, updating or removing a Soplos kernel, the package list was refreshed with stale data. Now fully re-fetches from apt so the Update button reflects the real state.
 - **Fixed**: `apt-cache policy` and `apt-cache show` output field names in the system language on non-English systems (`Instalados:` / `Candidato:` in Spanish). The code was parsing English-only strings, so `installed_ver` was always empty and the Update button never appeared. Fixed by forcing `LC_ALL=C` on all apt-cache calls.

@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.0-3] - 2026-06-02
+
+### Fixed
+- **Spurious Update button after kernel update**: After updating a Soplos kernel, the old vmlinuz was still present in `/boot` before reboot. The vmlinuz version fallback was comparing it against the repo candidate and showing the Update button incorrectly. The fallback now only activates when the metapackage is not registered in apt (`Installed: (none)`), so if apt knows the package is up to date, it is trusted and the vmlinuz is not checked.
+
 ## [1.0.0-2] - 2026-06-02
 
 ### Fixed
