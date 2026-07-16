@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.1--1-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,11 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1)
+### 🚀 Recent Updates (v1.0.1-1)
+- **Fixed**: Soplos Kernels tab now detects march-level package variants (`linux-soplos-bore-v3`, etc.).
+- **Fixed**: Display names for march-level packages: `linux-soplos-v3` → "Stock V3", `linux-soplos-bore-v3` → "BORE V3".
+
+### Previous Updates (v1.0.1)
 - **Added**: x86-64 microarchitecture level selector in Stock mode (v1 Generic / v2 SSE4.2+ / v3 AVX2+ / v4 AVX-512) for building march-optimized kernels.
 - **Added**: X3D VCache scheduler patch (Stock mode only) — original Soplos patch that steers tasks to the VCache CCD on AMD Ryzen X3D dual-CCD processors. Auto-selects BORE + NTSYNC. Named `soplos-x3d-vN`.
 - **Added**: Wiki info button in Soplos Kernels tab linking to the CPU Compatibility guide.
@@ -142,57 +146,3 @@ Contact: info@soploslinux.com
 - [Report issues](https://github.com/SoplosLinux/soplos-kernel-installer/issues)
 - [Help](https://soplos.org)
 
-## 📦 Versions
-
-### v1.0.0-4 (02/06/2026)
-- **Fixed**: NVIDIA DKMS patch now also applied when installing or updating kernels from the Soplos Kernels repository tab — previously only ran when compiling from source.
-- **Fixed**: NVIDIA VMA patch uses `--fuzz=5` to cover driver versions with minor line offset differences (e.g. 590.x vs 580.x).
-
-### v1.0.0-1 (02/06/2026)
-- **Added**: "Remove repository" button in the Soplos Kernels tab — removes the repository source file and its GPG key without affecting already installed kernels
-
-### v1.0.0 (05/04/2026)
-- **PREEMPT_RT Integration**: For kernels ≥6.12, PREEMPT_RT is integrated upstream — no external patch download, automatically enables `CONFIG_PREEMPT_RT=y`
-- **Source Reuse**: Recycle existing kernel sources for faster subsequent compilations with automatic patch conflict detection
-- **Expandable History**: Installation history with automatic kernel tags (XanMod, Liquorix, Zen, System...) and improved UI
-- **Keyboard Shortcuts**: Ctrl+Q (quit), Ctrl+W (close), F5 (refresh), F1 (help/about), Ctrl+Tab / Ctrl+Shift+Tab (switch tabs)
-- **About Dialog**: Application information with version, author, license and website
-- **NTSYNC Patch**: Added NT synchronization primitives support for Wine/Proton gaming
-- **NVIDIA Kernel 7.x Patch**: Automatically applies VMA locking API compatibility patch to NVIDIA DKMS sources before build (fixes DKMS failure on kernel 7.0+)
-- **DKMS MOK Auto-Enroll**: Prompts to enroll DKMS signing key after Secure Boot install when NVIDIA GPU detected — fixes NVENC/CUDA with Secure Boot
-- **Save .deb Before Cleanup**: Offers to save compiled packages before deleting the build directory
-- **MOK Key Path**: Key management dialog shows the MOK key storage location
-- **Fixed**: Incorrect generation of 1GB `-dbg` packages.
-- **Fixed**: Kernel version naming discrepancies (e.g., 7.0-rc6 vs 7.0.0-rc6) for Secure Boot/NVIDIA signing.
-- **Fixed**: Properly isolated kernel packages (`image` + `headers` + `libc-dev` only).
-- **Fixed**: All kernel profile compilation bugs — PREEMPT_DYNAMIC, THP, DEBUG_INFO Kconfig choice blocks.
-- **Fixed**: GPU detection checks only display/VGA/3D lines — AMD CPU no longer causes false positives.
-- **Fixed**: Cleanup checkbox now actually triggers build directory removal.
-- **Fixed**: Path quoting in `cp` and `make -C` commands.
-- **Fixed**: MOK password shell injection — password safely escaped with `shlex.quote()`.
-- **Fixed**: Install button disabled on first click to prevent duplicate builds.
-- **Fixed**: Custom kernel name validated before install.
-- **Fixed**: `remove_kernel()` validates release string before constructing shell commands.
-- **Fixed**: Interactive config prompts mid-build — second `make olddefconfig` pass after profile options.
-- **Added**: Soplos Stock hidden profile (Ctrl+Shift+D) for vanilla kernel distribution builds.
-- **Improved**: MOK dialog explains DKMS automatic rebuild cycle on each new kernel install.
-- **Improved**: Complete internationalization for 8 languages (9 additional strings).
-- **Added**: Soplos Kernels tab — install pre-built Stock, Gaming and Real-Time kernels from the official Soplos repository with one click.
-- **Added**: Tabbed interface (Build Kernel / Soplos Kernels) via `Gtk.Notebook`.
-- **Added**: Persistent build history in `~/.local/share/soplos-kernel-installer/` — survives build directory cleanup, with automatic migration from previous locations.
-- **Added**: `KDEB_PKGVERSION=1` — compiled packages no longer include the kernel version twice in the filename.
-- **Fixed**: MOK signed kernel detection now also physically verifies vmlinuz files with `sbverify`.
-- **Fixed**: STOCK profile package naming — trailing dash removed when suffix is empty.
-- **Fixed**: Soplos Kernels detection based on `/boot/vmlinuz-*` — works regardless of how the kernel was removed.
-- **Fixed**: Soplos Kernels Remove button always active for installed kernels even without repository configured.
-- **Fixed**: Kernel history list refreshes after install/remove from the Soplos Kernels tab.
-- **Fixed**: Kernel release now read from `include/config/kernel.release` in the source tree — correctly handles patch-injected version suffixes (e.g. `zen1` added by the Zen patch to the Makefile EXTRAVERSION).
-- **Added**: Dynamic Kernel List — Soplos Kernels tab reads available packages from apt-cache at runtime; any new package in the repo appears automatically.
-- **Added**: Refresh button in Soplos Kernels tab — forces `apt-get update` and reloads the list.
-- **Added**: Stock profile post-build — creates metapackage .deb and prompts to save all packages (image + headers + metapackage) to a folder, without installing the kernel on the system.
-- **Added**: New kernel variants: `linux-soplos-bore`, `linux-soplos-bore-ntsync`, `linux-soplos-zen`, `linux-soplos-ntsync` (linux-soplos-gaming renamed to linux-soplos-bore).
-- **Added**: Ctrl+Tab / Ctrl+Shift+Tab keyboard shortcuts to switch between tabs.
-- **Added**: Version number displayed next to each kernel name in the Soplos Kernels tab.
-- **Added**: Update button in Soplos Kernels tab — appears when a newer version is available, upgrades the metapackage and purges old image and headers automatically.
-- **Fixed**: Stock post-build package discovery now correctly handles patch-injected version suffixes (e.g. `zen1`) — old and new image/headers are found reliably.
-- **Fixed**: After updating a Soplos kernel, old image and headers packages for the same variant are purged without requiring manual intervention.

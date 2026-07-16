@@ -453,11 +453,20 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
     @staticmethod
     def _soplos_pkg_display_name(pkg: str) -> str:
+        _MARCH = {'v1', 'v2', 'v3', 'v4'}
         suffix = pkg[len('linux-soplos'):]
         if not suffix:
             return _("Stock")
-        suffix = suffix.lstrip('-')
-        return suffix.upper() if len(suffix) <= 5 else suffix.replace('-', ' ').title()
+        parts = suffix.lstrip('-').split('-')
+        march = parts[-1] if parts[-1] in _MARCH else None
+        flavor = parts[:-1] if march else parts
+        if not flavor:
+            label = _("Stock")
+        elif len('-'.join(flavor)) <= 5:
+            label = '-'.join(flavor).upper()
+        else:
+            label = '-'.join(flavor).replace('-', ' ').title()
+        return f"{label} {march.upper()}" if march else label
 
     def _fetch_soplos_packages(self) -> None:
         def fetch():
@@ -473,7 +482,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
                 )
                 for pkg in sorted(names.stdout.splitlines()):
                     pkg = pkg.strip()
-                    if not re.match(r'^linux-soplos(-[a-z]+)*$', pkg):
+                    if not re.match(r'^linux-soplos(-[a-z0-9]+)*$', pkg):
                         continue
                     show = subprocess.run(
                         ['apt-cache', 'show', pkg],
