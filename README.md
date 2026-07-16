@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.0--4-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -19,6 +19,7 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
   - [PREEMPT_RT](https://cdn.kernel.org/pub/linux/kernel/projects/rt) — Full real-time preemption
   - [Zen](https://github.com/zen-kernel/zen-kernel) — Desktop/gaming optimizations
   - [NTSYNC](https://www.kernel.org) — NT synchronization primitives
+  - [X3D VCache](https://github.com/SoplosLinux/x3d-soplos) — AMD Ryzen X3D dual-CCD scheduler preference (Stock mode)
 - 🎯 **Kernel profiles**: Gaming · Audio/Video · Minimal/Office · Automatic
 - 🔄 **Source reuse**: Recycle existing kernel sources for faster recompilation
 - 🛡️ **Secure Boot** signing via MOK (generate keys, enroll in BIOS, sign kernel + EFI)
@@ -27,7 +28,13 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.0-4)
+### 🚀 Recent Updates (v1.0.1)
+- **Added**: x86-64 microarchitecture level selector in Stock mode (v1 Generic / v2 SSE4.2+ / v3 AVX2+ / v4 AVX-512) for building march-optimized kernels.
+- **Added**: X3D VCache scheduler patch (Stock mode only) — original Soplos patch that steers tasks to the VCache CCD on AMD Ryzen X3D dual-CCD processors. Auto-selects BORE + NTSYNC. Named `soplos-x3d-vN`.
+- **Added**: Wiki info button in Soplos Kernels tab linking to the CPU Compatibility guide.
+- **Added**: Auto-generated kernel name in Stock mode based on selected patches and march level.
+
+### Previous Updates (v1.0.0-4)
 - **Fixed**: NVIDIA DKMS patch now also applied when installing or updating kernels from the Soplos Kernels repository tab — previously only ran when compiling from source.
 - **Fixed**: NVIDIA VMA patch now uses `--fuzz=5` to cover driver versions with minor line offset differences (e.g. 590.x).
 

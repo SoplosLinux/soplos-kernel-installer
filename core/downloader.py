@@ -27,6 +27,7 @@ BORE_RAW_BASE = "https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/
 CACHY_RAW_BASE = "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/{major_minor}/{subdir}/{filename}"
 RT_BASE_URL = "https://www.kernel.org/pub/linux/kernel/projects/rt/{major_minor}/"
 ZEN_RELEASES_WEB = "https://github.com/zen-kernel/zen-kernel/releases"
+X3D_PATCH_URL = "https://raw.githubusercontent.com/SoplosLinux/x3d-soplos/main/patches/0001-sched-amd-x3d-vcache.patch"
 
 
 class KernelDownloader:
@@ -306,6 +307,8 @@ class KernelDownloader:
                 paths = self._download_rt(version, major_minor, patches_dir)
             elif patch_id == "zen":
                 paths = self._download_zen(version, major_minor, patches_dir)
+            elif patch_id == "x3d":
+                paths = self._download_x3d(patches_dir)
             else:
                 print(f"Unknown patch id: {patch_id}", file=sys.stderr)
                 continue
@@ -491,6 +494,19 @@ class KernelDownloader:
             shutil.move(uncompressed, dest)
             return [dest]
 
+        return None
+
+    def _download_x3d(self, patches_dir: str) -> Optional[List[str]]:
+        """
+        Download the Soplos AMD X3D VCache scheduler patch.
+        The patch is kernel-version-agnostic — one file covers all 7.x releases.
+        Source: github.com/SoplosLinux/x3d-soplos
+        """
+        self._report_progress("Downloading X3D VCache scheduler patch...", -1)
+        dest = os.path.join(patches_dir, "soplos-x3d-vcache.patch")
+        if self._download_file(X3D_PATCH_URL, dest):
+            return [dest]
+        print("Could not download X3D VCache patch", file=sys.stderr)
         return None
 
     def _download_zen(self, version: str, major_minor: str,

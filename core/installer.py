@@ -58,7 +58,9 @@ class SoplosInstaller:
     def configure(self, version: str, profile: KernelProfile,
                   custom_name: str = "soplos",
                   secure_boot: bool = False,
-                  patch_ids: Optional[List[str]] = None) -> bool:
+                  patch_ids: Optional[List[str]] = None,
+                  march_level: Optional[str] = None,
+                  enable_sched_ext: bool = False) -> bool:
         """Configure the kernel for building."""
         source_dir = os.path.join(self._build_dir, f"linux-{version}")
 
@@ -88,6 +90,26 @@ class SoplosInstaller:
             self._report_progress("Enabling PREEMPT_RT...", 28)
             run_command("./scripts/config --enable PREEMPT_RT", cwd=source_dir)
             run_command("./scripts/config --disable PREEMPT_DYNAMIC", cwd=source_dir)
+
+        # March level (Stock mode only)
+        if march_level:
+            _MARCH_MAP = {
+                "v1": ("GENERIC_CPU",  ["GENERIC_CPU2", "GENERIC_CPU3", "GENERIC_CPU4"]),
+                "v2": ("GENERIC_CPU2", ["GENERIC_CPU",  "GENERIC_CPU3", "GENERIC_CPU4"]),
+                "v3": ("GENERIC_CPU3", ["GENERIC_CPU",  "GENERIC_CPU2", "GENERIC_CPU4"]),
+                "v4": ("GENERIC_CPU4", ["GENERIC_CPU",  "GENERIC_CPU2", "GENERIC_CPU3"]),
+            }
+            enable_opt, disable_opts = _MARCH_MAP.get(march_level, (None, []))
+            if enable_opt:
+                self._report_progress(f"Setting march level {march_level}...", 28)
+                for opt in disable_opts:
+                    run_command(f"./scripts/config --disable {opt}", cwd=source_dir)
+                run_command(f"./scripts/config --enable {enable_opt}", cwd=source_dir)
+
+        # sched_ext — scheduler extension framework (Stock mode only)
+        if enable_sched_ext:
+            self._report_progress("Enabling sched_ext...", 28)
+            run_command("./scripts/config --enable SCHED_CLASS_EXT", cwd=source_dir)
 
         # Apply all fixes before olddefconfig so it can resolve their dependencies
         sb_key = None

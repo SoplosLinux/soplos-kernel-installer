@@ -94,7 +94,7 @@ class KernelPatcher:
 
     def _sort_patch_ids(self, ids: List[str]) -> List[str]:
         """Return patch ids in preferred application order."""
-        order = ["rt", "bore", "zen"]
+        order = ["rt", "bore", "zen", "x3d"]
         sorted_ids = [p for p in order if p in ids]
         remaining = [p for p in ids if p not in sorted_ids]
         return sorted_ids + remaining

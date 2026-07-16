@@ -886,3 +886,36 @@ msgid ""
 msgstr ""
 "\n"
 "✓ Kernel-Build abgeschlossen!"
+
+msgid "CPU architecture level"
+msgstr "CPU-Architekturebene"
+
+msgid "Optimizes the compiled kernel for the target CPU generation."
+msgstr "Optimiert den kompilierten Kernel für die Ziel-CPU-Generation."
+
+msgid "Generic (v1)"
+msgstr "Generisch (v1)"
+
+msgid "All x86-64 CPUs — maximum compatibility (LATAM)"
+msgstr "Alle x86-64-CPUs — maximale Kompatibilität (LATAM)"
+
+msgid "x86-64-v2"
+msgstr "x86-64-v2"
+
+msgid "SSE4.2+ — most CPUs since ~2009"
+msgstr "SSE4.2+ — die meisten CPUs seit ~2009"
+
+msgid "x86-64-v3"
+msgstr "x86-64-v3"
+
+msgid "AVX2+ — modern hardware since ~2013 (Haswell / Zen+)"
+msgstr "AVX2+ — moderne Hardware seit ~2013 (Haswell / Zen+)"
+
+msgid "x86-64-v4"
+msgstr "x86-64-v4"
+
+msgid "AVX-512 — latest generation CPUs"
+msgstr "AVX-512 — neueste CPU-Generation"
+
+msgid "Which kernel is right for my hardware?"
+msgstr "Welcher Kernel ist der richtige für meine Hardware?"

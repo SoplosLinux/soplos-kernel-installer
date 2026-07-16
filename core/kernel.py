@@ -45,6 +45,13 @@ AVAILABLE_PATCHES: List[PatchInfo] = [
         source_url="https://www.kernel.org",
         is_config_only=True,
     ),
+    PatchInfo(
+        id="x3d",
+        name="X3D VCache",
+        description="Scheduler preference for AMD Ryzen X3D dual-CCD processors — steers tasks to the VCache CCD.",
+        source_url="https://github.com/SoplosLinux/x3d-soplos",
+        stock_only=True,
+    ),
 ]
 
 
@@ -256,6 +263,8 @@ class KernelManager:
         secure_boot: bool = False,
         reuse_source: bool = False,
         build_only: bool = False,
+        march_level: Optional[str] = None,
+        enable_sched_ext: bool = False,
     ) -> bool:
         """
         Full kernel install:
@@ -334,7 +343,9 @@ class KernelManager:
             self._report_progress("Configuring kernel...", 26)
             if not self._installer.configure(
                 version, profile, custom_name,
-                secure_boot=secure_boot, patch_ids=patch_ids
+                secure_boot=secure_boot, patch_ids=patch_ids,
+                march_level=march_level,
+                enable_sched_ext=enable_sched_ext,
             ):
                 return False
 

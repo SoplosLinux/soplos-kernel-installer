@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.1] - 2026-07-16
+
+### Added
+- **x86-64 march level selector** (Stock mode): Build kernels targeting v1 (Generic), v2 (SSE4.2+), v3 (AVX2+) or v4 (AVX-512) microarchitecture levels via `CONFIG_GENERIC_CPU{2,3,4}`.
+- **X3D VCache scheduler patch** (Stock mode only): Original Soplos patch that detects asymmetric L3 cache topology on AMD Ryzen X3D dual-CCD processors and steers tasks to the VCache CCD using a load-balanced hook in `select_task_rq_fair()`. Auto-selects BORE + NTSYNC; kernel named `soplos-x3d-vN`.
+- **Auto-generated kernel name** in Stock mode: Name field is read-only and computed from the selected patch set and march level.
+- **Wiki info button** in Soplos Kernels tab: Opens the CPU Compatibility guide on soplos.org to help users choose the right kernel for their hardware.
+
 ## [1.0.0-4] - 2026-06-02
 
 ### Fixed

@@ -5,7 +5,7 @@ Main window for Soplos Kernel Installer.
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GdkPixbuf', '2.0')
-from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
+from gi.repository import Gtk, Gdk, GLib, GdkPixbuf, Gio
 
 import threading
 import os
@@ -19,6 +19,7 @@ import tempfile
 from widgets.profile_selector import ProfileSelector
 from widgets.version_picker import VersionPicker
 from widgets.patch_selector import PatchSelector
+from widgets.march_selector import MarchSelector
 from widgets.build_progress import BuildProgress
 from widgets.history_view import HistoryView
 from core.nvidia import has_nvidia_gpu
@@ -160,8 +161,19 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         patch_frame = Gtk.Frame()
         patch_frame.get_style_context().add_class('soplos-card')
         self._patch_selector = PatchSelector()
+        self._patch_selector.connect('patches-changed', self._on_stock_option_changed)
         patch_frame.add(self._patch_selector)
         config_box.pack_start(patch_frame, False, False, 0)
+
+        # ── Fila 2c: March selector (Stock mode only) ─────────────────
+        self._march_frame = Gtk.Frame()
+        self._march_frame.get_style_context().add_class('soplos-card')
+        self._march_selector = MarchSelector()
+        self._march_selector.connect('march-changed', self._on_stock_option_changed)
+        self._march_frame.add(self._march_selector)
+        self._march_frame.set_no_show_all(True)
+        self._march_frame.hide()
+        config_box.pack_start(self._march_frame, False, False, 0)
 
         # ── Fila 3: Opciones (izq) + Info sistema + Secure Boot (der) ─
         row3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
@@ -406,6 +418,15 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._add_repo_btn.get_style_context().add_class('suggested-action')
         self._add_repo_btn.connect('clicked', self._on_add_soplos_repo_clicked)
         repo_row.pack_start(self._add_repo_btn, False, False, 0)
+
+        _wiki_url = "https://soplos.org/wiki/applications/soplos-kernel-installer/#compatibility"
+        wiki_btn = Gtk.Button()
+        wiki_btn.set_relief(Gtk.ReliefStyle.NONE)
+        wiki_btn.set_focus_on_click(False)
+        wiki_btn.set_tooltip_text(_("Which kernel is right for my hardware?"))
+        wiki_btn.add(Gtk.Image.new_from_icon_name("dialog-information-symbolic", Gtk.IconSize.BUTTON))
+        wiki_btn.connect("clicked", lambda _: Gio.AppInfo.launch_default_for_uri(_wiki_url, None))
+        repo_row.pack_start(wiki_btn, False, False, 0)
 
         repo_inner.pack_start(repo_row, False, False, 0)
         repo_frame.add(repo_inner)
@@ -870,11 +891,40 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
     # ------------------------------------------------------------------
 
     def _on_profile_changed(self, selector, profile) -> None:
-        if profile and profile.id == ProfileType.STOCK:
+        is_stock = profile and profile.id == ProfileType.STOCK
+        if is_stock:
             self._patch_selector.clear_all()
-        elif profile:
-            self._patch_selector.apply_profile_suggestions(profile)
-        self._kernel_name_entry.set_sensitive(True)
+            self._patch_selector.set_stock_mode(True)
+            self._march_frame.show()
+            self._kernel_name_entry.set_sensitive(False)
+            self._update_stock_name()
+        else:
+            self._patch_selector.set_stock_mode(False)
+            if profile:
+                self._patch_selector.apply_profile_suggestions(profile)
+            self._march_frame.hide()
+            self._kernel_name_entry.set_sensitive(True)
+            self._kernel_name_entry.set_text("soplos")
+        self._update_name_hint()
+
+    def _on_stock_option_changed(self, *_args) -> None:
+        profile = self._profile_selector.get_selected_profile()
+        if profile and profile.id == ProfileType.STOCK:
+            self._update_stock_name()
+
+    def _update_stock_name(self) -> None:
+        _ORDER = {"bore": 0, "rt": 1, "zen": 2, "ntsync": 3, "x3d": 4}
+        patch_ids = sorted(
+            self._patch_selector.get_selected_patch_ids(),
+            key=lambda p: _ORDER.get(p, 99)
+        )
+        march = self._march_selector.get_march_level()
+        # x3d is always packaged as "soplos-x3d" — bore+ntsync are implicit
+        if "x3d" in patch_ids:
+            parts = ["soplos", "x3d", march]
+        else:
+            parts = ["soplos"] + patch_ids + [march]
+        self._kernel_name_entry.set_text("-".join(parts))
         self._update_name_hint()
 
     def _activate_stock_profile(self) -> None:
@@ -1627,6 +1677,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._kernel_manager.set_progress_callback(progress_cb)
 
         is_stock = (profile.id == ProfileType.STOCK)
+        march_level = self._march_selector.get_march_level() if is_stock else None
 
         def run_install():
             log_path = os.path.join(os.path.expanduser('~'), 'kernel_build', 'build.log')
@@ -1645,6 +1696,8 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
                 secure_boot=secure_boot,
                 reuse_source=reuse_source,
                 build_only=is_stock,
+                march_level=march_level,
+                enable_sched_ext=is_stock,
             )
             GLib.idle_add(self._on_build_finished, success)
 

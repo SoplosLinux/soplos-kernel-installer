@@ -71,6 +71,9 @@ class PatchSelector(Gtk.Box):
             check.connect('toggled', self._on_toggled, patch.id)
             checks_row.pack_start(check, False, False, 0)
             self._checks[patch.id] = (check, checks_row)
+            if patch.stock_only:
+                check.set_no_show_all(True)
+                check.hide()
 
         self.pack_start(checks_row, False, False, 0)
 
@@ -89,7 +92,30 @@ class PatchSelector(Gtk.Box):
                         self._checks[other_id][0].set_active(False)
                 self._blocking_signal = False
 
+            # x3d always requires bore + ntsync — auto-select them
+            if patch_id == "x3d":
+                self._blocking_signal = True
+                for required in ("bore", "ntsync"):
+                    if required in self._checks:
+                        self._checks[required][0].set_active(True)
+                self._blocking_signal = False
+
         self.emit('patches-changed')
+
+    def set_stock_mode(self, is_stock: bool) -> None:
+        """Show or hide stock-only patches (x3d and future stock-only entries)."""
+        from core.kernel import AVAILABLE_PATCHES as _PATCHES
+        for patch in _PATCHES:
+            if patch.stock_only and patch.id in self._checks:
+                check = self._checks[patch.id][0]
+                if is_stock:
+                    check.set_no_show_all(False)
+                    check.show()
+                else:
+                    check.hide()
+                    self._blocking_signal = True
+                    check.set_active(False)
+                    self._blocking_signal = False
 
     def update_for_version(self, version: str) -> None:
         """Show/enable NTSYNC only for kernel >= 6.14."""
