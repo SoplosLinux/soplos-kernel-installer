@@ -145,6 +145,12 @@ msgstr "Zen"
 msgid "Zen kernel optimizations — gaming and desktop performance."
 msgstr "Optimisations kernel Zen — performances gaming et bureau."
 
+msgid "NT synchronization primitives — improves Wine/Proton gaming performance."
+msgstr "Primitives de synchronisation NT — améliore les performances de jeu sous Wine/Proton."
+
+msgid "Scheduler preference for AMD Ryzen X3D dual-CCD processors — steers tasks to the VCache CCD."
+msgstr "Préférence de l'ordonnanceur pour les processeurs AMD Ryzen X3D à double CCD — dirige les tâches vers le CCD VCache."
+
 msgid "Applied patches: {}"
 msgstr "Patches appliqués : {}"
 

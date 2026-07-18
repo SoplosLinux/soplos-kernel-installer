@@ -27,7 +27,10 @@ BORE_RAW_BASE = "https://raw.githubusercontent.com/firelzrd/bore-scheduler/main/
 CACHY_RAW_BASE = "https://raw.githubusercontent.com/CachyOS/kernel-patches/master/{major_minor}/{subdir}/{filename}"
 RT_BASE_URL = "https://www.kernel.org/pub/linux/kernel/projects/rt/{major_minor}/"
 ZEN_RELEASES_WEB = "https://github.com/zen-kernel/zen-kernel/releases"
-X3D_PATCH_URL = "https://raw.githubusercontent.com/SoplosLinux/x3d-soplos/main/patches/0001-sched-amd-x3d-vcache.patch"
+X3D_PATCH_URL = "https://raw.githubusercontent.com/SoplosLinux/x3d-soplos/main/patches/0001-sched-amd-x3d-vcache-{tag}.patch"
+
+DEBIAN_PACKAGES_INDEX = "https://deb.debian.org/debian/dists/sid/main/binary-amd64/Packages.xz"
+DEBIAN_POOL_ROOT = "https://deb.debian.org/debian/"
 
 
 class KernelDownloader:
@@ -308,7 +311,7 @@ class KernelDownloader:
             elif patch_id == "zen":
                 paths = self._download_zen(version, major_minor, patches_dir)
             elif patch_id == "x3d":
-                paths = self._download_x3d(patches_dir)
+                paths = self._download_x3d(version, major_minor, patches_dir)
             else:
                 print(f"Unknown patch id: {patch_id}", file=sys.stderr)
                 continue
@@ -496,17 +499,109 @@ class KernelDownloader:
 
         return None
 
-    def _download_x3d(self, patches_dir: str) -> Optional[List[str]]:
+    def get_base_config(self, cache_path: str) -> Optional[str]:
+        """
+        Fetch a broad, curated .config to use as the build's starting point:
+        Debian sid's current amd64 kernel config. Re-fetched on every build so
+        it never goes stale the way a config inherited from a previous local
+        build does — new hardware Kconfig symbols keep getting picked up
+        automatically instead of defaulting to "n" forever.
+
+        Falls back to the last successfully cached copy if the network fetch
+        fails — never falls back to this machine's own installed kernel config.
+        """
+        self._report_progress("Fetching Debian base kernel config...", -1)
+        fresh = self._fetch_debian_config()
+        if fresh:
+            try:
+                import shutil
+                ensure_directory(os.path.dirname(cache_path))
+                shutil.copy(fresh, cache_path)
+            except Exception:
+                pass
+            return fresh
+
+        if os.path.exists(cache_path):
+            self._report_progress(
+                "Could not reach Debian — using last cached base config.", -1
+            )
+            return cache_path
+
+        print("No base config available (download failed, no cache)", file=sys.stderr)
+        return None
+
+    def _fetch_debian_config(self) -> Optional[str]:
+        """Download Debian sid's current linux-headers-*-amd64 package and
+        extract its .config. Uses the real apt package index (Packages.xz),
+        not the packages.debian.org website — the index format is stable,
+        the website's HTML is not."""
+        import lzma
+        import glob
+        import shutil
+        import tempfile
+        from utils.system import run_command
+
+        try:
+            req = urllib.request.Request(
+                DEBIAN_PACKAGES_INDEX,
+                headers={'User-Agent': 'SoplosKernelInstaller/1.0'}
+            )
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                raw = resp.read()
+            text = lzma.decompress(raw).decode('utf-8', errors='replace')
+        except Exception as e:
+            print(f"Debian Packages index fetch error: {e}", file=sys.stderr)
+            return None
+
+        pkg_re = re.compile(r'^linux-headers-\d[\w.+~-]*-amd64$', re.MULTILINE)
+        filename = None
+        for block in text.split("\n\n"):
+            m_name = re.search(r'^Package:\s*(\S+)$', block, re.MULTILINE)
+            if not m_name or not pkg_re.match(m_name.group(1)):
+                continue
+            m_file = re.search(r'^Filename:\s*(\S+)$', block, re.MULTILINE)
+            if m_file:
+                filename = m_file.group(1)
+                break
+
+        if not filename:
+            print("Debian Packages index: linux-headers-*-amd64 not found", file=sys.stderr)
+            return None
+
+        tmp_dir = tempfile.mkdtemp(prefix="soplos-debian-config-")
+        deb_path = os.path.join(tmp_dir, "linux-headers.deb")
+        if not self._download_file(DEBIAN_POOL_ROOT + filename, deb_path):
+            print("Could not download Debian linux-headers package", file=sys.stderr)
+            return None
+
+        extract_dir = os.path.join(tmp_dir, "extracted")
+        result = run_command(f'dpkg-deb -x "{deb_path}" "{extract_dir}"')
+        if result.returncode != 0:
+            print("Could not extract Debian linux-headers package", file=sys.stderr)
+            return None
+
+        matches = glob.glob(os.path.join(extract_dir, "usr", "src", "linux-headers-*", ".config"))
+        if not matches:
+            print("Debian headers package: .config not found inside", file=sys.stderr)
+            return None
+        return matches[0]
+
+    def _download_x3d(self, version: str, major_minor: str,
+                      patches_dir: str) -> Optional[List[str]]:
         """
         Download the Soplos AMD X3D VCache scheduler patch.
-        The patch is kernel-version-agnostic — one file covers all 7.x releases.
+        A separate patch file is maintained per kernel line — 6.x, 7.0, 7.1 — since
+        the hunk offsets differ between them (fair.c changes between releases).
         Source: github.com/SoplosLinux/x3d-soplos
         """
-        self._report_progress("Downloading X3D VCache scheduler patch...", -1)
-        dest = os.path.join(patches_dir, "soplos-x3d-vcache.patch")
-        if self._download_file(X3D_PATCH_URL, dest):
+        major = version.split('.')[0]
+        tag = major_minor if major_minor in ("7.0", "7.1") else f"{major}.x"
+
+        self._report_progress(f"Downloading X3D VCache scheduler patch ({tag})...", -1)
+        dest = os.path.join(patches_dir, f"soplos-x3d-vcache-{tag}.patch")
+        if self._download_file(X3D_PATCH_URL.format(tag=tag), dest):
             return [dest]
-        print("Could not download X3D VCache patch", file=sys.stderr)
+        print(f"Could not download X3D VCache patch for {tag}", file=sys.stderr)
         return None
 
     def _download_zen(self, version: str, major_minor: str,

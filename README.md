@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.1--1-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.1--2-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,15 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1-1)
+### 🚀 Recent Updates (v1.0.1-2)
+- **Fixed**: X3D VCache patch download now uses a per-kernel-version URL (6.x/7.0/7.1) instead of a single stale link.
+- **Fixed**: Base kernel configuration is now fetched fresh from Debian sid on every build instead of copying a previously installed kernel's config — avoids configuration drift and missing support for recent hardware.
+- **Fixed**: Build failure caused by an inherited module signing key path only valid inside Debian's own build system.
+- **Fixed**: Patch tooltips (BORE, PREEMPT_RT, Zen, NTSYNC, X3D VCache) were never translated — now properly localized in all 8 languages.
+- **Added**: `ASUS_ARMOURY` and `OXP_EC` handheld gaming EC drivers forced as modules in every build (ROG Ally, OneXPlayer/AYANEO).
+- **Added**: v1/v2 CPU architecture levels now disabled automatically when the X3D patch is selected.
+
+### Previous Updates (v1.0.1-1)
 - **Fixed**: Soplos Kernels tab now detects march-level package variants (`linux-soplos-bore-v3`, etc.).
 - **Fixed**: Display names for march-level packages: `linux-soplos-v3` → "Stock V3", `linux-soplos-bore-v3` → "BORE V3".
 

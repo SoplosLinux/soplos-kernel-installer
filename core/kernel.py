@@ -16,6 +16,7 @@ from .secure_boot import SecureBootManager
 from .history import HistoryManager
 from .profiles import KernelProfile, get_all_profiles, ProfileType
 from .common_types import KernelVersion, InstalledKernel, PatchInfo
+from .i18n_manager import _
 from utils.system import run_command, run_privileged, get_build_directory
 
 # Available patches catalogue
@@ -23,32 +24,32 @@ AVAILABLE_PATCHES: List[PatchInfo] = [
     PatchInfo(
         id="bore",
         name="BORE",
-        description="Burst-Oriented Response Enhancer — improved CPU scheduler for responsiveness.",
+        description=_("Burst-Oriented Response Enhancer — improved CPU scheduler for responsiveness."),
         source_url="https://github.com/firelzrd/bore-scheduler",
     ),
     PatchInfo(
         id="rt",
         name="PREEMPT_RT",
-        description="Full real-time preemption — ultra-low latency for audio/video production.",
+        description=_("Full real-time preemption — ultra-low latency for audio/video production."),
         source_url="https://www.kernel.org/pub/linux/kernel/projects/rt",
     ),
     PatchInfo(
         id="zen",
         name="Zen",
-        description="Zen kernel optimizations — gaming and desktop performance.",
+        description=_("Zen kernel optimizations — gaming and desktop performance."),
         source_url="https://github.com/zen-kernel/zen-kernel",
     ),
     PatchInfo(
         id="ntsync",
         name="NTSYNC",
-        description="NT synchronization primitives — improves Wine/Proton gaming performance.",
+        description=_("NT synchronization primitives — improves Wine/Proton gaming performance."),
         source_url="https://www.kernel.org",
         is_config_only=True,
     ),
     PatchInfo(
         id="x3d",
         name="X3D VCache",
-        description="Scheduler preference for AMD Ryzen X3D dual-CCD processors — steers tasks to the VCache CCD.",
+        description=_("Scheduler preference for AMD Ryzen X3D dual-CCD processors — steers tasks to the VCache CCD."),
         source_url="https://github.com/SoplosLinux/x3d-soplos",
         stock_only=True,
     ),
@@ -340,9 +341,16 @@ class KernelManager:
             if profile.id == ProfileType.HARDWARE_OPTIMIZED:
                 profile.config_options = KernelProfile.detect_hardware_optimizations()
 
+            self._report_progress("Fetching base kernel configuration...", 25)
+            cache_config = os.path.join(self._build_dir, "debian-base.config")
+            base_config_path = self._downloader.get_base_config(cache_config)
+            if not base_config_path:
+                self._report_progress("Error: could not obtain a base kernel configuration.", -1)
+                return False
+
             self._report_progress("Configuring kernel...", 26)
             if not self._installer.configure(
-                version, profile, custom_name,
+                version, profile, base_config_path, custom_name,
                 secure_boot=secure_boot, patch_ids=patch_ids,
                 march_level=march_level,
                 enable_sched_ext=enable_sched_ext,

@@ -66,3 +66,15 @@ class MarchSelector(Gtk.Box):
     def set_march_level(self, level: str) -> None:
         if level in self._radios:
             self._radios[level].set_active(True)
+
+    def set_minimum_level(self, level: str) -> None:
+        """Disable levels below `level` — e.g. X3D VCache CPUs are all
+        Zen 3+ (x86-64-v3 or higher), so v1/v2 make no sense with it."""
+        min_index = MarchLevel.ALL.index(level) if level in MarchLevel.ALL else 0
+        for i, lvl in enumerate(MarchLevel.ALL):
+            radio = self._radios.get(lvl)
+            if radio:
+                radio.set_sensitive(i >= min_index)
+        current = self.get_march_level()
+        if MarchLevel.ALL.index(current) < min_index:
+            self.set_march_level(level)

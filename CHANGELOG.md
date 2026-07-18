@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.1-2] - 2026-07-18
+
+### Fixed
+- **X3D VCache patch download**: now uses a per-kernel-version URL (6.x/7.0/7.1) instead of a single stale link that no longer existed in the source repository.
+- **Base kernel configuration**: now fetched fresh from Debian sid on every build instead of copying the config of a previously installed kernel — avoids configuration drift accumulating across builds and missing support for recently-added hardware.
+- **Build failure from inherited module signing key path**: the base config's `MODULE_SIG_KEY` could point to a path that only exists inside Debian's own build system, breaking `dpkg-buildpackage` at the certs stage. Now reset to the kernel's own default path when no custom Secure Boot key is set.
+- **Patch tooltips always in English**: the patch descriptions (BORE, PREEMPT_RT, Zen, NTSYNC, X3D VCache) shown on hover in the Patches selector were never passed through the translation system. Now properly localized; added missing translations for the NTSYNC and X3D VCache descriptions in all 8 languages.
+
+### Added
+- **Handheld gaming EC drivers**: `ASUS_ARMOURY` (ROG Ally/Ally X) and `OXP_EC` (OneXPlayer/AYANEO) are now forced as modules in every build.
+- **March level guardrail**: v1/v2 CPU architecture levels are now disabled automatically when the X3D patch is selected, since X3D hardware requires at least x86-64-v3.
+
 ## [1.0.1-1] - 2026-07-16
 
 ### Fixed

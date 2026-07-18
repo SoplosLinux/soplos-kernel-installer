@@ -20,6 +20,7 @@ from widgets.profile_selector import ProfileSelector
 from widgets.version_picker import VersionPicker
 from widgets.patch_selector import PatchSelector
 from widgets.march_selector import MarchSelector
+from core.common_types import MarchLevel
 from widgets.build_progress import BuildProgress
 from widgets.history_view import HistoryView
 from core.nvidia import has_nvidia_gpu
@@ -917,6 +918,9 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._update_name_hint()
 
     def _on_stock_option_changed(self, *_args) -> None:
+        x3d_active = 'x3d' in self._patch_selector.get_selected_patch_ids()
+        self._march_selector.set_minimum_level(MarchLevel.V3 if x3d_active else MarchLevel.V1)
+
         profile = self._profile_selector.get_selected_profile()
         if profile and profile.id == ProfileType.STOCK:
             self._update_stock_name()

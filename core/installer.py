@@ -56,6 +56,7 @@ class SoplosInstaller:
     # ------------------------------------------------------------------
 
     def configure(self, version: str, profile: KernelProfile,
+                  base_config_path: str,
                   custom_name: str = "soplos",
                   secure_boot: bool = False,
                   patch_ids: Optional[List[str]] = None,
@@ -64,9 +65,8 @@ class SoplosInstaller:
         """Configure the kernel for building."""
         source_dir = os.path.join(self._build_dir, f"linux-{version}")
 
-        self._report_progress("Copying current kernel configuration...", 26)
-        base_config = self._find_base_config()
-        run_command(f'cp "{base_config}" .config', cwd=source_dir)
+        self._report_progress("Copying base kernel configuration...", 26)
+        run_command(f'cp "{base_config_path}" .config', cwd=source_dir)
         run_command("chmod +x scripts/config", cwd=source_dir)
 
         # Apply profile options
@@ -163,11 +163,19 @@ class SoplosInstaller:
             "./scripts/config --enable DEBUG_INFO_NONE",
         ]
 
+    def _get_handheld_fixes(self) -> List[str]:
+        """Force-enable EC drivers for gaming handhelds (ASUS ROG Ally, OneXPlayer/
+        AYANEO) as modules — missing from the inherited base .config."""
+        return [
+            "./scripts/config --module ASUS_ARMOURY",
+            "./scripts/config --module OXP_EC",
+        ]
+
     def _get_config_fixes(self, secure_boot_key: Optional[str] = None) -> List[str]:
         fixes = [
             './scripts/config --set-str SYSTEM_TRUSTED_KEYS ""',
             './scripts/config --set-str SYSTEM_REVOCATION_KEYS ""',
-        ] + self._get_debug_info_fixes()
+        ] + self._get_debug_info_fixes() + self._get_handheld_fixes()
         if secure_boot_key:
             fixes += [
                 "./scripts/config --enable MODULE_SIG",
@@ -178,6 +186,13 @@ class SoplosInstaller:
             fixes += [
                 "./scripts/config --disable MODULE_SIG",
                 "./scripts/config --disable MODULE_SIG_ALL",
+                # Reset to the kernel's own default path — certs/Makefile knows
+                # how to generate a key there if missing. The base .config may
+                # carry a custom path (e.g. Debian's build-time "output/...")
+                # that doesn't exist in this tree and has no Makefile rule,
+                # which breaks the build even with MODULE_SIG disabled if
+                # something else selects it back on via Kconfig dependencies.
+                './scripts/config --set-str MODULE_SIG_KEY "certs/signing_key.pem"',
             ]
         return fixes
 
@@ -451,27 +466,6 @@ class SoplosInstaller:
 
         self._report_progress("Installation complete.", 100)
         return True
-
-    def _find_base_config(self) -> str:
-        """Return the config of the Debian stock kernel, not the running custom one.
-        Falls back to the running kernel's config if no stock kernel is found."""
-        candidates = sorted([
-            c for c in glob.glob("/boot/config-*")
-            if "soplos" not in c
-        ])
-        if candidates:
-            return candidates[-1]
-        # Fallback: use the currently running kernel's config
-        result = run_command("uname -r")
-        running = result.stdout.strip() if result.returncode == 0 else ""
-        fallback = f"/boot/config-{running}" if running else ""
-        if fallback and os.path.exists(fallback):
-            return fallback
-        self._report_progress(
-            "⚠ No stock Debian kernel config found — using first available config.", -1
-        )
-        all_configs = sorted(glob.glob("/boot/config-*"))
-        return all_configs[-1] if all_configs else "/boot/config"
 
     def _find_installed_release(self, version: str, custom_name: str,
                                  profile: KernelProfile) -> Optional[str]:
