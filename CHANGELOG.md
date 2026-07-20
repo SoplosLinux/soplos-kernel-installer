@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.1-3] - 2026-07-20
+
+### Fixed
+- **X3D VCache selection could leave an incompatible patch checked**: selecting X3D force-enables BORE, but since that happened while patch-toggle signals were blocked, BORE's own "uncheck Zen (incompatible)" logic never ran — Zen could stay checked alongside BORE+X3D if it was already active, sending a broken patch combination to the build. Now X3D's auto-select also clears whatever is incompatible with BORE.
+
 ## [1.0.1-2] - 2026-07-18
 
 ### Fixed

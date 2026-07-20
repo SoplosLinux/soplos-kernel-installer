@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.1--2-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.1--3-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1-2)
+### 🚀 Recent Updates (v1.0.1-3)
+- **Fixed**: Selecting X3D could leave Zen checked alongside the auto-selected BORE (if Zen was already active), sending an incompatible patch combination to the build and breaking it.
+
+### Previous Updates (v1.0.1-2)
 - **Fixed**: X3D VCache patch download now uses a per-kernel-version URL (6.x/7.0/7.1) instead of a single stale link.
 - **Fixed**: Base kernel configuration is now fetched fresh from Debian sid on every build instead of copying a previously installed kernel's config — avoids configuration drift and missing support for recent hardware.
 - **Fixed**: Build failure caused by an inherited module signing key path only valid inside Debian's own build system.

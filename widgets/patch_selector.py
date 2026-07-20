@@ -92,12 +92,18 @@ class PatchSelector(Gtk.Box):
                         self._checks[other_id][0].set_active(False)
                 self._blocking_signal = False
 
-            # x3d always requires bore + ntsync — auto-select them
+            # x3d always requires bore + ntsync — auto-select them, and clear
+            # whatever is incompatible with bore too (e.g. zen), since forcing
+            # bore active here doesn't let bore's own toggle handler run
+            # (blocked by _blocking_signal) to do that clearing itself.
             if patch_id == "x3d":
                 self._blocking_signal = True
                 for required in ("bore", "ntsync"):
                     if required in self._checks:
                         self._checks[required][0].set_active(True)
+                for other_id in _get_incompatible_with("bore"):
+                    if other_id in self._checks:
+                        self._checks[other_id][0].set_active(False)
                 self._blocking_signal = False
 
         self.emit('patches-changed')
