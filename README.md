@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.1--3-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.1--4-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1-3)
+### 🚀 Recent Updates (v1.0.1-4)
+- **Changed**: The "Which kernel is right for my hardware?" button no longer opens the wiki — it now detects the highest x86-64 architecture level (v1–v4) the CPU actually supports and shows it directly in the app.
+
+### Previous Updates (v1.0.1-3)
 - **Fixed**: Selecting X3D could leave Zen checked alongside the auto-selected BORE (if Zen was already active), sending an incompatible patch combination to the build and breaking it.
 
 ### Previous Updates (v1.0.1-2)

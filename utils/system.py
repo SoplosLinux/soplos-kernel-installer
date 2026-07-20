@@ -5,6 +5,7 @@ System command execution utilities for Soplos Kernel Installer.
 import subprocess
 import shlex
 import os
+import re
 import shutil
 import signal
 import sys
@@ -178,6 +179,20 @@ def get_disk_info(path: Optional[str] = None) -> tuple:
         return (free / 1073741824, total / 1073741824, (used / total * 100) if total > 0 else 0)
     except Exception:
         return (0.0, 0.0, 0.0)
+
+
+def get_supported_march_level() -> str:
+    """Returns the highest x86-64 microarchitecture level ('v1'-'v4') this
+    CPU actually supports, per the dynamic linker's own glibc-hwcaps probe."""
+    for ld_path in ('/lib64/ld-linux-x86-64.so.2', '/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2'):
+        if os.path.exists(ld_path):
+            result = run_command(f'"{ld_path}" --help')
+            found = set(re.findall(r'x86-64-(v[234])\s+\(supported', result.stdout))
+            for level in ('v4', 'v3', 'v2'):
+                if level in found:
+                    return level
+            break
+    return 'v1'
 
 
 def get_cpu_temp() -> float:

@@ -927,3 +927,9 @@ msgstr "AVX-512 — latest generation CPUs"
 
 msgid "Which kernel is right for my hardware?"
 msgstr "Which kernel is right for my hardware?"
+
+msgid "Your CPU supports up to %s"
+msgstr "Your CPU supports up to %s"
+
+msgid "Choose a kernel package with this architecture level, or lower, from the list below."
+msgstr "Choose a kernel package with this architecture level, or lower, from the list below."

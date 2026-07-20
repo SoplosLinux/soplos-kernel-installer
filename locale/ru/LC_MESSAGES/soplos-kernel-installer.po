@@ -925,3 +925,9 @@ msgstr "AVX-512 — ЦП последнего поколения"
 
 msgid "Which kernel is right for my hardware?"
 msgstr "Какое ядро подходит для моего оборудования?"
+
+msgid "Your CPU supports up to %s"
+msgstr "Ваш процессор поддерживает до %s"
+
+msgid "Choose a kernel package with this architecture level, or lower, from the list below."
+msgstr "Выберите в списке ниже пакет ядра с этим уровнем архитектуры или ниже."

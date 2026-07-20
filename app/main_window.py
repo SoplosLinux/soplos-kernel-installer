@@ -5,7 +5,7 @@ Main window for Soplos Kernel Installer.
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('GdkPixbuf', '2.0')
-from gi.repository import Gtk, Gdk, GLib, GdkPixbuf, Gio
+from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
 
 import threading
 import os
@@ -28,7 +28,7 @@ from core.nvidia_dkms_patch import get_nvidia_dkms_patch_commands
 from core.i18n_manager import _
 from core.profiles import ProfileType
 from config.constants import APP_VERSION as VERSION
-from utils.system import reboot_system, get_build_directory
+from utils.system import reboot_system, get_build_directory, get_supported_march_level
 
 
 class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
@@ -420,13 +420,12 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._add_repo_btn.connect('clicked', self._on_add_soplos_repo_clicked)
         repo_row.pack_start(self._add_repo_btn, False, False, 0)
 
-        _wiki_url = "https://soplos.org/wiki/applications/soplos-kernel-installer/#compatibility"
         wiki_btn = Gtk.Button()
         wiki_btn.set_relief(Gtk.ReliefStyle.NONE)
         wiki_btn.set_focus_on_click(False)
         wiki_btn.set_tooltip_text(_("Which kernel is right for my hardware?"))
         wiki_btn.add(Gtk.Image.new_from_icon_name("dialog-information-symbolic", Gtk.IconSize.BUTTON))
-        wiki_btn.connect("clicked", lambda _: Gio.AppInfo.launch_default_for_uri(_wiki_url, None))
+        wiki_btn.connect("clicked", self._on_march_info_clicked)
         repo_row.pack_start(wiki_btn, False, False, 0)
 
         repo_inner.pack_start(repo_row, False, False, 0)
@@ -651,6 +650,21 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         if not suffix:
             return False
         return bool(glob.glob(f"/boot/vmlinuz-*{suffix}"))
+
+    def _on_march_info_clicked(self, btn) -> None:
+        level = get_supported_march_level()
+        dialog = Gtk.MessageDialog(
+            transient_for=self,
+            modal=True,
+            message_type=Gtk.MessageType.INFO,
+            buttons=Gtk.ButtonsType.OK,
+            text=_("Your CPU supports up to %s") % level.upper(),
+        )
+        dialog.format_secondary_text(
+            _("Choose a kernel package with this architecture level, or lower, from the list below.")
+        )
+        dialog.run()
+        dialog.destroy()
 
     def _on_refresh_soplos_repo_clicked(self, btn) -> None:
         btn.set_sensitive(False)
