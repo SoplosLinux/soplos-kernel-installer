@@ -931,3 +931,18 @@ msgstr "Ваш процессор поддерживает до %s"
 
 msgid "Choose a kernel package with this architecture level, or lower, from the list below."
 msgstr "Выберите в списке ниже пакет ядра с этим уровнем архитектуры или ниже."
+
+msgid "Your hardware"
+msgstr "Ваше оборудование"
+
+msgid "CPU: %s"
+msgstr "ЦП: %s"
+
+msgid "Supported architecture level: %s"
+msgstr "Поддерживаемый уровень архитектуры: %s"
+
+msgid "GPU: %s"
+msgstr "GPU: %s"
+
+msgid "RAM: %.1f GB"
+msgstr "ОЗУ: %.1f ГБ"

@@ -23,12 +23,15 @@ from widgets.march_selector import MarchSelector
 from core.common_types import MarchLevel
 from widgets.build_progress import BuildProgress
 from widgets.history_view import HistoryView
-from core.nvidia import has_nvidia_gpu
+from core.nvidia import has_nvidia_gpu, get_gpu_description
 from core.nvidia_dkms_patch import get_nvidia_dkms_patch_commands
 from core.i18n_manager import _
 from core.profiles import ProfileType
 from config.constants import APP_VERSION as VERSION
-from utils.system import reboot_system, get_build_directory, get_supported_march_level
+from utils.system import (
+    reboot_system, get_build_directory, get_supported_march_level,
+    get_cpu_model, get_memory_info,
+)
 
 
 class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
@@ -653,16 +656,31 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
     def _on_march_info_clicked(self, btn) -> None:
         level = get_supported_march_level()
+        cpu_model = get_cpu_model()
+        gpu_desc = get_gpu_description()
+        _used, total_ram, _pct = get_memory_info()
+
+        lines = []
+        if cpu_model:
+            lines.append(_("CPU: %s") % cpu_model)
+        lines.append(_("Supported architecture level: %s") % level.upper())
+        if gpu_desc:
+            lines.append(_("GPU: %s") % gpu_desc)
+        if total_ram:
+            lines.append(_("RAM: %.1f GB") % total_ram)
+        lines.append("")
+        lines.append(
+            _("Choose a kernel package with this architecture level, or lower, from the list below.")
+        )
+
         dialog = Gtk.MessageDialog(
             transient_for=self,
             modal=True,
             message_type=Gtk.MessageType.INFO,
             buttons=Gtk.ButtonsType.OK,
-            text=_("Your CPU supports up to %s") % level.upper(),
+            text=_("Your hardware"),
         )
-        dialog.format_secondary_text(
-            _("Choose a kernel package with this architecture level, or lower, from the list below.")
-        )
+        dialog.format_secondary_text("\n".join(lines))
         dialog.run()
         dialog.destroy()
 

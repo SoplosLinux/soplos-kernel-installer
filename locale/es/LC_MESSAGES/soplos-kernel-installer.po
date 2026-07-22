@@ -931,3 +931,18 @@ msgstr "Tu CPU soporta hasta %s"
 
 msgid "Choose a kernel package with this architecture level, or lower, from the list below."
 msgstr "Elige en la lista de abajo un paquete de kernel con este nivel de arquitectura, o uno inferior."
+
+msgid "Your hardware"
+msgstr "Tu hardware"
+
+msgid "CPU: %s"
+msgstr "CPU: %s"
+
+msgid "Supported architecture level: %s"
+msgstr "Nivel de arquitectura soportado: %s"
+
+msgid "GPU: %s"
+msgstr "GPU: %s"
+
+msgid "RAM: %.1f GB"
+msgstr "RAM: %.1f GB"

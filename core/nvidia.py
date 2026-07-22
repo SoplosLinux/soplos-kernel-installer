@@ -32,6 +32,18 @@ def has_intel_gpu() -> bool:
     return any("intel" in l for l in _gpu_lines())
 
 
+def get_gpu_description() -> str:
+    """Return the model name(s) reported by lspci for detected display/GPU devices."""
+    if not shutil.which("lspci"):
+        return ''
+    keywords = ("vga", "display", "3d controller", "3d")
+    models = []
+    for line in run_command("lspci").stdout.splitlines():
+        if any(k in line.lower() for k in keywords) and ':' in line:
+            models.append(line.split(':', 2)[-1].strip())
+    return ", ".join(models)
+
+
 def get_dkms_nvidia_module(kernel_release: str) -> Optional[str]:
     """
     Return the DKMS nvidia module path for the given kernel release,

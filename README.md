@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1-4)
+### 🚀 Recent Updates (v1.0.1-5)
+- **Changed**: The "Which kernel is right for my hardware?" popup now also shows the detected CPU model, GPU, and total RAM alongside the supported x86-64 architecture level.
+
+### Previous Updates (v1.0.1-4)
 - **Changed**: The "Which kernel is right for my hardware?" button no longer opens the wiki — it now detects the highest x86-64 architecture level (v1–v4) the CPU actually supports and shows it directly in the app.
 
 ### Previous Updates (v1.0.1-3)

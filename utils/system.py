@@ -195,6 +195,18 @@ def get_supported_march_level() -> str:
     return 'v1'
 
 
+def get_cpu_model() -> str:
+    """Returns the CPU model name from /proc/cpuinfo, or an empty string if unknown."""
+    try:
+        with open('/proc/cpuinfo', 'r') as f:
+            for line in f:
+                if line.startswith('model name'):
+                    return line.split(':', 1)[1].strip()
+    except Exception:
+        pass
+    return ''
+
+
 def get_cpu_temp() -> float:
     hwmon_base = '/sys/class/hwmon'
     if os.path.exists(hwmon_base):

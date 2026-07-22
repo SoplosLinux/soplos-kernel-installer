@@ -931,3 +931,18 @@ msgstr "CPU-ul tău acceptă până la %s"
 
 msgid "Choose a kernel package with this architecture level, or lower, from the list below."
 msgstr "Alege din lista de mai jos un pachet de kernel cu acest nivel de arhitectură, sau unul inferior."
+
+msgid "Your hardware"
+msgstr "Hardware-ul tău"
+
+msgid "CPU: %s"
+msgstr "CPU: %s"
+
+msgid "Supported architecture level: %s"
+msgstr "Nivel de arhitectură acceptat: %s"
+
+msgid "GPU: %s"
+msgstr "GPU: %s"
+
+msgid "RAM: %.1f GB"
+msgstr "RAM: %.1f GB"

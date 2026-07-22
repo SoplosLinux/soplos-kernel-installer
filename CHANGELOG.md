@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.1-5] - 2026-07-22
+
+### Changed
+- **"Which kernel is right for my hardware?" popup**: now also shows the detected CPU model, GPU, and total RAM alongside the supported x86-64 architecture level, giving users a fuller picture of their hardware before picking a kernel package.
+
 ## [1.0.1-4] - 2026-07-20
 
 ### Changed
