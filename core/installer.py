@@ -91,6 +91,17 @@ class SoplosInstaller:
             run_command("./scripts/config --enable PREEMPT_RT", cwd=source_dir)
             run_command("./scripts/config --disable PREEMPT_DYNAMIC", cwd=source_dir)
 
+        # Zen: the patch's whole reason for existing is the BMQ/PDS alternate
+        # scheduler (CONFIG_SCHED_ALT), but that Kconfig option defaults to
+        # "n" (unlike BORE's CONFIG_SCHED_BORE, which defaults to "y") — so
+        # without this, selecting "zen" silently builds a kernel with the
+        # rest of the patchset but still running mainline CFS/EEVDF.
+        # PDS is the patch's own choice default; matches upstream intent.
+        if patch_ids and "zen" in patch_ids:
+            self._report_progress("Enabling Zen's alternate scheduler (SCHED_ALT/PDS)...", 28)
+            run_command("./scripts/config --enable SCHED_ALT", cwd=source_dir)
+            run_command("./scripts/config --enable SCHED_PDS", cwd=source_dir)
+
         # March level (Stock mode only)
         if march_level:
             _MARCH_MAP = {

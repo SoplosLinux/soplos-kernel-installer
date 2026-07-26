@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.1--4-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.1--6-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -14,10 +14,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 ## ✨ Features
 
 - 📥 **Multiple channels**: Stable, LTS, RC, and Soplos Featured (curated versions)
-- 🔧 **Patch support** from original upstream sources:
-  - [BORE](https://github.com/firelzrd/bore-scheduler) — Burst-Oriented Response Enhancer
+- 🔧 **Patch support**, preferring original upstream sources, with a Soplos-maintained fallback for point releases upstream hasn't caught up with yet:
+  - [BORE](https://github.com/firelzrd/bore-scheduler) — Burst-Oriented Response Enhancer (fallback: [bore-soplos](https://github.com/SoplosLinux/bore-soplos))
   - [PREEMPT_RT](https://cdn.kernel.org/pub/linux/kernel/projects/rt) — Full real-time preemption
-  - [Zen](https://github.com/zen-kernel/zen-kernel) — Desktop/gaming optimizations
+  - [Zen](https://github.com/zen-kernel/zen-kernel) — Desktop/gaming optimizations (fallback: [zen-soplos](https://github.com/SoplosLinux/zen-soplos))
   - [NTSYNC](https://www.kernel.org) — NT synchronization primitives
   - [X3D VCache](https://github.com/SoplosLinux/x3d-soplos) — AMD Ryzen X3D dual-CCD scheduler preference (Stock mode)
 - 🎯 **Kernel profiles**: Gaming · Audio/Video · Minimal/Office · Automatic
@@ -28,7 +28,12 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1-5)
+### 🚀 Recent Updates (v1.0.1-6)
+- **Fixed**: BORE/Zen patch sources that downloaded successfully but failed to apply against the current kernel point release no longer abort the build — they're now verified with a dry-run apply and the next source in the fallback chain is tried automatically.
+- **Fixed**: Selecting Zen no longer silently builds a kernel that still runs mainline CFS/EEVDF — `CONFIG_SCHED_ALT`/`CONFIG_SCHED_PDS` are now forced on (Zen's own Kconfig default for `SCHED_ALT` is "n", unlike BORE's "y"). Confirmed on real hardware: the alternate scheduler is genuinely active at boot, not just compiled in.
+- **Added**: [SoplosLinux/bore-soplos](https://github.com/SoplosLinux/bore-soplos) and [SoplosLinux/zen-soplos](https://github.com/SoplosLinux/zen-soplos) as fallback patch sources for BORE and Zen, used only when upstream hasn't published a working patch for the requested kernel version yet.
+
+### Previous Updates (v1.0.1-5)
 - **Changed**: The "Which kernel is right for my hardware?" popup now also shows the detected CPU model, GPU, and total RAM alongside the supported x86-64 architecture level.
 
 ### Previous Updates (v1.0.1-4)

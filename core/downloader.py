@@ -28,6 +28,8 @@ CACHY_RAW_BASE = "https://raw.githubusercontent.com/CachyOS/kernel-patches/maste
 RT_BASE_URL = "https://www.kernel.org/pub/linux/kernel/projects/rt/{major_minor}/"
 ZEN_RELEASES_WEB = "https://github.com/zen-kernel/zen-kernel/releases"
 X3D_PATCH_URL = "https://raw.githubusercontent.com/SoplosLinux/x3d-soplos/main/patches/0001-sched-amd-x3d-vcache-{tag}.patch"
+BORE_SOPLOS_URL = "https://raw.githubusercontent.com/SoplosLinux/bore-soplos/main/patches/0001-bore-{major_minor}.patch"
+ZEN_SOPLOS_URL = "https://raw.githubusercontent.com/SoplosLinux/zen-soplos/main/patches/0001-zen-{major_minor}.patch"
 
 DEBIAN_PACKAGES_INDEX = "https://deb.debian.org/debian/dists/sid/main/binary-amd64/Packages.xz"
 DEBIAN_POOL_ROOT = "https://deb.debian.org/debian/"
@@ -361,11 +363,39 @@ class KernelDownloader:
             print(f"GitHub API error ({url}): {e}", file=sys.stderr)
             return None
 
+    def _patches_apply(self, version: str, patch_paths: List[str]) -> bool:
+        """
+        Verify a set of downloaded patch files actually apply (dry-run) against
+        the extracted source tree for `version`. A patch that merely downloaded
+        successfully is not the same as one that will apply — a stale upstream
+        patch (built against an older point release) downloads fine and then
+        fails at real apply time, which is too late to fall back to another
+        source. This lets source-selection loops check before committing.
+        """
+        source_dir = os.path.join(self._build_dir, f"linux-{version}")
+        if not os.path.isdir(source_dir):
+            # Source tree not extracted yet (e.g. called before download()) —
+            # can't verify, assume it applies and let the real apply step catch it.
+            return True
+
+        from utils.system import run_command
+        for patch_path in patch_paths:
+            result = run_command(
+                f'patch -p1 --batch --forward --dry-run -i "{patch_path}"',
+                cwd=source_dir
+            )
+            if result.returncode != 0:
+                return False
+        return True
+
     def _download_bore(self, version: str, major_minor: str,
                        patches_dir: str) -> Optional[List[str]]:
         """
         Download BORE scheduler patches.
-        Tries: firelzrd/bore-scheduler (stable → legacy) → CachyOS/kernel-patches fallback.
+        Tries: firelzrd/bore-scheduler (stable → legacy) → CachyOS/kernel-patches
+        → SoplosLinux/bore-soplos. Each candidate is verified with a dry-run
+        apply before being accepted — a source that downloads fine but doesn't
+        actually apply to this point release falls through to the next one.
         """
         self._report_progress(f"Downloading BORE patch for {version}...", -1)
 
@@ -393,10 +423,16 @@ class KernelDownloader:
                     local_paths.append(dest)
                 else:
                     self._report_progress(f"Error downloading BORE file: {filename}", -1)
-                    return None
+                    local_paths = []
+                    break
 
             if local_paths:
-                return local_paths
+                if self._patches_apply(version, local_paths):
+                    return local_paths
+                self._report_progress(
+                    f"BORE patch from firelzrd ({tree}) downloaded but doesn't apply "
+                    f"to {version} — trying next source...", -1
+                )
 
         # --- Source 2: CachyOS/kernel-patches fallback ---
         self._report_progress(
@@ -404,9 +440,44 @@ class KernelDownloader:
         )
         cachy_paths = self._download_bore_cachy(major_minor, patches_dir)
         if cachy_paths:
-            return cachy_paths
+            if self._patches_apply(version, cachy_paths):
+                return cachy_paths
+            self._report_progress(
+                f"CachyOS BORE patch downloaded but doesn't apply to {version} — "
+                f"trying next source...", -1
+            )
+
+        # --- Source 3: SoplosLinux/bore-soplos rebase fallback ---
+        self._report_progress(
+            f"BORE not found upstream — trying SoplosLinux/bore-soplos fallback for {major_minor}...", -1
+        )
+        soplos_paths = self._download_bore_soplos(major_minor, patches_dir)
+        if soplos_paths:
+            if self._patches_apply(version, soplos_paths):
+                return soplos_paths
+            self._report_progress(
+                f"⚠ SoplosLinux/bore-soplos patch doesn't apply to {version} either — "
+                f"no working BORE source found.", -1
+            )
 
         print(f"No BORE patch available for {major_minor}", file=sys.stderr)
+        return None
+
+    def _download_bore_soplos(self, major_minor: str, patches_dir: str) -> Optional[List[str]]:
+        """
+        Download BORE from SoplosLinux/bore-soplos — a Soplos-maintained rebase
+        used only when upstream (firelzrd, CachyOS) hasn't published a patch
+        for this kernel line yet. Not build/boot verified upstream: see
+        github.com/SoplosLinux/bore-soplos README before trusting a build made
+        from this source.
+        """
+        raw_url = BORE_SOPLOS_URL.format(major_minor=major_minor)
+        dest = os.path.join(patches_dir, f"bore-soplos-{major_minor}.patch")
+        if self._download_file(raw_url, dest):
+            self._report_progress(f"SoplosLinux/bore-soplos patch downloaded for {major_minor}.", -1)
+            return [dest]
+
+        print(f"SoplosLinux/bore-soplos: no patch for {major_minor}", file=sys.stderr)
         return None
 
     def _download_bore_cachy(self, major_minor: str, patches_dir: str) -> Optional[List[str]]:
@@ -659,10 +730,18 @@ class KernelDownloader:
         if not asset_url:
             self._report_progress(
                 f"⚠ Zen patch not found for kernel {version} "
-                f"(no release matching {target_prefix} in zen-kernel/zen-kernel).", -1
+                f"(no release matching {target_prefix} in zen-kernel/zen-kernel) — "
+                f"trying SoplosLinux/zen-soplos fallback...", -1
             )
             print(f"No Zen release matching {target_prefix} found", file=sys.stderr)
-            return None
+            soplos_paths = self._download_zen_soplos(major_minor, patches_dir)
+            if soplos_paths and not self._patches_apply(version, soplos_paths):
+                self._report_progress(
+                    f"⚠ SoplosLinux/zen-soplos patch doesn't apply to {version} either — "
+                    f"no working Zen source found.", -1
+                )
+                return None
+            return soplos_paths
 
         zst_dest = os.path.join(patches_dir, asset_name)
         dest = os.path.join(patches_dir, f"zen-{version}.patch")
@@ -673,6 +752,29 @@ class KernelDownloader:
         from utils.system import run_command
         result = run_command(f'zstd -d "{zst_dest}" -o "{dest}"')
         if result.returncode == 0 and os.path.exists(dest):
+            if self._patches_apply(version, [dest]):
+                return [dest]
+            self._report_progress(
+                f"Zen release {asset_name} downloaded but doesn't apply to {version} — "
+                f"trying SoplosLinux/zen-soplos fallback...", -1
+            )
+            return self._download_zen_soplos(major_minor, patches_dir)
+
+        return None
+
+    def _download_zen_soplos(self, major_minor: str, patches_dir: str) -> Optional[List[str]]:
+        """
+        Download Zen from SoplosLinux/zen-soplos — a Soplos-maintained rebase
+        used only when zen-kernel/zen-kernel hasn't published a release for
+        this kernel line yet. Not build/boot verified upstream: see
+        github.com/SoplosLinux/zen-soplos README before trusting a build made
+        from this source — it's a much larger patch surface than BORE/x3d.
+        """
+        raw_url = ZEN_SOPLOS_URL.format(major_minor=major_minor)
+        dest = os.path.join(patches_dir, f"zen-soplos-{major_minor}.patch")
+        if self._download_file(raw_url, dest):
+            self._report_progress(f"SoplosLinux/zen-soplos patch downloaded for {major_minor}.", -1)
             return [dest]
 
+        print(f"SoplosLinux/zen-soplos: no patch for {major_minor}", file=sys.stderr)
         return None

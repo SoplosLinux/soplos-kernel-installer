@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.1-6] - 2026-07-26
+
+### Fixed
+- **BORE/Zen patch source selection**: a patch source (e.g. firelzrd's BORE, zen-kernel's official Zen release) could download successfully and still fail to apply against the current kernel point release — the failure only surfaced during the actual `patch` apply step, by which point it was too late to fall back to another source. Downloaded BORE/Zen candidates are now verified with a `patch --dry-run` against the extracted kernel tree before being accepted; if a source downloads fine but doesn't apply, the next source in the chain is tried automatically instead of aborting the build.
+- **Zen's alternate scheduler never actually built**: selecting the "zen" patch applied the full patchset and the build succeeded, but the kernel silently ran mainline CFS/EEVDF instead of BMQ/PDS — `CONFIG_SCHED_ALT` (unlike BORE's `CONFIG_SCHED_BORE`) defaults to `n` in Kconfig, so it needed to be forced on explicitly. `configure()` now enables `CONFIG_SCHED_ALT` and `CONFIG_SCHED_PDS` (the patch's own default scheduler choice) whenever "zen" is selected. Verified on real hardware: `CONFIG_SCHED_ALT=y`/`CONFIG_SCHED_PDS=y` in the running kernel's config, and Project C-specific sysctls (`kernel.yield_type`) present while CFS-only sysctls (`sched_cfs_bandwidth_slice_us`, `sched_util_clamp_*`, etc.) are gone, confirming PDS is genuinely active — not just compiled in.
+
+### Added
+- **BORE**: new third fallback source, [SoplosLinux/bore-soplos](https://github.com/SoplosLinux/bore-soplos), used only when neither firelzrd nor CachyOS have a working patch for the requested kernel version yet.
+- **Zen**: new fallback source, [SoplosLinux/zen-soplos](https://github.com/SoplosLinux/zen-soplos), used when zen-kernel/zen-kernel hasn't published a matching release yet.
+
 ## [1.0.1-5] - 2026-07-22
 
 ### Changed
