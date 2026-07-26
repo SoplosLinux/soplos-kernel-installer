@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.1--6-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.1--7-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,13 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1-6)
+### 🚀 Recent Updates (v1.0.1-7)
+- **Added**: Core count selector for compilation — spin button next to the cleanup option, defaults to all logical cores, available in both regular and Stock modes.
+- **Added**: Profile and Version (V1–V4) filters in the Soplos Kernels tab, populated from whatever's actually in the repo.
+- **Fixed**: Kernel list filters no longer leave "Install"/"Remove" buttons blank until a manual refresh.
+- **Fixed**: The filters row now sits in its own card instead of a barely-visible separator line.
+
+### Previous Updates (v1.0.1-6)
 - **Fixed**: BORE/Zen patch sources that downloaded successfully but failed to apply against the current kernel point release no longer abort the build — they're now verified with a dry-run apply and the next source in the fallback chain is tried automatically.
 - **Fixed**: Selecting Zen no longer silently builds a kernel that still runs mainline CFS/EEVDF — `CONFIG_SCHED_ALT`/`CONFIG_SCHED_PDS` are now forced on (Zen's own Kconfig default for `SCHED_ALT` is "n", unlike BORE's "y"). Confirmed on real hardware: the alternate scheduler is genuinely active at boot, not just compiled in.
 - **Added**: [SoplosLinux/bore-soplos](https://github.com/SoplosLinux/bore-soplos) and [SoplosLinux/zen-soplos](https://github.com/SoplosLinux/zen-soplos) as fallback patch sources for BORE and Zen, used only when upstream hasn't published a working patch for the requested kernel version yet.

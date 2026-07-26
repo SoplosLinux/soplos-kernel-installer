@@ -30,7 +30,7 @@ from core.profiles import ProfileType
 from config.constants import APP_VERSION as VERSION
 from utils.system import (
     reboot_system, get_build_directory, get_supported_march_level,
-    get_cpu_model, get_memory_info,
+    get_cpu_model, get_memory_info, get_cpu_count,
 )
 
 
@@ -192,6 +192,20 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         )
         self._cleanup_check.set_active(True)
         options_inner.pack_start(self._cleanup_check, False, False, 0)
+
+        cores_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        cores_label = Gtk.Label(label=_("Cores to use for compilation:"))
+        cores_row.pack_start(cores_label, False, False, 0)
+
+        max_cores = get_cpu_count()
+        self._cores_spin = Gtk.SpinButton.new_with_range(1, max_cores, 1)
+        self._cores_spin.set_value(max_cores)
+        self._cores_spin.set_tooltip_text(
+            _("Number of CPU cores passed to make -j. Defaults to all logical cores ({}).").format(max_cores)
+        )
+        cores_row.pack_start(self._cores_spin, False, False, 0)
+
+        options_inner.pack_start(cores_row, False, False, 0)
 
         options_frame.add(options_inner)
         row3.pack_start(options_frame, True, True, 0)
@@ -435,6 +449,32 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         repo_frame.add(repo_inner)
         box.pack_start(repo_frame, False, False, 0)
 
+        # Filters card — its own card, same pattern as repo_frame/kernels_frame,
+        # so the split from the kernels list is an actual card boundary, not a
+        # thin in-card separator line that's too subtle to notice on dark themes.
+        filters_frame = Gtk.Frame()
+        filters_frame.get_style_context().add_class('soplos-card')
+        filter_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+
+        flavor_label = Gtk.Label(label=_("Profile:"))
+        filter_row.pack_start(flavor_label, False, False, 0)
+        self._kernel_flavor_filter = Gtk.ComboBoxText()
+        self._kernel_flavor_filter.append("all", _("All"))
+        self._kernel_flavor_filter.set_active_id("all")
+        self._kernel_flavor_filter.connect('changed', lambda w: self._on_kernel_filter_changed())
+        filter_row.pack_start(self._kernel_flavor_filter, False, False, 0)
+
+        march_label = Gtk.Label(label=_("Version:"))
+        filter_row.pack_start(march_label, False, False, 0)
+        self._kernel_march_filter = Gtk.ComboBoxText()
+        self._kernel_march_filter.append("all", _("All"))
+        self._kernel_march_filter.set_active_id("all")
+        self._kernel_march_filter.connect('changed', lambda w: self._on_kernel_filter_changed())
+        filter_row.pack_start(self._kernel_march_filter, False, False, 0)
+
+        filters_frame.add(filter_row)
+        box.pack_start(filters_frame, False, False, 0)
+
         # Kernels list card
         kernels_frame = Gtk.Frame()
         kernels_frame.get_style_context().add_class('soplos-card')
@@ -455,11 +495,12 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         return scroll
 
     @staticmethod
-    def _soplos_pkg_display_name(pkg: str) -> str:
+    def _soplos_pkg_flavor_and_march(pkg: str):
+        """Split a linux-soplos* package name into (profile label, march label or None)."""
         _MARCH = {'v1', 'v2', 'v3', 'v4'}
         suffix = pkg[len('linux-soplos'):]
         if not suffix:
-            return _("Stock")
+            return (_("Stock"), None)
         parts = suffix.lstrip('-').split('-')
         march = parts[-1] if parts[-1] in _MARCH else None
         flavor = parts[:-1] if march else parts
@@ -469,7 +510,12 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             label = '-'.join(flavor).upper()
         else:
             label = '-'.join(flavor).replace('-', ' ').title()
-        return f"{label} {march.upper()}" if march else label
+        return (label, march.upper() if march else None)
+
+    @staticmethod
+    def _soplos_pkg_display_name(pkg: str) -> str:
+        label, march = SoplosKernelInstallerWindow._soplos_pkg_flavor_and_march(pkg)
+        return f"{label} {march}" if march else label
 
     def _fetch_soplos_packages(self) -> None:
         def fetch():
@@ -546,6 +592,37 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._soplos_updates = updates
         self._soplos_versions = versions
         self._soplos_apt_registered = apt_registered
+        self._populate_kernel_filters()
+        self._rebuild_kernels_list()
+        self._refresh_soplos_kernels_tab()
+
+    def _populate_kernel_filters(self) -> None:
+        """Fill the profile/version filter combos from the packages actually
+        present in the repo, so they never show a march level or profile that
+        isn't currently available (and pick up new ones — e.g. Zen — for free)."""
+        flavors = set()
+        marches = set()
+        for pkg, _name, _desc, _suffix in self._soplos_packages:
+            flavor, march = self._soplos_pkg_flavor_and_march(pkg)
+            flavors.add(flavor)
+            if march:
+                marches.add(march)
+
+        def _refill(combo: Gtk.ComboBoxText, values) -> None:
+            previous = combo.get_active_id()
+            combo.remove_all()
+            combo.append("all", _("All"))
+            for v in sorted(values):
+                combo.append(v, v)
+            combo.set_active_id(previous if previous in ({"all"} | values) else "all")
+
+        _refill(self._kernel_flavor_filter, flavors)
+        _refill(self._kernel_march_filter, marches)
+
+    def _on_kernel_filter_changed(self) -> None:
+        """Re-render the kernel list for the new filter selection. Buttons are
+        recreated blank by _rebuild_kernels_list() — _refresh_soplos_kernels_tab()
+        is what actually sets their label/style, so both must run together."""
         self._rebuild_kernels_list()
         self._refresh_soplos_kernels_tab()
 
@@ -564,8 +641,30 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             self._kernels_rows.show_all()
             return
 
+        flavor_filter = self._kernel_flavor_filter.get_active_id() or "all"
+        march_filter = self._kernel_march_filter.get_active_id() or "all"
+
+        visible_packages = []
+        for entry in self._soplos_packages:
+            pkg = entry[0]
+            flavor, march = self._soplos_pkg_flavor_and_march(pkg)
+            if flavor_filter != "all" and flavor != flavor_filter:
+                continue
+            if march_filter != "all" and march != march_filter:
+                continue
+            visible_packages.append(entry)
+
+        if not visible_packages:
+            lbl = Gtk.Label(label=_("No kernels match the selected filters"))
+            lbl.get_style_context().add_class('dim-label')
+            lbl.set_margin_top(8)
+            lbl.set_margin_bottom(8)
+            self._kernels_rows.pack_start(lbl, False, False, 0)
+            self._kernels_rows.show_all()
+            return
+
         first = True
-        for pkg, name, desc, _suffix in self._soplos_packages:
+        for pkg, name, desc, _suffix in visible_packages:
             if not first:
                 self._kernels_rows.pack_start(Gtk.Separator(), False, False, 0)
             first = False
@@ -1723,6 +1822,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
         is_stock = (profile.id == ProfileType.STOCK)
         march_level = self._march_selector.get_march_level() if is_stock else None
+        cpu_count = int(self._cores_spin.get_value())
 
         def run_install():
             log_path = os.path.join(os.path.expanduser('~'), 'kernel_build', 'build.log')
@@ -1743,6 +1843,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
                 build_only=is_stock,
                 march_level=march_level,
                 enable_sched_ext=is_stock,
+                cpu_count=cpu_count,
             )
             GLib.idle_add(self._on_build_finished, success)
 

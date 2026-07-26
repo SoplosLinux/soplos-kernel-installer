@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.1-7] - 2026-07-26
+
+### Added
+- **Core count selector**: the "Compile kernel" tab now has a spin button ("Cores to use for compilation") next to the cleanup checkbox, defaulting to all logical cores. Available for both regular profiles and Stock/developer mode — not gated behind either. Threaded through `full_install()` → `installer.build()`; `make -j{n}` uses the chosen value instead of always auto-detecting.
+- **Soplos Kernels tab: profile/version filters**: two dropdowns ("Profile" and "Version") above the kernel list, populated dynamically from the packages actually present in the repo (so a newly published flavor like Zen shows up on its own, nothing hardcoded). Filtering by profile, by march level (V1–V4), or both.
+
+### Fixed
+- Changing a kernel-list filter left the "Install"/"Remove" buttons blank until something else (like clicking Refresh) triggered a full re-render — `_rebuild_kernels_list()` recreates buttons without a label, and only `_refresh_soplos_kernels_tab()` actually sets it. Filter changes now trigger both.
+- The filter row was visually stuck to the top of the kernel list with no clear boundary — moved into its own card (same visual pattern as the repository status and kernel list cards) instead of a single-pixel in-card separator that wasn't noticeable on the dark theme.
+
 ## [1.0.1-6] - 2026-07-26
 
 ### Fixed

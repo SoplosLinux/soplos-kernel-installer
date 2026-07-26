@@ -211,10 +211,15 @@ class SoplosInstaller:
     # Build
     # ------------------------------------------------------------------
 
-    def build(self, version: str) -> bool:
-        """Compile the kernel as Debian packages."""
+    def build(self, version: str, cpu_count: Optional[int] = None) -> bool:
+        """Compile the kernel as Debian packages.
+
+        cpu_count: user-chosen core count for `make -j`. None (or < 1) falls
+        back to the logical core count — same as before this was configurable.
+        """
         source_dir = os.path.join(self._build_dir, f"linux-{version}")
-        cpu_count = get_cpu_count()
+        if not cpu_count or cpu_count < 1:
+            cpu_count = get_cpu_count()
 
         self._report_progress(f"Compiling with {cpu_count} cores...", 30)
 

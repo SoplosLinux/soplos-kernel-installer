@@ -266,6 +266,7 @@ class KernelManager:
         build_only: bool = False,
         march_level: Optional[str] = None,
         enable_sched_ext: bool = False,
+        cpu_count: Optional[int] = None,
     ) -> bool:
         """
         Full kernel install:
@@ -362,7 +363,7 @@ class KernelManager:
 
             # 4. Build
             self._report_progress("Building kernel...", 30)
-            if not self._installer.build(version):
+            if not self._installer.build(version, cpu_count):
                 return False
 
             if is_cancelled():
