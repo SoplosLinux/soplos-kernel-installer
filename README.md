@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.1--7-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.1--8-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,12 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1-7)
+### 🚀 Recent Updates (v1.0.1-8)
+- **Fixed**: the NVIDIA DKMS patch was silently skipped on the open kernel modules (`nvidia-open-590`/`610`), which keep their sources under `kernel-open/nvidia/`. Both source layouts are handled now, so installing a kernel patches the driver on Turing and newer as well.
+- **Fixed**: the patch is only applied when the source actually uses `VMA_LOCK_OFFSET`, instead of always trying and printing a failed-patch warning on newer drivers.
+- **Removed**: dead constants `DRACUT_CONF_DIR` and `DRACUT_SOPLOS_CONF`.
+
+### v1.0.1-7
 - **Added**: Core count selector for compilation — spin button next to the cleanup option, defaults to all logical cores, available in both regular and Stock modes.
 - **Added**: Profile and Version (V1–V4) filters in the Soplos Kernels tab, populated from whatever's actually in the repo.
 - **Fixed**: Kernel list filters no longer leave "Install"/"Remove" buttons blank until a manual refresh.

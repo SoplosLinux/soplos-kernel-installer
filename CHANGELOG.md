@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.1-8] - 2026-07-28
+
+### Fixed
+- **NVIDIA DKMS patch silently skipped on open kernel modules**: `get_nvidia_dkms_patch_commands()` only looked for `nvidia/nv-mmap.c` inside each `/usr/src/nvidia-*/` tree. The `nvidia-open-590` and `nvidia-open-610` packages keep their sources under `kernel-open/nvidia/`, so the patch was skipped without a word on every system using them — which is now everything Turing and newer. Both layouts are walked now.
+- **Failed-patch warning on sources that do not need it**: the patch was attempted unconditionally, printing a "patch failed" warning on driver versions that no longer use the old VMA locking API. It is now applied only when `VMA_LOCK_OFFSET` is actually present in the source.
+
+### Removed
+- Dead constants `DRACUT_CONF_DIR` and `DRACUT_SOPLOS_CONF` in `core/installer.py`: defined but never referenced anywhere in the project.
+
 ## [1.0.1-7] - 2026-07-26
 
 ### Added

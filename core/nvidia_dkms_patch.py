@@ -81,17 +81,28 @@ def get_nvidia_dkms_patch_commands() -> str:
     """
     patch_content = NV_MMAP_VMA_LOCK_PATCH.replace("'", "'\\''")
 
+    # The proprietary driver keeps its sources at <src>/nvidia/, the open kernel
+    # modules (nvidia-open-590, nvidia-open-610) at <src>/kernel-open/nvidia/.
+    # Checking only the first silently skipped every nvidia-open install, which
+    # is now the layout used by everything Turing and newer.
     return (
         "for NVIDIA_SRC in /usr/src/nvidia-*/; do "
-        "  NV_MMAP=\"${NVIDIA_SRC}nvidia/nv-mmap.c\"; "
-        "  if [ ! -f \"$NV_MMAP\" ]; then continue; fi; "
-        "  if grep -q 'VM_REFCNT_EXCLUDE_READERS_FLAG' \"$NV_MMAP\" 2>/dev/null; then "
-        "    echo \"NVIDIA VMA patch already applied in ${NVIDIA_SRC} — skipping.\"; "
-        "    continue; "
-        "  fi; "
-        "  echo \"Applying NVIDIA VMA lock patch to ${NVIDIA_SRC}...\"; "
-        f"  printf '%s' '{patch_content}' | patch --fuzz=5 -p1 -d \"$NVIDIA_SRC\" && "
-        "  echo \"NVIDIA VMA patch applied successfully.\" || "
-        "  echo \"Warning: NVIDIA VMA patch failed for ${NVIDIA_SRC} — DKMS may fail.\"; "
+        "  for NV_SUB in '' 'kernel-open/'; do "
+        "    NV_ROOT=\"${NVIDIA_SRC}${NV_SUB}\"; "
+        "    NV_MMAP=\"${NV_ROOT}nvidia/nv-mmap.c\"; "
+        "    if [ ! -f \"$NV_MMAP\" ]; then continue; fi; "
+        "    if grep -q 'VM_REFCNT_EXCLUDE_READERS_FLAG' \"$NV_MMAP\" 2>/dev/null; then "
+        "      echo \"NVIDIA VMA patch already applied in ${NV_ROOT} — skipping.\"; "
+        "      continue; "
+        "    fi; "
+        "    if ! grep -q 'VMA_LOCK_OFFSET' \"$NV_MMAP\" 2>/dev/null; then "
+        "      echo \"${NV_ROOT} does not use VMA_LOCK_OFFSET — patch not needed.\"; "
+        "      continue; "
+        "    fi; "
+        "    echo \"Applying NVIDIA VMA lock patch to ${NV_ROOT}...\"; "
+        f"    printf '%s' '{patch_content}' | patch --fuzz=5 -p1 -d \"$NV_ROOT\" && "
+        "    echo \"NVIDIA VMA patch applied successfully.\" || "
+        "    echo \"Warning: NVIDIA VMA patch failed for ${NV_ROOT} — DKMS may fail.\"; "
+        "  done; "
         "done"
     )

@@ -26,10 +26,6 @@ from utils.system import (
     get_cpu_count,
 )
 
-DRACUT_CONF_DIR = "/etc/dracut.conf.d/"
-DRACUT_SOPLOS_CONF = DRACUT_CONF_DIR + "soplos.conf"
-
-
 class SoplosInstaller:
     """Orchestrates kernel build and installation on Soplos Linux."""
 
