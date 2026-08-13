@@ -27,6 +27,7 @@ from core.nvidia import has_nvidia_gpu, get_gpu_description
 from core.nvidia_dkms_patch import get_nvidia_dkms_patch_commands
 from core.i18n_manager import _
 from core.profiles import ProfileType
+from core.batch import BatchBuilder, release_queue
 from config.constants import APP_VERSION as VERSION
 from utils.system import (
     reboot_system, get_build_directory, get_supported_march_level,
@@ -54,6 +55,13 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._current_build_profile = None
         self._current_build_version = ""
         self._current_build_custom_name = ""
+
+        # Batch build state (Stock/developer mode only)
+        self._batch_builder = None
+        self._batch_running = False
+        self._batch_total = 0
+        self._batch_current_job = ""
+        self._batch_dest = ""
 
         self.get_style_context().add_class('soplos-window')
 
@@ -178,6 +186,12 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._march_frame.set_no_show_all(True)
         self._march_frame.hide()
         config_box.pack_start(self._march_frame, False, False, 0)
+
+        # ── Fila 2d: Batch release build (Stock mode only) ────────────
+        self._batch_frame = self._create_batch_controls()
+        self._batch_frame.set_no_show_all(True)
+        self._batch_frame.hide()
+        config_box.pack_start(self._batch_frame, False, False, 0)
 
         # ── Fila 3: Opciones (izq) + Info sistema + Secure Boot (der) ─
         row3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
@@ -1037,6 +1051,8 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             self._patch_selector.clear_all()
             self._patch_selector.set_stock_mode(True)
             self._march_frame.show()
+            self._batch_frame.set_no_show_all(False)
+            self._batch_frame.show_all()
             self._kernel_name_entry.set_sensitive(False)
             self._update_stock_name()
         else:
@@ -1044,6 +1060,8 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             if profile:
                 self._patch_selector.apply_profile_suggestions(profile)
             self._march_frame.hide()
+            self._batch_frame.hide()
+            self._batch_frame.set_no_show_all(True)
             self._kernel_name_entry.set_sensitive(True)
             self._kernel_name_entry.set_text("soplos")
         self._update_name_hint()
@@ -1073,6 +1091,218 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
     def _activate_stock_profile(self) -> None:
         self._profile_selector.toggle_stock_profile()
+
+    # ------------------------------------------------------------------
+    # Batch release build (Stock/developer mode only)
+    # ------------------------------------------------------------------
+
+    def _default_batch_dest(self) -> str:
+        candidate = os.path.join(
+            os.path.expanduser("~"), "Descargas", "SoplosApps", "kernels"
+        )
+        return candidate if os.path.isdir(candidate) else os.path.expanduser("~")
+
+    def _create_batch_controls(self) -> Gtk.Widget:
+        """Destination folder and the button that builds the whole release."""
+        frame = Gtk.Frame()
+        frame.get_style_context().add_class('soplos-card')
+        inner = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+
+        header = Gtk.Label(label=_("Build the whole release"))
+        header.get_style_context().add_class('section-header')
+        header.set_halign(Gtk.Align.START)
+        inner.pack_start(header, False, False, 0)
+
+        dest_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        dest_label = Gtk.Label(label=_("Destination:"))
+        dest_label.get_style_context().add_class('dim-label')
+        dest_row.pack_start(dest_label, False, False, 0)
+
+        self._batch_dest = self._default_batch_dest()
+        self._batch_dest_value = Gtk.Label(label=self._batch_dest)
+        self._batch_dest_value.set_halign(Gtk.Align.START)
+        self._batch_dest_value.set_ellipsize(3)  # PANGO_ELLIPSIZE_END
+        dest_row.pack_start(self._batch_dest_value, True, True, 0)
+
+        self._batch_dest_btn = Gtk.Button(label=_("Choose..."))
+        self._batch_dest_btn.connect('clicked', self._on_batch_choose_dest)
+        dest_row.pack_end(self._batch_dest_btn, False, False, 0)
+
+        inner.pack_start(dest_row, False, False, 0)
+
+        self._batch_start_btn = Gtk.Button(
+            label=_("Build all {n} kernels").format(n=len(release_queue()))
+        )
+        self._batch_start_btn.connect('clicked', self._on_batch_start)
+        inner.pack_start(self._batch_start_btn, False, False, 0)
+
+        frame.add(inner)
+        return frame
+
+    def _on_batch_choose_dest(self, btn) -> None:
+        chooser = Gtk.FileChooserDialog(
+            title=_("Choose destination folder"),
+            transient_for=self,
+            action=Gtk.FileChooserAction.SELECT_FOLDER,
+        )
+        chooser.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
+        chooser.add_button(_("Select"), Gtk.ResponseType.OK)
+        chooser.set_current_folder(self._batch_dest or os.path.expanduser("~"))
+        resp = chooser.run()
+        folder = chooser.get_filename()
+        chooser.destroy()
+
+        if resp == Gtk.ResponseType.OK and folder:
+            self._batch_dest = folder
+            self._batch_dest_value.set_text(folder)
+
+    def _on_batch_start(self, btn) -> None:
+        if self._batch_running or self._building:
+            return
+
+        version = self._version_picker.get_selected_version()
+        if not version:
+            self._show_error(_("Select a kernel version first."))
+            return
+
+        if not self._batch_dest or not os.path.isdir(self._batch_dest):
+            self._show_error(_("Choose a valid destination folder first."))
+            return
+
+        jobs = release_queue()
+
+        dialog = Gtk.MessageDialog(
+            transient_for=self, modal=True,
+            message_type=Gtk.MessageType.QUESTION,
+            buttons=Gtk.ButtonsType.NONE,
+            text=_("Build the whole release?")
+        )
+        dialog.format_secondary_text(
+            _("%(n)d kernels of version %(version)s will be built one after "
+              "another and saved to %(dest)s\n\n"
+              "The build directory is deleted before and after every kernel.")
+            % {'n': len(jobs), 'version': version, 'dest': self._batch_dest}
+        )
+        dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
+        dialog.add_button(_("Start"), Gtk.ResponseType.OK)
+        dialog.get_widget_for_response(Gtk.ResponseType.OK).get_style_context().add_class('suggested-action')
+        resp = dialog.run()
+        dialog.destroy()
+
+        if resp != Gtk.ResponseType.OK:
+            return
+
+        cpu_count = int(self._cores_spin.get_value())
+
+        self._batch_running = True
+        self._batch_total = len(jobs)
+
+        # Same controls as a single build: the user decides whether to switch
+        # to the log screen or stay here
+        self._building = True
+        self._install_btn.hide()
+        self._build_ctrl_box.show_all()
+        self._dep_progress.set_fraction(0.0)
+        self._dep_label.set_text("")
+        self._progress_revealer.set_reveal_child(True)
+        self._build_progress.start_build()
+        self._cancel_btn.set_sensitive(True)
+        self._back_btn.set_sensitive(True)
+        self._done_btn.hide()
+        self._start_pulse()
+
+        # Keep the machine awake for the whole queue, not just one kernel
+        self._inhibit_cookie = self.get_application().inhibit(
+            self,
+            Gtk.ApplicationInhibitFlags.SUSPEND | Gtk.ApplicationInhibitFlags.IDLE,
+            _("Batch kernel compilation in progress")
+        )
+
+        def progress_cb(message: str, percent: int) -> None:
+            GLib.idle_add(self._on_build_progress, message, percent)
+
+        def job_cb(index: int, total: int, name: str) -> None:
+            GLib.idle_add(self._on_batch_job, index, total, name)
+
+        self._batch_builder = BatchBuilder(
+            kernel_manager=self._kernel_manager,
+            progress_callback=progress_cb,
+            job_callback=job_cb,
+        )
+        self._kernel_manager.set_progress_callback(progress_cb)
+
+        def run_batch():
+            result = self._batch_builder.run(
+                version=version,
+                dest_root=self._batch_dest,
+                cpu_count=cpu_count,
+                jobs=jobs,
+            )
+            GLib.idle_add(self._on_batch_finished, result)
+
+        threading.Thread(target=run_batch, daemon=True).start()
+
+    def _on_batch_job(self, index: int, total: int, name: str) -> bool:
+        """Re-attach the log viewer to the fresh build.log of this kernel."""
+        log_path = os.path.join(get_build_directory(), 'build.log')
+        self._build_progress.stop_monitoring()
+        self._build_progress.append_log(
+            _("\n=== [{i}/{n}] {name} ===").format(i=index, n=total, name=name)
+        )
+        self._build_progress.monitor_log_file(log_path)
+        self._batch_current_job = f"[{index}/{total}] {name}"
+        return False
+
+    def _on_batch_finished(self, result) -> bool:
+        self._batch_running = False
+        self._building = False
+        self._stop_pulse()
+        self._build_progress.stop_monitoring()
+
+        if self._inhibit_cookie:
+            self.get_application().uninhibit(self._inhibit_cookie)
+            self._inhibit_cookie = 0
+
+        done = len(result.completed)
+        success = result.ok
+
+        self._build_progress.set_complete(success, cancelled=result.cancelled)
+        self._cancel_btn.set_sensitive(False)
+        self._back_btn.set_sensitive(True)
+        self._done_btn.show()
+        self._build_ctrl_box.hide()
+        self._install_btn.show()
+        self._install_btn.set_sensitive(True)
+        self._progress_revealer.set_reveal_child(False)
+
+        if result.error:
+            self._build_progress.append_log("\n" + result.error)
+            self._show_error(result.error)
+        elif result.cancelled:
+            self._build_progress.append_log(
+                _("\nQueue cancelled after {n} kernel(s).").format(n=done)
+            )
+        elif result.failed:
+            self._build_progress.append_log(
+                _("\nFAILED: {name} — build directory kept at {log}").format(
+                    name=result.failed, log=result.failed_log or "")
+            )
+            self._show_error(
+                _("Build failed for {name}.\n\n"
+                  "{n} kernel(s) were completed before the failure. "
+                  "The build directory has been kept, the log is at:\n{log}").format(
+                    name=result.failed, n=done, log=result.failed_log or "")
+            )
+        else:
+            self._build_progress.append_log(
+                _("\nAll {n} kernels built.").format(n=done)
+            )
+            self._show_info(
+                _("All {n} kernels were built and saved to:\n{path}").format(
+                    n=done, path=self._batch_dest)
+            )
+
+        return False
 
     def _on_version_changed(self, picker, version: str) -> None:
         self._update_name_hint()
@@ -1972,6 +2202,10 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
         cleanup = (resp == Gtk.ResponseType.NO)
         self._building = False
+        if self._batch_running and self._batch_builder:
+            # Stop the whole queue, not just the kernel being built
+            self._batch_builder.cancel(cleanup=cleanup)
+            return
         self._kernel_manager.cancel(cleanup=cleanup)
         self._build_progress.set_complete(success=False, cancelled=True)
         self._build_progress.append_log(_("\n⚠ Installation cancelled."))

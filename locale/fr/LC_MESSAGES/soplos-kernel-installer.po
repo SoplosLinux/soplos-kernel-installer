@@ -946,3 +946,87 @@ msgstr "GPU : %s"
 
 msgid "RAM: %.1f GB"
 msgstr "RAM : %.1f Go"
+
+msgid "Profile:"
+msgstr "Profil :"
+
+msgid "Version:"
+msgstr "Version :"
+
+msgid "No kernels match the selected filters"
+msgstr "Aucun noyau ne correspond aux filtres sélectionnés"
+
+msgid "Cores to use for compilation:"
+msgstr "Cœurs à utiliser pour la compilation :"
+
+msgid "Number of CPU cores passed to make -j. Defaults to all logical cores ({})."
+msgstr "Nombre de cœurs passés à make -j. Par défaut, tous les cœurs logiques ({})."
+
+msgid "Could not delete the build directory.\nCheck permissions or disk state."
+msgstr "Impossible de supprimer le dossier de compilation.\nVérifiez les permissions ou l'état du disque."
+
+msgid "Build the whole release"
+msgstr "Compiler la version complète"
+
+msgid "Destination:"
+msgstr "Destination :"
+
+msgid "Choose..."
+msgstr "Choisir..."
+
+msgid "Build all {n} kernels"
+msgstr "Compiler les {n} noyaux"
+
+msgid "Choose a valid destination folder first."
+msgstr "Choisissez d'abord un dossier de destination valide."
+
+msgid "Build the whole release?"
+msgstr "Compiler la version complète ?"
+
+msgid "%(n)d kernels of version %(version)s will be built one after another and saved to %(dest)s\n\nThe build directory is deleted before and after every kernel."
+msgstr "%(n)d noyaux de la version %(version)s seront compilés l'un après l'autre et enregistrés dans %(dest)s\n\nLe dossier de compilation est supprimé avant et après chaque noyau."
+
+msgid "Start"
+msgstr "Démarrer"
+
+msgid "Batch kernel compilation in progress"
+msgstr "Compilation de noyaux par lots en cours"
+
+msgid "\n=== [{i}/{n}] {name} ==="
+msgstr "\n=== [{i}/{n}] {name} ==="
+
+msgid "\nQueue cancelled after {n} kernel(s)."
+msgstr "\nFile d'attente annulée après {n} noyau(x)."
+
+msgid "\nFAILED: {name} — build directory kept at {log}"
+msgstr "\nÉCHEC : {name} — dossier de compilation conservé dans {log}"
+
+msgid "Build failed for {name}.\n\n{n} kernel(s) were completed before the failure. The build directory has been kept, the log is at:\n{log}"
+msgstr "Échec de la compilation de {name}.\n\n{n} noyau(x) ont été terminés avant l'échec. Le dossier de compilation a été conservé, le journal se trouve dans :\n{log}"
+
+msgid "\nAll {n} kernels built."
+msgstr "\nLes {n} noyaux ont été compilés."
+
+msgid "All {n} kernels were built and saved to:\n{path}"
+msgstr "Les {n} noyaux ont été compilés et enregistrés dans :\n{path}"
+
+msgid "Stock profile not found."
+msgstr "Profil Stock introuvable."
+
+msgid "Checking build dependencies..."
+msgstr "Vérification des dépendances de compilation..."
+
+msgid "Could not install the build dependencies."
+msgstr "Impossible d'installer les dépendances de compilation."
+
+msgid "[{i}/{n}] Building {name}..."
+msgstr "[{i}/{n}] Compilation de {name}..."
+
+msgid "Build failed for {name}. Queue stopped."
+msgstr "Échec de la compilation de {name}. File d'attente arrêtée."
+
+msgid "No packages found for {name}. Queue stopped."
+msgstr "Aucun paquet trouvé pour {name}. File d'attente arrêtée."
+
+msgid "[{i}/{n}] {name} saved to {path}"
+msgstr "[{i}/{n}] {name} enregistré dans {path}"

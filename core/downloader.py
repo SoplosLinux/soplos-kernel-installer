@@ -28,6 +28,7 @@ CACHY_RAW_BASE = "https://raw.githubusercontent.com/CachyOS/kernel-patches/maste
 RT_BASE_URL = "https://www.kernel.org/pub/linux/kernel/projects/rt/{major_minor}/"
 ZEN_RELEASES_WEB = "https://github.com/zen-kernel/zen-kernel/releases"
 X3D_PATCH_URL = "https://raw.githubusercontent.com/SoplosLinux/x3d-soplos/main/patches/0001-sched-amd-x3d-vcache-{tag}.patch"
+MARCH_PATCH_URL = "https://raw.githubusercontent.com/SoplosLinux/soplos-cpu-kernel-patch/main/patches/0001-x86-64-isa-level-{tag}.patch"
 BORE_SOPLOS_URL = "https://raw.githubusercontent.com/SoplosLinux/bore-soplos/main/patches/0001-bore-{major_minor}.patch"
 ZEN_SOPLOS_URL = "https://raw.githubusercontent.com/SoplosLinux/zen-soplos/main/patches/0001-zen-{major_minor}.patch"
 
@@ -314,6 +315,8 @@ class KernelDownloader:
                 paths = self._download_zen(version, major_minor, patches_dir)
             elif patch_id == "x3d":
                 paths = self._download_x3d(version, major_minor, patches_dir)
+            elif patch_id == "march":
+                paths = self._download_march(version, major_minor, patches_dir)
             else:
                 print(f"Unknown patch id: {patch_id}", file=sys.stderr)
                 continue
@@ -673,6 +676,26 @@ class KernelDownloader:
         if self._download_file(X3D_PATCH_URL.format(tag=tag), dest):
             return [dest]
         print(f"Could not download X3D VCache patch for {tag}", file=sys.stderr)
+        return None
+
+    def _download_march(self, version: str, major_minor: str,
+                        patches_dir: str) -> Optional[List[str]]:
+        """
+        Download the Soplos x86-64 ISA level patch.
+        Adds the Kconfig choice that lets the build target x86-64-v2, v3 or v4;
+        mainline only offers -march=native, which cannot be redistributed.
+        A separate patch file is maintained per kernel line, since the block it
+        touches in arch/x86/Makefile changes between releases.
+        Source: github.com/SoplosLinux/soplos-cpu-kernel-patch
+        """
+        major = version.split('.')[0]
+        tag = major_minor if major_minor in ("7.1",) else f"{major}.x"
+
+        self._report_progress(f"Downloading x86-64 ISA level patch ({tag})...", -1)
+        dest = os.path.join(patches_dir, f"soplos-x86-64-isa-level-{tag}.patch")
+        if self._download_file(MARCH_PATCH_URL.format(tag=tag), dest):
+            return [dest]
+        print(f"Could not download x86-64 ISA level patch for {tag}", file=sys.stderr)
         return None
 
     def _download_zen(self, version: str, major_minor: str,

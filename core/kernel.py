@@ -279,6 +279,14 @@ class KernelManager:
         """
         patch_ids = patch_ids or []
 
+        # The x86-64 ISA level patch is not user-selectable: it is required
+        # whenever building above the v1 baseline, with or without other
+        # patches. Kept out of patch_ids so it never reaches the package name
+        # or the installation history.
+        build_patch_ids = list(patch_ids)
+        if march_level and march_level != "v1":
+            build_patch_ids.append("march")
+
         cancel_event = threading.Event()
         self._cancel_event = cancel_event
 
@@ -299,7 +307,7 @@ class KernelManager:
             if reuse_source:
                 # Check if applied patches match requested ones
                 applied = sorted(self._patcher.get_applied_patches(version))
-                requested = sorted(patch_ids)
+                requested = sorted(build_patch_ids)
                 if applied != requested:
                     self._report_progress(
                         "Patch set changed — re-extracting sources from cache...", 2
@@ -317,12 +325,12 @@ class KernelManager:
                 return False
 
             # 2. Download and apply patches
-            if patch_ids:
+            if build_patch_ids:
                 patches_dir = os.path.join(self._build_dir, "patches")
 
                 self._report_progress("Downloading patches...", 20)
                 downloaded = self._downloader.download_patches(
-                    version, patch_ids, patches_dir
+                    version, build_patch_ids, patches_dir
                 )
 
                 if is_cancelled():

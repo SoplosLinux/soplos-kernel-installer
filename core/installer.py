@@ -98,13 +98,18 @@ class SoplosInstaller:
             run_command("./scripts/config --enable SCHED_ALT", cwd=source_dir)
             run_command("./scripts/config --enable SCHED_PDS", cwd=source_dir)
 
-        # March level (Stock mode only)
+        march_symbol = None
+
+        # March level (Stock mode only).
+        # The X86_64_ISA_V* symbols come from the Soplos x86-64 ISA level patch;
+        # mainline has no per-level choice, only X86_NATIVE_CPU (-march=native).
+        # v1 is the upstream baseline and needs no symbol, so the patch is only
+        # downloaded and applied for v2 and above.
         if march_level:
             _MARCH_MAP = {
-                "v1": ("GENERIC_CPU",  ["GENERIC_CPU2", "GENERIC_CPU3", "GENERIC_CPU4"]),
-                "v2": ("GENERIC_CPU2", ["GENERIC_CPU",  "GENERIC_CPU3", "GENERIC_CPU4"]),
-                "v3": ("GENERIC_CPU3", ["GENERIC_CPU",  "GENERIC_CPU2", "GENERIC_CPU4"]),
-                "v4": ("GENERIC_CPU4", ["GENERIC_CPU",  "GENERIC_CPU2", "GENERIC_CPU3"]),
+                "v2": ("X86_64_ISA_V2", ["X86_64_ISA_V1", "X86_64_ISA_V3", "X86_64_ISA_V4"]),
+                "v3": ("X86_64_ISA_V3", ["X86_64_ISA_V1", "X86_64_ISA_V2", "X86_64_ISA_V4"]),
+                "v4": ("X86_64_ISA_V4", ["X86_64_ISA_V1", "X86_64_ISA_V2", "X86_64_ISA_V3"]),
             }
             enable_opt, disable_opts = _MARCH_MAP.get(march_level, (None, []))
             if enable_opt:
@@ -112,6 +117,7 @@ class SoplosInstaller:
                 for opt in disable_opts:
                     run_command(f"./scripts/config --disable {opt}", cwd=source_dir)
                 run_command(f"./scripts/config --enable {enable_opt}", cwd=source_dir)
+                march_symbol = enable_opt
 
         # sched_ext — scheduler extension framework (Stock mode only)
         if enable_sched_ext:
@@ -142,6 +148,22 @@ class SoplosInstaller:
         # Re-apply DEBUG_INFO fixes — olddefconfig resets the choice to Debian default
         for fix in self._get_debug_info_fixes():
             run_command(fix, cwd=source_dir)
+
+        # olddefconfig drops symbols that do not exist in the tree, which is
+        # how the old GENERIC_CPU{2,3,4} approach failed silently: the kernel
+        # was named -v4 but built at the v1 baseline. Verify the ISA level
+        # symbol survived and abort if it did not.
+        if march_symbol:
+            state = run_command(
+                f"./scripts/config --state {march_symbol}", cwd=source_dir
+            )
+            if state.stdout.strip() != "y":
+                self._report_progress(
+                    f"Error: {march_symbol} was dropped by olddefconfig — the "
+                    f"x86-64 ISA level patch is missing or did not apply. "
+                    f"Refusing to build a mislabelled kernel.", -1
+                )
+                return False
 
         return True
 

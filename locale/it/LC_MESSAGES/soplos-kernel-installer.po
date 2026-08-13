@@ -946,3 +946,87 @@ msgstr "GPU: %s"
 
 msgid "RAM: %.1f GB"
 msgstr "RAM: %.1f GB"
+
+msgid "Profile:"
+msgstr "Profilo:"
+
+msgid "Version:"
+msgstr "Versione:"
+
+msgid "No kernels match the selected filters"
+msgstr "Nessun kernel corrisponde ai filtri selezionati"
+
+msgid "Cores to use for compilation:"
+msgstr "Core da usare per la compilazione:"
+
+msgid "Number of CPU cores passed to make -j. Defaults to all logical cores ({})."
+msgstr "Numero di core passati a make -j. Predefinito: tutti i core logici ({})."
+
+msgid "Could not delete the build directory.\nCheck permissions or disk state."
+msgstr "Impossibile eliminare la cartella di compilazione.\nControlla i permessi o lo stato del disco."
+
+msgid "Build the whole release"
+msgstr "Compila l'intera release"
+
+msgid "Destination:"
+msgstr "Destinazione:"
+
+msgid "Choose..."
+msgstr "Scegli..."
+
+msgid "Build all {n} kernels"
+msgstr "Compila tutti i {n} kernel"
+
+msgid "Choose a valid destination folder first."
+msgstr "Scegli prima una cartella di destinazione valida."
+
+msgid "Build the whole release?"
+msgstr "Compilare l'intera release?"
+
+msgid "%(n)d kernels of version %(version)s will be built one after another and saved to %(dest)s\n\nThe build directory is deleted before and after every kernel."
+msgstr "Verranno compilati %(n)d kernel della versione %(version)s uno dopo l'altro e salvati in %(dest)s\n\nLa cartella di compilazione viene eliminata prima e dopo ogni kernel."
+
+msgid "Start"
+msgstr "Avvia"
+
+msgid "Batch kernel compilation in progress"
+msgstr "Compilazione di kernel in blocco in corso"
+
+msgid "\n=== [{i}/{n}] {name} ==="
+msgstr "\n=== [{i}/{n}] {name} ==="
+
+msgid "\nQueue cancelled after {n} kernel(s)."
+msgstr "\nCoda annullata dopo {n} kernel."
+
+msgid "\nFAILED: {name} — build directory kept at {log}"
+msgstr "\nERRORE: {name} — cartella di compilazione conservata in {log}"
+
+msgid "Build failed for {name}.\n\n{n} kernel(s) were completed before the failure. The build directory has been kept, the log is at:\n{log}"
+msgstr "Compilazione fallita per {name}.\n\n{n} kernel completati prima dell'errore. La cartella di compilazione è stata conservata, il log si trova in:\n{log}"
+
+msgid "\nAll {n} kernels built."
+msgstr "\nCompilati tutti i {n} kernel."
+
+msgid "All {n} kernels were built and saved to:\n{path}"
+msgstr "Tutti i {n} kernel sono stati compilati e salvati in:\n{path}"
+
+msgid "Stock profile not found."
+msgstr "Profilo Stock non trovato."
+
+msgid "Checking build dependencies..."
+msgstr "Controllo delle dipendenze di compilazione..."
+
+msgid "Could not install the build dependencies."
+msgstr "Impossibile installare le dipendenze di compilazione."
+
+msgid "[{i}/{n}] Building {name}..."
+msgstr "[{i}/{n}] Compilazione di {name}..."
+
+msgid "Build failed for {name}. Queue stopped."
+msgstr "Compilazione fallita per {name}. Coda interrotta."
+
+msgid "No packages found for {name}. Queue stopped."
+msgstr "Nessun pacchetto trovato per {name}. Coda interrotta."
+
+msgid "[{i}/{n}] {name} saved to {path}"
+msgstr "[{i}/{n}] {name} salvato in {path}"

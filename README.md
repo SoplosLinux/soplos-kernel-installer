@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.1--8-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.1--9-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,13 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1-8)
+### 🚀 Recent Updates (v1.0.1-9)
+- **Added**: Unattended release build in Stock mode — compiles every kernel of a release one after another, each from a clean build directory, saving the packages into `<destination>/<version>/V1`–`V4`. The queue stops at the first failure and keeps that build directory so the log survives.
+- **Fixed**: The x86-64 architecture level was never applied. The build set `CONFIG_GENERIC_CPU{2,3,4}`, symbols that do not exist in mainline, so `olddefconfig` dropped them and every kernel was compiled at the v1 baseline — `-v2`, `-v3` and `-v4` were identical to `-v1`. The level now comes from [soplos-cpu-kernel-patch](https://github.com/SoplosLinux/soplos-cpu-kernel-patch), and the build aborts if the symbol does not survive configuration instead of shipping a mislabelled kernel.
+- **Translations**: batch interface translated into all eight languages, plus six older strings left untranslated since v1.0.1-7.
+- **Note**: v4 produces the same binary as v3 — their only difference is AVX-512 and the kernel disables vector code generation.
+
+### v1.0.1-8
 - **Fixed**: the NVIDIA DKMS patch was silently skipped on the open kernel modules (`nvidia-open-590`/`610`), which keep their sources under `kernel-open/nvidia/`. Both source layouts are handled now, so installing a kernel patches the driver on Turing and newer as well.
 - **Fixed**: the patch is only applied when the source actually uses `VMA_LOCK_OFFSET`, instead of always trying and printing a failed-patch warning on newer drivers.
 - **Removed**: dead constants `DRACUT_CONF_DIR` and `DRACUT_SOPLOS_CONF`.

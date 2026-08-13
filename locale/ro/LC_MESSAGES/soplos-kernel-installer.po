@@ -946,3 +946,87 @@ msgstr "GPU: %s"
 
 msgid "RAM: %.1f GB"
 msgstr "RAM: %.1f GB"
+
+msgid "Profile:"
+msgstr "Profil:"
+
+msgid "Version:"
+msgstr "Versiune:"
+
+msgid "No kernels match the selected filters"
+msgstr "Niciun nucleu nu corespunde filtrelor selectate"
+
+msgid "Cores to use for compilation:"
+msgstr "Nuclee folosite la compilare:"
+
+msgid "Number of CPU cores passed to make -j. Defaults to all logical cores ({})."
+msgstr "Numărul de nuclee transmise către make -j. Implicit, toate nucleele logice ({})."
+
+msgid "Could not delete the build directory.\nCheck permissions or disk state."
+msgstr "Nu s-a putut șterge directorul de compilare.\nVerifică permisiunile sau starea discului."
+
+msgid "Build the whole release"
+msgstr "Compilează întreaga versiune"
+
+msgid "Destination:"
+msgstr "Destinație:"
+
+msgid "Choose..."
+msgstr "Alege..."
+
+msgid "Build all {n} kernels"
+msgstr "Compilează toate cele {n} nuclee"
+
+msgid "Choose a valid destination folder first."
+msgstr "Alege mai întâi un folder de destinație valid."
+
+msgid "Build the whole release?"
+msgstr "Compilezi întreaga versiune?"
+
+msgid "%(n)d kernels of version %(version)s will be built one after another and saved to %(dest)s\n\nThe build directory is deleted before and after every kernel."
+msgstr "Se vor compila %(n)d nuclee ale versiunii %(version)s unul după altul și vor fi salvate în %(dest)s\n\nDirectorul de compilare este șters înainte și după fiecare nucleu."
+
+msgid "Start"
+msgstr "Pornește"
+
+msgid "Batch kernel compilation in progress"
+msgstr "Compilare de nuclee în lot în desfășurare"
+
+msgid "\n=== [{i}/{n}] {name} ==="
+msgstr "\n=== [{i}/{n}] {name} ==="
+
+msgid "\nQueue cancelled after {n} kernel(s)."
+msgstr "\nCoadă anulată după {n} nucleu/nuclee."
+
+msgid "\nFAILED: {name} — build directory kept at {log}"
+msgstr "\nEȘEC: {name} — directorul de compilare păstrat în {log}"
+
+msgid "Build failed for {name}.\n\n{n} kernel(s) were completed before the failure. The build directory has been kept, the log is at:\n{log}"
+msgstr "Compilarea a eșuat pentru {name}.\n\n{n} nuclee au fost finalizate înainte de eroare. Directorul de compilare a fost păstrat, jurnalul se află în:\n{log}"
+
+msgid "\nAll {n} kernels built."
+msgstr "\nToate cele {n} nuclee au fost compilate."
+
+msgid "All {n} kernels were built and saved to:\n{path}"
+msgstr "Toate cele {n} nuclee au fost compilate și salvate în:\n{path}"
+
+msgid "Stock profile not found."
+msgstr "Profilul Stock nu a fost găsit."
+
+msgid "Checking build dependencies..."
+msgstr "Se verifică dependențele de compilare..."
+
+msgid "Could not install the build dependencies."
+msgstr "Nu s-au putut instala dependențele de compilare."
+
+msgid "[{i}/{n}] Building {name}..."
+msgstr "[{i}/{n}] Se compilează {name}..."
+
+msgid "Build failed for {name}. Queue stopped."
+msgstr "Compilarea a eșuat pentru {name}. Coadă oprită."
+
+msgid "No packages found for {name}. Queue stopped."
+msgstr "Nu s-au găsit pachete pentru {name}. Coadă oprită."
+
+msgid "[{i}/{n}] {name} saved to {path}"
+msgstr "[{i}/{n}] {name} salvat în {path}"

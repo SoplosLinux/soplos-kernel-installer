@@ -946,3 +946,87 @@ msgstr "GPU: %s"
 
 msgid "RAM: %.1f GB"
 msgstr "RAM: %.1f GB"
+
+msgid "Profile:"
+msgstr "Perfil:"
+
+msgid "Version:"
+msgstr "Versão:"
+
+msgid "No kernels match the selected filters"
+msgstr "Nenhum kernel corresponde aos filtros selecionados"
+
+msgid "Cores to use for compilation:"
+msgstr "Núcleos a usar na compilação:"
+
+msgid "Number of CPU cores passed to make -j. Defaults to all logical cores ({})."
+msgstr "Número de núcleos passados a make -j. Predefinição: todos os núcleos lógicos ({})."
+
+msgid "Could not delete the build directory.\nCheck permissions or disk state."
+msgstr "Não foi possível apagar o diretório de compilação.\nVerifique as permissões ou o estado do disco."
+
+msgid "Build the whole release"
+msgstr "Compilar a versão completa"
+
+msgid "Destination:"
+msgstr "Destino:"
+
+msgid "Choose..."
+msgstr "Escolher..."
+
+msgid "Build all {n} kernels"
+msgstr "Compilar os {n} kernels"
+
+msgid "Choose a valid destination folder first."
+msgstr "Escolha primeiro uma pasta de destino válida."
+
+msgid "Build the whole release?"
+msgstr "Compilar a versão completa?"
+
+msgid "%(n)d kernels of version %(version)s will be built one after another and saved to %(dest)s\n\nThe build directory is deleted before and after every kernel."
+msgstr "Serão compilados %(n)d kernels da versão %(version)s um após o outro e guardados em %(dest)s\n\nO diretório de compilação é apagado antes e depois de cada kernel."
+
+msgid "Start"
+msgstr "Iniciar"
+
+msgid "Batch kernel compilation in progress"
+msgstr "Compilação de kernels em lote em curso"
+
+msgid "\n=== [{i}/{n}] {name} ==="
+msgstr "\n=== [{i}/{n}] {name} ==="
+
+msgid "\nQueue cancelled after {n} kernel(s)."
+msgstr "\nFila cancelada após {n} kernel(s)."
+
+msgid "\nFAILED: {name} — build directory kept at {log}"
+msgstr "\nFALHA: {name} — diretório de compilação mantido em {log}"
+
+msgid "Build failed for {name}.\n\n{n} kernel(s) were completed before the failure. The build directory has been kept, the log is at:\n{log}"
+msgstr "Falha ao compilar {name}.\n\n{n} kernel(s) concluídos antes da falha. O diretório de compilação foi mantido, o log está em:\n{log}"
+
+msgid "\nAll {n} kernels built."
+msgstr "\nOs {n} kernels foram compilados."
+
+msgid "All {n} kernels were built and saved to:\n{path}"
+msgstr "Os {n} kernels foram compilados e guardados em:\n{path}"
+
+msgid "Stock profile not found."
+msgstr "Perfil Stock não encontrado."
+
+msgid "Checking build dependencies..."
+msgstr "A verificar dependências de compilação..."
+
+msgid "Could not install the build dependencies."
+msgstr "Não foi possível instalar as dependências de compilação."
+
+msgid "[{i}/{n}] Building {name}..."
+msgstr "[{i}/{n}] A compilar {name}..."
+
+msgid "Build failed for {name}. Queue stopped."
+msgstr "Falha ao compilar {name}. Fila parada."
+
+msgid "No packages found for {name}. Queue stopped."
+msgstr "Não foram encontrados pacotes para {name}. Fila parada."
+
+msgid "[{i}/{n}] {name} saved to {path}"
+msgstr "[{i}/{n}] {name} guardado em {path}"

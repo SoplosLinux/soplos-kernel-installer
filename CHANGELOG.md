@@ -5,6 +5,70 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.1-9] - 2026-08-13
+
+### Added
+
+- **Unattended release build** (Stock mode): builds every kernel of a release
+  one after another with no interaction — 6 variants for v1 and v2 plus x3d for
+  v3 and v4. Destination folder and core count are chosen once, dependencies are
+  resolved once, and the machine is kept awake for the whole queue.
+  - Every kernel starts from a completely fresh build directory: it is deleted
+    before the build and again after its packages have been copied out. No
+    sources, patches or object files are ever reused between kernels.
+  - Packages are saved to `<destination>/<version>/V1` through `V4`, created on
+    demand as each level completes.
+  - The queue stops at the first failure and keeps that build directory intact,
+    so the build log and the sources of the failing kernel survive for
+    inspection.
+  - Uses the existing build screen, with its live log, system stats and cancel
+    button. The cancel button stops the whole queue, not just the current
+    kernel.
+
+### Fixed
+
+- **The x86-64 architecture level was never applied.** The build set
+  `CONFIG_GENERIC_CPU{2,3,4}`, symbols that do not exist in mainline — they come
+  from an out-of-tree patch that was never applied. `scripts/config` wrote them,
+  `olddefconfig` dropped them without a word, and every kernel was compiled at
+  the v1 baseline. Kernels named `-v2`, `-v3` and `-v4` were byte-identical to
+  `-v1` apart from `CONFIG_LOCALVERSION`. This affected every release built with
+  the selector since 1.0.1, including the published 7.1.4, 7.1.5 and 7.1.7
+  kernel sets.
+  - The level now comes from
+    [SoplosLinux/soplos-cpu-kernel-patch](https://github.com/SoplosLinux/soplos-cpu-kernel-patch),
+    which adds a proper Kconfig choice (`X86_64_ISA_V1` to `V4`) and the matching
+    `-march=x86-64-v{2,3,4}` branches in `arch/x86/Makefile`. Mainline only
+    offers `X86_NATIVE_CPU` (`-march=native`), which targets the build machine
+    and cannot be redistributed.
+  - The patch is downloaded and applied automatically whenever the level is
+    above v1, with or without other patches selected. It never appears in the
+    package name or the installation history.
+  - **The build now aborts** if the level symbol does not survive
+    `olddefconfig`, instead of silently producing a mislabelled kernel.
+  - Verified on 7.1.8 binaries: the v1 `ext4` module contains 1 BMI1/BMI2
+    instruction, the v3 one contains 627.
+
+### Changed
+
+- v1 no longer writes any architecture symbol at all. It is the upstream
+  baseline and now builds exactly as vanilla does.
+
+### Translations
+
+- Translated the batch interface into all eight languages, plus six older
+  strings that had been left untranslated since 1.0.1-7: `Profile:`,
+  `Version:`, `Cores to use for compilation:`, its tooltip, the empty-filter
+  message and the build directory deletion error.
+
+### Known limitation
+
+- **v4 produces the same binary as v3.** The only difference between the two
+  levels is AVX-512, and the kernel disables vector code generation
+  (`-mno-avx`), so nothing changes. Confirmed on 7.1.8: the disassembly of the
+  v3 and v4 modules is identical, zero lines differ. v4 is kept for catalogue
+  consistency.
+
 ## [1.0.1-8] - 2026-07-28
 
 ### Fixed

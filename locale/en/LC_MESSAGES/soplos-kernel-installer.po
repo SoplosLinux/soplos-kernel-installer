@@ -948,3 +948,87 @@ msgstr "GPU: %s"
 
 msgid "RAM: %.1f GB"
 msgstr "RAM: %.1f GB"
+
+msgid "Profile:"
+msgstr "Profile:"
+
+msgid "Version:"
+msgstr "Version:"
+
+msgid "No kernels match the selected filters"
+msgstr "No kernels match the selected filters"
+
+msgid "Cores to use for compilation:"
+msgstr "Cores to use for compilation:"
+
+msgid "Number of CPU cores passed to make -j. Defaults to all logical cores ({})."
+msgstr "Number of CPU cores passed to make -j. Defaults to all logical cores ({})."
+
+msgid "Could not delete the build directory.\nCheck permissions or disk state."
+msgstr "Could not delete the build directory.\nCheck permissions or disk state."
+
+msgid "Build the whole release"
+msgstr "Build the whole release"
+
+msgid "Destination:"
+msgstr "Destination:"
+
+msgid "Choose..."
+msgstr "Choose..."
+
+msgid "Build all {n} kernels"
+msgstr "Build all {n} kernels"
+
+msgid "Choose a valid destination folder first."
+msgstr "Choose a valid destination folder first."
+
+msgid "Build the whole release?"
+msgstr "Build the whole release?"
+
+msgid "%(n)d kernels of version %(version)s will be built one after another and saved to %(dest)s\n\nThe build directory is deleted before and after every kernel."
+msgstr "%(n)d kernels of version %(version)s will be built one after another and saved to %(dest)s\n\nThe build directory is deleted before and after every kernel."
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Batch kernel compilation in progress"
+msgstr "Batch kernel compilation in progress"
+
+msgid "\n=== [{i}/{n}] {name} ==="
+msgstr "\n=== [{i}/{n}] {name} ==="
+
+msgid "\nQueue cancelled after {n} kernel(s)."
+msgstr "\nQueue cancelled after {n} kernel(s)."
+
+msgid "\nFAILED: {name} — build directory kept at {log}"
+msgstr "\nFAILED: {name} — build directory kept at {log}"
+
+msgid "Build failed for {name}.\n\n{n} kernel(s) were completed before the failure. The build directory has been kept, the log is at:\n{log}"
+msgstr "Build failed for {name}.\n\n{n} kernel(s) were completed before the failure. The build directory has been kept, the log is at:\n{log}"
+
+msgid "\nAll {n} kernels built."
+msgstr "\nAll {n} kernels built."
+
+msgid "All {n} kernels were built and saved to:\n{path}"
+msgstr "All {n} kernels were built and saved to:\n{path}"
+
+msgid "Stock profile not found."
+msgstr "Stock profile not found."
+
+msgid "Checking build dependencies..."
+msgstr "Checking build dependencies..."
+
+msgid "Could not install the build dependencies."
+msgstr "Could not install the build dependencies."
+
+msgid "[{i}/{n}] Building {name}..."
+msgstr "[{i}/{n}] Building {name}..."
+
+msgid "Build failed for {name}. Queue stopped."
+msgstr "Build failed for {name}. Queue stopped."
+
+msgid "No packages found for {name}. Queue stopped."
+msgstr "No packages found for {name}. Queue stopped."
+
+msgid "[{i}/{n}] {name} saved to {path}"
+msgstr "[{i}/{n}] {name} saved to {path}"

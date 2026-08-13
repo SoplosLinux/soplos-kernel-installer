@@ -946,3 +946,87 @@ msgstr "GPU: %s"
 
 msgid "RAM: %.1f GB"
 msgstr "ОЗУ: %.1f ГБ"
+
+msgid "Profile:"
+msgstr "Профиль:"
+
+msgid "Version:"
+msgstr "Версия:"
+
+msgid "No kernels match the selected filters"
+msgstr "Нет ядер, соответствующих выбранным фильтрам"
+
+msgid "Cores to use for compilation:"
+msgstr "Ядра для компиляции:"
+
+msgid "Number of CPU cores passed to make -j. Defaults to all logical cores ({})."
+msgstr "Число ядер, передаваемых make -j. По умолчанию все логические ядра ({})."
+
+msgid "Could not delete the build directory.\nCheck permissions or disk state."
+msgstr "Не удалось удалить каталог сборки.\nПроверьте права доступа или состояние диска."
+
+msgid "Build the whole release"
+msgstr "Собрать весь выпуск"
+
+msgid "Destination:"
+msgstr "Назначение:"
+
+msgid "Choose..."
+msgstr "Выбрать..."
+
+msgid "Build all {n} kernels"
+msgstr "Собрать все ядра ({n})"
+
+msgid "Choose a valid destination folder first."
+msgstr "Сначала выберите допустимую папку назначения."
+
+msgid "Build the whole release?"
+msgstr "Собрать весь выпуск?"
+
+msgid "%(n)d kernels of version %(version)s will be built one after another and saved to %(dest)s\n\nThe build directory is deleted before and after every kernel."
+msgstr "%(n)d ядер версии %(version)s будут собраны одно за другим и сохранены в %(dest)s\n\nКаталог сборки удаляется до и после каждого ядра."
+
+msgid "Start"
+msgstr "Начать"
+
+msgid "Batch kernel compilation in progress"
+msgstr "Выполняется пакетная сборка ядер"
+
+msgid "\n=== [{i}/{n}] {name} ==="
+msgstr "\n=== [{i}/{n}] {name} ==="
+
+msgid "\nQueue cancelled after {n} kernel(s)."
+msgstr "\nОчередь отменена. Собрано ядер: {n}."
+
+msgid "\nFAILED: {name} — build directory kept at {log}"
+msgstr "\nОШИБКА: {name} — каталог сборки сохранён в {log}"
+
+msgid "Build failed for {name}.\n\n{n} kernel(s) were completed before the failure. The build directory has been kept, the log is at:\n{log}"
+msgstr "Не удалось собрать {name}.\n\nДо ошибки собрано ядер: {n}. Каталог сборки сохранён, журнал находится в:\n{log}"
+
+msgid "\nAll {n} kernels built."
+msgstr "\nСобрано ядер: {n}."
+
+msgid "All {n} kernels were built and saved to:\n{path}"
+msgstr "Все ядра ({n}) собраны и сохранены в:\n{path}"
+
+msgid "Stock profile not found."
+msgstr "Профиль Stock не найден."
+
+msgid "Checking build dependencies..."
+msgstr "Проверка зависимостей сборки..."
+
+msgid "Could not install the build dependencies."
+msgstr "Не удалось установить зависимости сборки."
+
+msgid "[{i}/{n}] Building {name}..."
+msgstr "[{i}/{n}] Сборка {name}..."
+
+msgid "Build failed for {name}. Queue stopped."
+msgstr "Не удалось собрать {name}. Очередь остановлена."
+
+msgid "No packages found for {name}. Queue stopped."
+msgstr "Пакеты для {name} не найдены. Очередь остановлена."
+
+msgid "[{i}/{n}] {name} saved to {path}"
+msgstr "[{i}/{n}] {name} сохранено в {path}"
