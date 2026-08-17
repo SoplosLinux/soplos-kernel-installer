@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.1--9-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.2-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,11 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.1-9)
+### 🚀 Recent Updates (v1.0.2)
+- **Fixed**: The x86-64 ISA level (march) patch silently never applied on any kernel other than exactly 7.1.x — `_download_march()` requested a `7.x`-tagged fallback file that never existed in `soplos-cpu-kernel-patch`, 404'd, and the build proceeded without the patch (v2/v3/v4 silently fell back to v1). First surfaced on kernel 7.2. Simplified the tag logic to always request the `7.x` file, which now exists and is verified across 7.1.x and 7.2.
+- **Note**: BORE, X3D and Zen also needed their own rebases to build again on kernel 7.2 — see `bore-soplos`, `x3d-soplos` and `zen-soplos`. No further code changes were needed here; the existing fallback chains already routed correctly once those repos had the right files.
+
+### Previous Updates (v1.0.1-9)
 - **Added**: Unattended release build in Stock mode — compiles every kernel of a release one after another, each from a clean build directory, saving the packages into `<destination>/<version>/V1`–`V4`. The queue stops at the first failure and keeps that build directory so the log survives.
 - **Fixed**: The x86-64 architecture level was never applied. The build set `CONFIG_GENERIC_CPU{2,3,4}`, symbols that do not exist in mainline, so `olddefconfig` dropped them and every kernel was compiled at the v1 baseline — `-v2`, `-v3` and `-v4` were identical to `-v1`. The level now comes from [soplos-cpu-kernel-patch](https://github.com/SoplosLinux/soplos-cpu-kernel-patch), and the build aborts if the symbol does not survive configuration instead of shipping a mislabelled kernel.
 - **Translations**: batch interface translated into all eight languages, plus six older strings left untranslated since v1.0.1-7.

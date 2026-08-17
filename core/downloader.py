@@ -684,12 +684,16 @@ class KernelDownloader:
         Download the Soplos x86-64 ISA level patch.
         Adds the Kconfig choice that lets the build target x86-64-v2, v3 or v4;
         mainline only offers -march=native, which cannot be redistributed.
-        A separate patch file is maintained per kernel line, since the block it
-        touches in arch/x86/Makefile changes between releases.
+        The repo only ships one file, tagged "{major}.x" — it has been stable
+        across the whole 7.x line so far (verified against 7.1.8 and 7.2).
+        Do NOT special-case an exact "major.minor" tag here again: the repo
+        has no such file, and requesting one 404s and silently skips the
+        patch (builds requesting v2/v3/v4 silently fall back to v1 with no
+        visible error) — this is exactly what happened on the first 7.2 build.
         Source: github.com/SoplosLinux/soplos-cpu-kernel-patch
         """
         major = version.split('.')[0]
-        tag = major_minor if major_minor in ("7.1",) else f"{major}.x"
+        tag = f"{major}.x"
 
         self._report_progress(f"Downloading x86-64 ISA level patch ({tag})...", -1)
         dest = os.path.join(patches_dir, f"soplos-x86-64-isa-level-{tag}.patch")

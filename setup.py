@@ -3,7 +3,7 @@ from pathlib import Path
 
 setup(
     name="soplos-kernel-installer",
-    version="1.0.1-9",
+    version="1.0.2",
     description="Soplos Linux Kernel Installer with patches and optimized profiles",
     author="Sergi Perich",
     author_email="info@soploslinux.com",

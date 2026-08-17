@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2] - 2026-08-17
+
+### Fixed
+
+- **x86-64 ISA level (march) patch silently never applied on any kernel
+  other than exactly 7.1.x.** `_download_march()` requested a `7.x`-tagged
+  fallback file for anything else, but that file never existed in
+  `soplos-cpu-kernel-patch` — the download 404'd, `_download_march()`
+  returned `None`, and the build proceeded without the patch. Builds
+  requesting v2/v3/v4 silently fell back to v1 with no visible error.
+  First surfaced when kernel 7.2 was released. Simplified the tag logic to
+  always request the `7.x` file (now the only one that exists, verified to
+  apply unchanged across 7.1.x and 7.2 — see `soplos-cpu-kernel-patch`
+  1.0.1). The `7.1`-specific branch that caused the 404 is gone.
+
+### Notes
+
+- Revision was at the `-9` cap — bumped the base version and dropped the
+  revision suffix instead of creating a `-10` (also applied to the in-app
+  footer version, since it already uses the same bare `X.Y.Z` format).
+- BORE, X3D and Zen also needed rebases for kernel 7.2 to become buildable
+  again — those live entirely in `bore-soplos`, `x3d-soplos` and
+  `zen-soplos` respectively, no code changes needed here beyond the march
+  fix above (the existing fallback chains and tag logic already routed
+  correctly once those repos had the right files).
+
 ## [1.0.1-9] - 2026-08-13
 
 ### Added
