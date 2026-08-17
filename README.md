@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.2-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.2--1-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.2)
+### 🚀 Recent Updates (v1.0.2-1)
+- **Fixed**: NVIDIA DKMS builds failed on kernel 7.2+ with `implicit declaration of function 'strncpy'` in `nvidia/os-interface.c` — some kernel header that used to transitively pull in `<linux/string.h>` stopped doing so, and GCC now treats that as a hard error. Added a new embedded compatibility patch (`NV_STRING_H_PATCH`) applied automatically alongside the existing VMA-locking fix, mirrored in `nvidia-patches` as Fix 4.
+
+### Previous Updates (v1.0.2)
 - **Fixed**: The x86-64 ISA level (march) patch silently never applied on any kernel other than exactly 7.1.x — `_download_march()` requested a `7.x`-tagged fallback file that never existed in `soplos-cpu-kernel-patch`, 404'd, and the build proceeded without the patch (v2/v3/v4 silently fell back to v1). First surfaced on kernel 7.2. Simplified the tag logic to always request the `7.x` file, which now exists and is verified across 7.1.x and 7.2.
 - **Note**: BORE, X3D and Zen also needed their own rebases to build again on kernel 7.2 — see `bore-soplos`, `x3d-soplos` and `zen-soplos`. No further code changes were needed here; the existing fallback chains already routed correctly once those repos had the right files.
 

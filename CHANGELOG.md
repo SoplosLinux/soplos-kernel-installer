@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2-1] - 2026-08-17
+
+### Fixed
+
+- **NVIDIA DKMS build failure on kernel 7.2+**: `nvidia/os-interface.c`
+  calls `strncpy()` without including `<linux/string.h>`, relying on some
+  other kernel header (reached transitively) to provide the declaration.
+  That transitive include disappeared starting with kernel 7.2, and GCC
+  treats an implicit function declaration as a hard error, so DKMS builds
+  failed outright (`implicit declaration of function 'strncpy'`). Added a
+  new embedded compatibility patch in `core/nvidia_dkms_patch.py`
+  (`NV_STRING_H_PATCH`) that adds the missing include, applied
+  automatically alongside the existing VMA-locking fix — same mechanism,
+  same idempotency guard, unrelated issue (different file, different API,
+  different kernel boundary). Mirrored in the standalone `nvidia-patches`
+  repo as Fix 4 (`patches/nvidia-string-h-kernel7.2.patch`).
+
 ## [1.0.2] - 2026-08-17
 
 ### Fixed
