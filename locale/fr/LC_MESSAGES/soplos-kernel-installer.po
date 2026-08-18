@@ -1030,3 +1030,36 @@ msgstr "Aucun paquet trouvé pour {name}. File d'attente arrêtée."
 
 msgid "[{i}/{n}] {name} saved to {path}"
 msgstr "[{i}/{n}] {name} enregistré dans {path}"
+
+msgid "Select kernels..."
+msgstr "Sélectionner les noyaux..."
+
+msgid "Select kernels to build"
+msgstr "Sélectionner les noyaux à compiler"
+
+msgid "Select all"
+msgstr "Tout sélectionner"
+
+msgid "Select none"
+msgstr "Tout désélectionner"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "All {n} kernels selected"
+msgstr "Les {n} noyaux sélectionnés"
+
+msgid "{n} of {total} kernels selected"
+msgstr "{n} sur {total} noyaux sélectionnés"
+
+msgid "Resume: skip kernels already built in the destination folder"
+msgstr "Reprendre : ignorer les noyaux déjà compilés dans le dossier de destination"
+
+msgid "Select at least one kernel to build."
+msgstr "Sélectionnez au moins un noyau à compiler."
+
+msgid "Every selected kernel is already built in the destination folder."
+msgstr "Tous les noyaux sélectionnés sont déjà compilés dans le dossier de destination."
+
+msgid "Build {n} selected kernels"
+msgstr "Compiler {n} noyaux sélectionnés"

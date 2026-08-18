@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.2--1-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.2--2-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,13 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.2-1)
+### 🚀 Recent Updates (v1.0.2-2)
+- **Added**: March selector (V1-V4) now available for every profile, not just Stock. Also added kernel selection (checkboxes) and resume (skip already-built) for the Stock batch build, instead of always building all 26 or none.
+- **Fixed**: The march selector and other profile-dependent UI never initialized for the default profile shown at launch — `ProfileSelector`'s first radio button starts pre-active, so its own `set_active(True)` never fired `toggled`/`profile-changed`.
+- **Fixed**: A V3/V4 build outside Stock mode was never reflected in the kernel's name — now appended whenever it isn't the default v1.
+- **Fixed**: The batch "Build all 26 kernels" button kept saying 26 after narrowing the selection in the dialog.
+
+### Previous Updates (v1.0.2-1)
 - **Fixed**: NVIDIA DKMS builds failed on kernel 7.2+ with `implicit declaration of function 'strncpy'` in `nvidia/os-interface.c` — some kernel header that used to transitively pull in `<linux/string.h>` stopped doing so, and GCC now treats that as a hard error. Added a new embedded compatibility patch (`NV_STRING_H_PATCH`) applied automatically alongside the existing VMA-locking fix, mirrored in `nvidia-patches` as Fix 4.
 
 ### Previous Updates (v1.0.2)

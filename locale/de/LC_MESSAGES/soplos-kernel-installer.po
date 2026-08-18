@@ -1030,3 +1030,36 @@ msgstr "Keine Pakete für {name} gefunden. Warteschlange gestoppt."
 
 msgid "[{i}/{n}] {name} saved to {path}"
 msgstr "[{i}/{n}] {name} gespeichert unter {path}"
+
+msgid "Select kernels..."
+msgstr "Kernel auswählen..."
+
+msgid "Select kernels to build"
+msgstr "Zu kompilierende Kernel auswählen"
+
+msgid "Select all"
+msgstr "Alle auswählen"
+
+msgid "Select none"
+msgstr "Keine auswählen"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "All {n} kernels selected"
+msgstr "Alle {n} Kernel ausgewählt"
+
+msgid "{n} of {total} kernels selected"
+msgstr "{n} von {total} Kernel ausgewählt"
+
+msgid "Resume: skip kernels already built in the destination folder"
+msgstr "Fortsetzen: bereits im Zielordner erstellte Kernel überspringen"
+
+msgid "Select at least one kernel to build."
+msgstr "Wähle mindestens einen Kernel zum Kompilieren aus."
+
+msgid "Every selected kernel is already built in the destination folder."
+msgstr "Jeder ausgewählte Kernel ist bereits im Zielordner erstellt."
+
+msgid "Build {n} selected kernels"
+msgstr "{n} ausgewählte Kernel kompilieren"

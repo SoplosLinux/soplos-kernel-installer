@@ -1032,3 +1032,36 @@ msgstr "No packages found for {name}. Queue stopped."
 
 msgid "[{i}/{n}] {name} saved to {path}"
 msgstr "[{i}/{n}] {name} saved to {path}"
+
+msgid "Select kernels..."
+msgstr "Select kernels..."
+
+msgid "Select kernels to build"
+msgstr "Select kernels to build"
+
+msgid "Select all"
+msgstr "Select all"
+
+msgid "Select none"
+msgstr "Select none"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "All {n} kernels selected"
+msgstr "All {n} kernels selected"
+
+msgid "{n} of {total} kernels selected"
+msgstr "{n} of {total} kernels selected"
+
+msgid "Resume: skip kernels already built in the destination folder"
+msgstr "Resume: skip kernels already built in the destination folder"
+
+msgid "Select at least one kernel to build."
+msgstr "Select at least one kernel to build."
+
+msgid "Every selected kernel is already built in the destination folder."
+msgstr "Every selected kernel is already built in the destination folder."
+
+msgid "Build {n} selected kernels"
+msgstr "Build {n} selected kernels"

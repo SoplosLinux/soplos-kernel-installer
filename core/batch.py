@@ -124,6 +124,20 @@ def release_queue() -> List[BatchJob]:
     return jobs
 
 
+def job_already_built(dest_root: str, version: str, job: BatchJob) -> bool:
+    """True when this job's metapackage .deb already exists in dest_root.
+
+    The metapackage filename is deterministic (linux-<job.name>_<version>_
+    amd64.deb, built by _build_metapackage), so its presence is a reliable
+    "this kernel is done" marker even though the same destination folder
+    (dest_root/version/V<n>/) holds several jobs sharing that march level.
+    """
+    meta_path = os.path.join(
+        dest_root, version, job.folder, f"linux-{job.name}_{version}_amd64.deb"
+    )
+    return os.path.isfile(meta_path)
+
+
 class BatchBuilder:
     """Runs the release queue unattended."""
 
@@ -173,14 +187,24 @@ class BatchBuilder:
 
     def run(self, version: str, dest_root: str,
             cpu_count: Optional[int] = None,
-            jobs: Optional[List[BatchJob]] = None) -> BatchResult:
+            jobs: Optional[List[BatchJob]] = None,
+            skip_existing: bool = False) -> BatchResult:
         """Build every kernel of the release into dest_root/<version>/V<n>/.
 
         Stops at the first failure, leaving the build directory in place.
+
+        skip_existing: resume a queue that failed partway through — skip any
+        job whose metapackage .deb is already in dest_root, instead of
+        rebuilding kernels that already finished successfully.
         """
         result = BatchResult()
         jobs = jobs if jobs is not None else release_queue()
+        if skip_existing:
+            jobs = [j for j in jobs if not job_already_built(dest_root, version, j)]
         total = len(jobs)
+
+        if total == 0:
+            return result
 
         if not cpu_count or cpu_count < 1:
             cpu_count = get_cpu_count()

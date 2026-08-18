@@ -1030,3 +1030,36 @@ msgstr "No se encontraron paquetes para {name}. Cola detenida."
 
 msgid "[{i}/{n}] {name} saved to {path}"
 msgstr "[{i}/{n}] {name} guardado en {path}"
+
+msgid "Select kernels..."
+msgstr "Seleccionar kernels..."
+
+msgid "Select kernels to build"
+msgstr "Seleccionar kernels a compilar"
+
+msgid "Select all"
+msgstr "Seleccionar todos"
+
+msgid "Select none"
+msgstr "Deseleccionar todos"
+
+msgid "OK"
+msgstr "Aceptar"
+
+msgid "All {n} kernels selected"
+msgstr "Los {n} kernels seleccionados"
+
+msgid "{n} of {total} kernels selected"
+msgstr "{n} de {total} kernels seleccionados"
+
+msgid "Resume: skip kernels already built in the destination folder"
+msgstr "Reanudar: saltar los kernels ya compilados en la carpeta de destino"
+
+msgid "Select at least one kernel to build."
+msgstr "Selecciona al menos un kernel para compilar."
+
+msgid "Every selected kernel is already built in the destination folder."
+msgstr "Todos los kernels seleccionados ya están compilados en la carpeta de destino."
+
+msgid "Build {n} selected kernels"
+msgstr "Compilar {n} kernels seleccionados"

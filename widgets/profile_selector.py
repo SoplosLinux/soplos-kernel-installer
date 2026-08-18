@@ -63,11 +63,17 @@ class ProfileSelector(Gtk.Box):
         public_profiles = [p for p in get_all_profiles() if p.id != ProfileType.STOCK]
         for profile in public_profiles:
             card = ProfileCard(profile, group=first_card)
+            # Connect before set_active so the default profile's own
+            # 'toggled' -> profile-changed reaches main_window.py at
+            # startup too, same as picking it by hand. Doing this in the
+            # other order left every startup-only listener (the march
+            # selector included) never initialized until the user
+            # switched profiles at least once.
+            card.connect('toggled', self._on_card_toggled)
             if first_card is None:
                 first_card = card
                 card.set_active(True)
                 self._selected_profile = profile
-            card.connect('toggled', self._on_card_toggled)
             self._cards[profile.id] = card
             cards_box.pack_start(card, True, True, 0)
 

@@ -27,7 +27,7 @@ from core.nvidia import has_nvidia_gpu, get_gpu_description
 from core.nvidia_dkms_patch import get_nvidia_dkms_patch_commands
 from core.i18n_manager import _
 from core.profiles import ProfileType
-from core.batch import BatchBuilder, release_queue
+from core.batch import BatchBuilder, release_queue, job_already_built
 from config.constants import APP_VERSION as VERSION
 from utils.system import (
     reboot_system, get_build_directory, get_supported_march_level,
@@ -390,6 +390,18 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         main_box.pack_end(self._progress_revealer, False, False, 0)
 
         self.add(main_box)
+
+        # A freshly built radio group's first button starts active=True
+        # already, so ProfileSelector's own set_active(True) on it never
+        # emits 'toggled' — there is no state change to react to. That
+        # means 'profile-changed' never fires for the default profile on
+        # startup, only when the user actually switches profiles by hand.
+        # Sync everything that depends on it (march selector visibility,
+        # patch selector suggestions, kernel name field...) once here.
+        self._on_profile_changed(
+            self._profile_selector, self._profile_selector.get_selected_profile()
+        )
+
         self.show_all()
 
         self._build_ctrl_box.hide()
@@ -1047,10 +1059,13 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
     def _on_profile_changed(self, selector, profile) -> None:
         is_stock = profile and profile.id == ProfileType.STOCK
+        # The march (x86-64 psABI) selector applies to any profile, not just
+        # Stock — a Gaming/Audio/Minimal/Automatic build benefits from v2/v3
+        # just as much, it was just never exposed outside Stock before.
+        self._march_frame.show()
         if is_stock:
             self._patch_selector.clear_all()
             self._patch_selector.set_stock_mode(True)
-            self._march_frame.show()
             self._batch_frame.set_no_show_all(False)
             self._batch_frame.show_all()
             self._kernel_name_entry.set_sensitive(False)
@@ -1059,7 +1074,9 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             self._patch_selector.set_stock_mode(False)
             if profile:
                 self._patch_selector.apply_profile_suggestions(profile)
-            self._march_frame.hide()
+            # x3d (the only patch that raises the march minimum) is
+            # Stock-only, so outside Stock the minimum is always v1.
+            self._march_selector.set_minimum_level(MarchLevel.V1)
             self._batch_frame.hide()
             self._batch_frame.set_no_show_all(True)
             self._kernel_name_entry.set_sensitive(True)
@@ -1073,6 +1090,8 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         profile = self._profile_selector.get_selected_profile()
         if profile and profile.id == ProfileType.STOCK:
             self._update_stock_name()
+        else:
+            self._update_name_hint()
 
     def _update_stock_name(self) -> None:
         _ORDER = {"bore": 0, "rt": 1, "zen": 2, "ntsync": 3, "x3d": 4}
@@ -1130,6 +1149,27 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
         inner.pack_start(dest_row, False, False, 0)
 
+        # Which jobs of the 26-kernel release queue to build. Defaults to
+        # all of them; the selection dialog can narrow it down.
+        self._batch_selected_jobs = release_queue()
+
+        select_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        self._batch_selection_label = Gtk.Label(
+            label=_("All {n} kernels selected").format(n=len(self._batch_selected_jobs))
+        )
+        self._batch_selection_label.set_halign(Gtk.Align.START)
+        self._batch_selection_label.get_style_context().add_class('dim-label')
+        select_row.pack_start(self._batch_selection_label, True, True, 0)
+        select_btn = Gtk.Button(label=_("Select kernels..."))
+        select_btn.connect('clicked', self._on_batch_select_jobs)
+        select_row.pack_end(select_btn, False, False, 0)
+        inner.pack_start(select_row, False, False, 0)
+
+        self._batch_resume_check = Gtk.CheckButton(
+            label=_("Resume: skip kernels already built in the destination folder")
+        )
+        inner.pack_start(self._batch_resume_check, False, False, 0)
+
         self._batch_start_btn = Gtk.Button(
             label=_("Build all {n} kernels").format(n=len(release_queue()))
         )
@@ -1138,6 +1178,67 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
         frame.add(inner)
         return frame
+
+    def _on_batch_select_jobs(self, btn) -> None:
+        """Dialog with one checkbox per job of the release queue."""
+        dialog = Gtk.Dialog(
+            title=_("Select kernels to build"),
+            transient_for=self, modal=True,
+        )
+        dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
+        dialog.add_button(_("OK"), Gtk.ResponseType.OK)
+        dialog.set_default_size(360, 480)
+
+        content = dialog.get_content_area()
+        content.set_spacing(6)
+        content.set_border_width(10)
+
+        toolbar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        all_btn = Gtk.Button(label=_("Select all"))
+        none_btn = Gtk.Button(label=_("Select none"))
+        toolbar.pack_start(all_btn, False, False, 0)
+        toolbar.pack_start(none_btn, False, False, 0)
+        content.pack_start(toolbar, False, False, 0)
+
+        scroller = Gtk.ScrolledWindow()
+        scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        list_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
+        scroller.add(list_box)
+        content.pack_start(scroller, True, True, 0)
+
+        all_jobs = release_queue()
+        selected_names = {j.name for j in self._batch_selected_jobs}
+        checks = []
+        for job in all_jobs:
+            check = Gtk.CheckButton(label=job.name)
+            check.set_active(job.name in selected_names)
+            list_box.pack_start(check, False, False, 0)
+            checks.append((job, check))
+
+        all_btn.connect('clicked', lambda b: [c.set_active(True) for _j, c in checks])
+        none_btn.connect('clicked', lambda b: [c.set_active(False) for _j, c in checks])
+
+        dialog.show_all()
+        resp = dialog.run()
+        if resp == Gtk.ResponseType.OK:
+            self._batch_selected_jobs = [j for j, c in checks if c.get_active()]
+            n = len(self._batch_selected_jobs)
+            total = len(all_jobs)
+            if n == total:
+                self._batch_selection_label.set_text(_("All {n} kernels selected").format(n=n))
+            else:
+                self._batch_selection_label.set_text(
+                    _("{n} of {total} kernels selected").format(n=n, total=total)
+                )
+            self._update_batch_start_label()
+        dialog.destroy()
+
+    def _update_batch_start_label(self) -> None:
+        n = len(self._batch_selected_jobs)
+        if n == len(release_queue()):
+            self._batch_start_btn.set_label(_("Build all {n} kernels").format(n=n))
+        else:
+            self._batch_start_btn.set_label(_("Build {n} selected kernels").format(n=n))
 
     def _on_batch_choose_dest(self, btn) -> None:
         chooser = Gtk.FileChooserDialog(
@@ -1169,7 +1270,20 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             self._show_error(_("Choose a valid destination folder first."))
             return
 
-        jobs = release_queue()
+        jobs = list(self._batch_selected_jobs)
+        skip_existing = self._batch_resume_check.get_active()
+
+        if not jobs:
+            self._show_error(_("Select at least one kernel to build."))
+            return
+
+        if skip_existing:
+            jobs = [j for j in jobs if not job_already_built(self._batch_dest, version, j)]
+            if not jobs:
+                self._show_error(
+                    _("Every selected kernel is already built in the destination folder.")
+                )
+                return
 
         dialog = Gtk.MessageDialog(
             transient_for=self, modal=True,
@@ -1329,6 +1443,13 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         version = self._version_picker.get_selected_version() or "6.x.x"
         name = self._kernel_name_entry.get_text().strip() or "soplos"
         profile = self._profile_selector.get_selected_profile()
+        is_stock = profile and profile.id == ProfileType.STOCK
+        # Stock's own name already encodes march (_update_stock_name); outside
+        # Stock this is the only place march becomes visible in the name, so a
+        # V3 build doesn't look identical to a V1 one.
+        march = self._march_selector.get_march_level()
+        if not is_stock and march and march != "v1":
+            name = f"{name}-{march}"
         suffix = profile.suffix if profile else "gaming"
         if suffix:
             result = f"{version}-{name}-{suffix}"
@@ -1972,6 +2093,14 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             )
             self._install_btn.set_sensitive(True)
             return
+        is_stock = (profile.id == ProfileType.STOCK)
+        march_for_name = self._march_selector.get_march_level()
+        # Stock already encodes march in its own generated name
+        # (_update_stock_name). Outside Stock, custom_name is free text and
+        # never carried the level, so a V3 Gaming/Audio/etc. build looked
+        # identical to a V1 one — nothing in the package name told them apart.
+        if not is_stock and march_for_name and march_for_name != "v1":
+            custom_name = f"{custom_name}-{march_for_name}"
         patch_ids = self._patch_selector.get_selected_patch_ids()
         secure_boot = self._secure_boot_check.get_active()
 
@@ -2051,7 +2180,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         self._kernel_manager.set_progress_callback(progress_cb)
 
         is_stock = (profile.id == ProfileType.STOCK)
-        march_level = self._march_selector.get_march_level() if is_stock else None
+        march_level = self._march_selector.get_march_level()
         cpu_count = int(self._cores_spin.get_value())
 
         def run_install():

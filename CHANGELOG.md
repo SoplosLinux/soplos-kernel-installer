@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2-2] - 2026-08-18
+
+### Added
+
+- **March (x86-64 psABI) selector available for every profile**, not just
+  Stock — Gaming, Audio/Video, Minimal/Office and Automatic builds can now
+  pick V1-V4 too, instead of always building at the compiler default.
+- **Kernel selection for the Stock batch build**: a "Select kernels..."
+  dialog lists all 26 jobs of the release queue with checkboxes, instead
+  of always building all-or-nothing.
+- **Resume for the Stock batch build**: a checkbox skips any kernel whose
+  metapackage `.deb` already exists in the destination folder, so a queue
+  that failed partway through can continue from where it stopped instead
+  of rebuilding everything from V1.
+
+### Fixed
+
+- **The march selector never appeared for the default profile at
+  startup**: `ProfileSelector`'s first radio button is already
+  `active=True` when the group is created, so its own `set_active(True)`
+  call was a no-op and never emitted `toggled` — `profile-changed` (and
+  everything that listens for it, march selector visibility included)
+  only ever fired when the user switched profiles by hand, never for the
+  profile shown on launch. Synced explicitly once after the window is
+  built.
+- **A V3/V4 build outside Stock mode looked identical to a V1 one**: the
+  march selector applied to the build (see Added, above) but was never
+  reflected in the kernel's name for non-Stock profiles, unlike Stock's
+  own auto-generated name. The march level is now appended to the name
+  (and its live preview) whenever it isn't the default v1.
+- **The batch "Build all 26 kernels" button kept its label after
+  narrowing the selection**: it always said "26" regardless of how many
+  kernels were actually checked in the selection dialog. Now reads
+  "Build N selected kernels" and only says "all 26" when every job is
+  selected.
+
 ## [1.0.2-1] - 2026-08-17
 
 ### Fixed

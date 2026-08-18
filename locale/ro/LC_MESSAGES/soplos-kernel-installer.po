@@ -1030,3 +1030,36 @@ msgstr "Nu s-au găsit pachete pentru {name}. Coadă oprită."
 
 msgid "[{i}/{n}] {name} saved to {path}"
 msgstr "[{i}/{n}] {name} salvat în {path}"
+
+msgid "Select kernels..."
+msgstr "Selectează kernel-uri..."
+
+msgid "Select kernels to build"
+msgstr "Selectează kernel-urile de compilat"
+
+msgid "Select all"
+msgstr "Selectează tot"
+
+msgid "Select none"
+msgstr "Deselectează tot"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "All {n} kernels selected"
+msgstr "Toate cele {n} kernel-uri selectate"
+
+msgid "{n} of {total} kernels selected"
+msgstr "{n} din {total} kernel-uri selectate"
+
+msgid "Resume: skip kernels already built in the destination folder"
+msgstr "Reia: omite kernel-urile deja compilate în folderul de destinație"
+
+msgid "Select at least one kernel to build."
+msgstr "Selectează cel puțin un kernel de compilat."
+
+msgid "Every selected kernel is already built in the destination folder."
+msgstr "Toate kernel-urile selectate sunt deja compilate în folderul de destinație."
+
+msgid "Build {n} selected kernels"
+msgstr "Compilează {n} kernel-uri selectate"

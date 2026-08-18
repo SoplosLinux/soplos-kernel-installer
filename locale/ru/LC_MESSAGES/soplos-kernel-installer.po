@@ -1030,3 +1030,36 @@ msgstr "Пакеты для {name} не найдены. Очередь оста�
 
 msgid "[{i}/{n}] {name} saved to {path}"
 msgstr "[{i}/{n}] {name} сохранено в {path}"
+
+msgid "Select kernels..."
+msgstr "Выбрать ядра..."
+
+msgid "Select kernels to build"
+msgstr "Выбрать ядра для сборки"
+
+msgid "Select all"
+msgstr "Выбрать всё"
+
+msgid "Select none"
+msgstr "Снять выбор"
+
+msgid "OK"
+msgstr "ОК"
+
+msgid "All {n} kernels selected"
+msgstr "Выбраны все {n} ядер"
+
+msgid "{n} of {total} kernels selected"
+msgstr "Выбрано {n} из {total} ядер"
+
+msgid "Resume: skip kernels already built in the destination folder"
+msgstr "Продолжить: пропустить ядра, уже собранные в папке назначения"
+
+msgid "Select at least one kernel to build."
+msgstr "Выберите хотя бы одно ядро для сборки."
+
+msgid "Every selected kernel is already built in the destination folder."
+msgstr "Все выбранные ядра уже собраны в папке назначения."
+
+msgid "Build {n} selected kernels"
+msgstr "Собрать {n} выбранных ядер"

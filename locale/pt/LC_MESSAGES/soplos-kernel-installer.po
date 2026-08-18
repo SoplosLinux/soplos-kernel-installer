@@ -1030,3 +1030,36 @@ msgstr "Não foram encontrados pacotes para {name}. Fila parada."
 
 msgid "[{i}/{n}] {name} saved to {path}"
 msgstr "[{i}/{n}] {name} guardado em {path}"
+
+msgid "Select kernels..."
+msgstr "Selecionar kernels..."
+
+msgid "Select kernels to build"
+msgstr "Selecionar kernels a compilar"
+
+msgid "Select all"
+msgstr "Selecionar tudo"
+
+msgid "Select none"
+msgstr "Não selecionar nenhum"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "All {n} kernels selected"
+msgstr "Todos os {n} kernels selecionados"
+
+msgid "{n} of {total} kernels selected"
+msgstr "{n} de {total} kernels selecionados"
+
+msgid "Resume: skip kernels already built in the destination folder"
+msgstr "Retomar: ignorar os kernels já compilados na pasta de destino"
+
+msgid "Select at least one kernel to build."
+msgstr "Selecione pelo menos um kernel para compilar."
+
+msgid "Every selected kernel is already built in the destination folder."
+msgstr "Todos os kernels selecionados já estão compilados na pasta de destino."
+
+msgid "Build {n} selected kernels"
+msgstr "Compilar {n} kernels selecionados"

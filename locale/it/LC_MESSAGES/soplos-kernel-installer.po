@@ -1030,3 +1030,36 @@ msgstr "Nessun pacchetto trovato per {name}. Coda interrotta."
 
 msgid "[{i}/{n}] {name} saved to {path}"
 msgstr "[{i}/{n}] {name} salvato in {path}"
+
+msgid "Select kernels..."
+msgstr "Seleziona kernel..."
+
+msgid "Select kernels to build"
+msgstr "Seleziona i kernel da compilare"
+
+msgid "Select all"
+msgstr "Seleziona tutti"
+
+msgid "Select none"
+msgstr "Deseleziona tutti"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "All {n} kernels selected"
+msgstr "Tutti i {n} kernel selezionati"
+
+msgid "{n} of {total} kernels selected"
+msgstr "{n} di {total} kernel selezionati"
+
+msgid "Resume: skip kernels already built in the destination folder"
+msgstr "Riprendi: salta i kernel già compilati nella cartella di destinazione"
+
+msgid "Select at least one kernel to build."
+msgstr "Seleziona almeno un kernel da compilare."
+
+msgid "Every selected kernel is already built in the destination folder."
+msgstr "Tutti i kernel selezionati sono già compilati nella cartella di destinazione."
+
+msgid "Build {n} selected kernels"
+msgstr "Compila {n} kernel selezionati"
