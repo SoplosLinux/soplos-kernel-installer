@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.2--2-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.2--3-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.2-2)
+### 🚀 Recent Updates (v1.0.2-3)
+- **Added**: `CONFIG_CGROUP_DMEM` (device/VRAM memory accounting cgroup) enabled unconditionally on every build, ahead of `soplos-game-daemon` needing it — avoids a forced recompile-and-republish cycle later.
+
+### Previous Updates (v1.0.2-2)
 - **Added**: March selector (V1-V4) now available for every profile, not just Stock. Also added kernel selection (checkboxes) and resume (skip already-built) for the Stock batch build, instead of always building all 26 or none.
 - **Fixed**: The march selector and other profile-dependent UI never initialized for the default profile shown at launch — `ProfileSelector`'s first radio button starts pre-active, so its own `set_active(True)` never fired `toggled`/`profile-changed`.
 - **Fixed**: A V3/V4 build outside Stock mode was never reflected in the kernel's name — now appended whenever it isn't the default v1.

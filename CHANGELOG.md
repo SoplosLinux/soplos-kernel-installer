@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2-3] - 2026-08-28
+
+### Added
+
+- **`CONFIG_CGROUP_DMEM`** enabled unconditionally on every build (device/VRAM
+  memory accounting cgroup, disabled by default in the Debian base config).
+  It's a compile-time flag with nothing that uses it yet, but baking it in
+  now avoids a forced recompile-and-republish cycle once
+  `soplos-game-daemon` actually needs it. A dropped symbol after
+  `olddefconfig` only warns, unlike the march level check, since nothing
+  depends on it yet.
+
 ## [1.0.2-2] - 2026-08-18
 
 ### Added

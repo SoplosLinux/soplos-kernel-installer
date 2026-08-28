@@ -124,6 +124,15 @@ class SoplosInstaller:
             self._report_progress("Enabling sched_ext...", 28)
             run_command("./scripts/config --enable SCHED_CLASS_EXT", cwd=source_dir)
 
+        # DMEM cgroup — device (VRAM) memory accounting, needed by the future
+        # gaming daemon. Unconditional: it is not tied to any patch/profile
+        # and does not conflict with anything else. Disabled in the Debian
+        # base config, and it is a compile-time option — baking it in now
+        # avoids having to recompile and republish kernels later just for
+        # this flag once the daemon actually needs it.
+        self._report_progress("Enabling DMEM cgroup...", 28)
+        run_command("./scripts/config --enable CGROUP_DMEM", cwd=source_dir)
+
         # Apply all fixes before olddefconfig so it can resolve their dependencies
         sb_key = None
         if secure_boot and self._secure_boot.keys_exist():
@@ -164,6 +173,17 @@ class SoplosInstaller:
                     f"Refusing to build a mislabelled kernel.", -1
                 )
                 return False
+
+        # Unlike the march level, a dropped CGROUP_DMEM does not mislabel or
+        # break the kernel — nothing uses it yet — so this only warns instead
+        # of aborting the build.
+        state = run_command("./scripts/config --state CGROUP_DMEM", cwd=source_dir)
+        if state.stdout.strip() != "y":
+            self._report_progress(
+                "Warning: CGROUP_DMEM was dropped by olddefconfig (missing "
+                "dependency) — this kernel will not have DMEM cgroup support.",
+                -1
+            )
 
         return True
 
