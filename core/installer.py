@@ -133,6 +133,13 @@ class SoplosInstaller:
         self._report_progress("Enabling DMEM cgroup...", 28)
         run_command("./scripts/config --enable CGROUP_DMEM", cwd=source_dir)
 
+        # Android Binder IPC — required for Waydroid. Built as a module, not
+        # built-in: users who never use Waydroid never load it, at no cost.
+        # Device names (binder,hwbinder,vndbinder) are left for whoever loads
+        # the module (modprobe options), not fixed at compile time.
+        self._report_progress("Enabling Android Binder IPC (Waydroid)...", 28)
+        run_command("./scripts/config --module ANDROID_BINDER_IPC", cwd=source_dir)
+
         # Apply all fixes before olddefconfig so it can resolve their dependencies
         sb_key = None
         if secure_boot and self._secure_boot.keys_exist():

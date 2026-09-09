@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2-4] - 2026-09-09
+
+### Added
+
+- **`CONFIG_ANDROID_BINDER_IPC`** enabled as a module on every build, giving
+  Waydroid support with no kernel patch needed. Built as `=m` on purpose:
+  users who never use Waydroid never load the module, at no cost. Device
+  names (`binder,hwbinder,vndbinder`) are left for whoever loads it
+  (`modprobe` options), not fixed at compile time.
+
 ## [1.0.2-3] - 2026-08-28
 
 ### Added

@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.2--3-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.2--4-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.2-3)
+### 🚀 Recent Updates (v1.0.2-4)
+- **Added**: `CONFIG_ANDROID_BINDER_IPC` enabled as a module on every build, giving Waydroid support with no kernel patch needed. Built as `=m` on purpose — users who never use Waydroid never load it, at no cost. Device names (`binder,hwbinder,vndbinder`) are left for whoever loads the module, not fixed at compile time.
+
+### Previous Updates (v1.0.2-3)
 - **Added**: `CONFIG_CGROUP_DMEM` (device/VRAM memory accounting cgroup) enabled unconditionally on every build, ahead of `soplos-game-daemon` needing it — avoids a forced recompile-and-republish cycle later.
 
 ### Previous Updates (v1.0.2-2)
