@@ -1449,6 +1449,11 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
     def _on_version_changed(self, picker, version: str) -> None:
         self._update_name_hint()
         self._patch_selector.update_for_version(version)
+        # Revision is a per-version concept — carrying over a value left
+        # from a previous recompile onto a newly picked kernel version would
+        # silently number a genuine first build as if it were a recompile.
+        if hasattr(self, '_batch_revision_spin'):
+            self._batch_revision_spin.set_value(0)
 
     def _on_version_loading_started(self, picker) -> None:
         self._install_btn.set_sensitive(False)

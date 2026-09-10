@@ -144,6 +144,20 @@ def _versioned(version: str, revision: int) -> str:
     return version if revision <= 0 else f"{version}-{kdeb_pkgversion(revision)}"
 
 
+def _dest_dir(dest_root: str, version: str, job: BatchJob, revision: int) -> str:
+    """Destination folder for a job: dest_root/<version>/V<n>[/rev<N>].
+
+    A recompile (revision > 0) gets its own "revN" subfolder instead of
+    landing next to the original build — otherwise revision 0 and revision 1
+    of the same kernel end up mixed together in the same folder, only
+    distinguishable by filename.
+    """
+    parts = [dest_root, version, job.folder]
+    if revision > 0:
+        parts.append(f"rev{revision}")
+    return os.path.join(*parts)
+
+
 def job_already_built(dest_root: str, version: str, job: BatchJob,
                        revision: int = 0) -> bool:
     """True when this job's metapackage .deb already exists in dest_root.
@@ -151,11 +165,11 @@ def job_already_built(dest_root: str, version: str, job: BatchJob,
     The metapackage filename is deterministic (linux-<job.name>_<version>
     [-<revision>]_amd64.deb, built by _build_metapackage), so its presence is
     a reliable "this kernel is done" marker even though the same destination
-    folder (dest_root/version/V<n>/) holds several jobs sharing that march
-    level.
+    folder (dest_root/version/V<n>/[revN/]) holds several jobs sharing that
+    march level.
     """
     meta_path = os.path.join(
-        dest_root, version, job.folder,
+        _dest_dir(dest_root, version, job, revision),
         f"linux-{job.name}_{_versioned(version, revision)}_amd64.deb"
     )
     return os.path.isfile(meta_path)
@@ -400,7 +414,8 @@ class BatchBuilder:
 
     def _save_packages(self, version: str, job: BatchJob,
                        dest_root: str, revision: int = 0) -> Optional[str]:
-        """Copy the packages of a finished build to dest_root/<version>/V<n>/.
+        """Copy the packages of a finished build to dest_root/<version>/V<n>/,
+        or dest_root/<version>/V<n>/rev<N>/ for a recompile (revision > 0).
 
         Returns the destination directory, or None if there was nothing to save.
         """
@@ -412,7 +427,7 @@ class BatchBuilder:
         if meta:
             debs.append(meta)
 
-        dest_dir = os.path.join(dest_root, version, job.folder)
+        dest_dir = _dest_dir(dest_root, version, job, revision)
         try:
             os.makedirs(dest_dir, exist_ok=True)
         except OSError:

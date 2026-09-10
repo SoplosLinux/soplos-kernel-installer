@@ -139,6 +139,14 @@ class SoplosInstaller:
         # valid choice here.
         self._report_progress("Enabling Android Binder IPC (Waydroid)...", 28)
         run_command("./scripts/config --enable ANDROID_BINDER_IPC", cwd=source_dir)
+        # The Debian base .config already carries this string set to just
+        # "binder" (confirmed on a real built kernel), overriding the
+        # upstream Kconfig default of all three devices — fix it explicitly
+        # instead of relying on a default that never applies here.
+        run_command(
+            './scripts/config --set-str ANDROID_BINDER_DEVICES "binder,hwbinder,vndbinder"',
+            cwd=source_dir
+        )
 
         # Apply all fixes before olddefconfig so it can resolve their dependencies
         sb_key = None
@@ -201,6 +209,16 @@ class SoplosInstaller:
                 "Warning: ANDROID_BINDER_IPC was dropped by olddefconfig "
                 "(missing dependency) — this kernel will not have Waydroid "
                 "support.",
+                -1
+            )
+
+        # ANDROID_BINDER_DEVICES is a string, not a tristate/bool, so
+        # --state doesn't apply — read it straight from .config instead.
+        cfg = run_command('grep "^CONFIG_ANDROID_BINDER_DEVICES=" .config', cwd=source_dir)
+        if 'hwbinder' not in cfg.stdout or 'vndbinder' not in cfg.stdout:
+            self._report_progress(
+                "Warning: ANDROID_BINDER_DEVICES does not list hwbinder/"
+                "vndbinder — Waydroid will likely still fail to start.",
                 -1
             )
 
