@@ -133,12 +133,12 @@ class SoplosInstaller:
         self._report_progress("Enabling DMEM cgroup...", 28)
         run_command("./scripts/config --enable CGROUP_DMEM", cwd=source_dir)
 
-        # Android Binder IPC — required for Waydroid. Built as a module, not
-        # built-in: users who never use Waydroid never load it, at no cost.
-        # Device names (binder,hwbinder,vndbinder) are left for whoever loads
-        # the module (modprobe options), not fixed at compile time.
+        # Android Binder IPC — required for Waydroid. This symbol is a plain
+        # bool in Kconfig (drivers/android/Kconfig), not a tristate: it can
+        # only be y or n, there is no module form. --enable is the only
+        # valid choice here.
         self._report_progress("Enabling Android Binder IPC (Waydroid)...", 28)
-        run_command("./scripts/config --module ANDROID_BINDER_IPC", cwd=source_dir)
+        run_command("./scripts/config --enable ANDROID_BINDER_IPC", cwd=source_dir)
 
         # Apply all fixes before olddefconfig so it can resolve their dependencies
         sb_key = None
@@ -189,6 +189,18 @@ class SoplosInstaller:
             self._report_progress(
                 "Warning: CGROUP_DMEM was dropped by olddefconfig (missing "
                 "dependency) — this kernel will not have DMEM cgroup support.",
+                -1
+            )
+
+        # Same soft check for Binder — nothing depends on it at boot, so a
+        # dropped symbol should not abort the build, only be visible instead
+        # of silently shipping a kernel without Waydroid support.
+        state = run_command("./scripts/config --state ANDROID_BINDER_IPC", cwd=source_dir)
+        if state.stdout.strip() != "y":
+            self._report_progress(
+                "Warning: ANDROID_BINDER_IPC was dropped by olddefconfig "
+                "(missing dependency) — this kernel will not have Waydroid "
+                "support.",
                 -1
             )
 
@@ -256,11 +268,18 @@ class SoplosInstaller:
     # Build
     # ------------------------------------------------------------------
 
-    def build(self, version: str, cpu_count: Optional[int] = None) -> bool:
+    def build(self, version: str, cpu_count: Optional[int] = None,
+              kdeb_pkgversion: int = 1) -> bool:
         """Compile the kernel as Debian packages.
 
         cpu_count: user-chosen core count for `make -j`. None (or < 1) falls
         back to the logical core count — same as before this was configurable.
+        kdeb_pkgversion: Debian revision of the resulting .deb (its Version:
+        field — the kernel version itself lives in the package NAME, not
+        here, confirmed against a real built .deb with `dpkg-deb -f`).
+        Defaults to 1, unchanged for the normal single-kernel flow; only the
+        Stock batch builder passes a value above 1, to recompile the same
+        kernel version as a real apt upgrade.
         """
         source_dir = os.path.join(self._build_dir, f"linux-{version}")
         if not cpu_count or cpu_count < 1:
@@ -270,7 +289,7 @@ class SoplosInstaller:
 
         cmd = (
             f'C_INCLUDE_PATH="/usr/include/$(gcc -print-multiarch 2>/dev/null)" '
-            f'KDEB_PKGVERSION=1 '
+            f'KDEB_PKGVERSION={kdeb_pkgversion} '
             f'make -C "{source_dir}" -j{cpu_count} bindeb-pkg'
         )
 

@@ -124,16 +124,39 @@ def release_queue() -> List[BatchJob]:
     return jobs
 
 
-def job_already_built(dest_root: str, version: str, job: BatchJob) -> bool:
+def kdeb_pkgversion(revision: int) -> int:
+    """Real Debian revision ("-N") passed to KDEB_PKGVERSION.
+
+    `revision` is the user-facing counter: 0 means "new kernel version, never
+    recompiled" and maps to the implicit 1 every first build already uses.
+    Any recompile is numbered from 1 (the first recompile, second, third...)
+    and is offset by one internally so it never collides with that implicit
+    1 — entering 1 for the very first recompile must produce a real, working
+    new package on its own, not a duplicate of the original build.
+    """
+    return revision + 1
+
+
+def _versioned(version: str, revision: int) -> str:
+    """Version string for the metapackage: plain on the first build, with an
+    explicit "-N" suffix only once the same kernel version gets recompiled.
+    """
+    return version if revision <= 0 else f"{version}-{kdeb_pkgversion(revision)}"
+
+
+def job_already_built(dest_root: str, version: str, job: BatchJob,
+                       revision: int = 0) -> bool:
     """True when this job's metapackage .deb already exists in dest_root.
 
-    The metapackage filename is deterministic (linux-<job.name>_<version>_
-    amd64.deb, built by _build_metapackage), so its presence is a reliable
-    "this kernel is done" marker even though the same destination folder
-    (dest_root/version/V<n>/) holds several jobs sharing that march level.
+    The metapackage filename is deterministic (linux-<job.name>_<version>
+    [-<revision>]_amd64.deb, built by _build_metapackage), so its presence is
+    a reliable "this kernel is done" marker even though the same destination
+    folder (dest_root/version/V<n>/) holds several jobs sharing that march
+    level.
     """
     meta_path = os.path.join(
-        dest_root, version, job.folder, f"linux-{job.name}_{version}_amd64.deb"
+        dest_root, version, job.folder,
+        f"linux-{job.name}_{_versioned(version, revision)}_amd64.deb"
     )
     return os.path.isfile(meta_path)
 
@@ -188,7 +211,8 @@ class BatchBuilder:
     def run(self, version: str, dest_root: str,
             cpu_count: Optional[int] = None,
             jobs: Optional[List[BatchJob]] = None,
-            skip_existing: bool = False) -> BatchResult:
+            skip_existing: bool = False,
+            revision: int = 0) -> BatchResult:
         """Build every kernel of the release into dest_root/<version>/V<n>/.
 
         Stops at the first failure, leaving the build directory in place.
@@ -196,11 +220,19 @@ class BatchBuilder:
         skip_existing: resume a queue that failed partway through — skip any
         job whose metapackage .deb is already in dest_root, instead of
         rebuilding kernels that already finished successfully.
+
+        revision: 0 for a brand new kernel version that has never been built
+        before. Pass 1, 2, 3... when recompiling the same kernel version
+        with different patches/fixes — 1 is the first recompile, and it is
+        guaranteed to produce a real, distinct package (never collides with
+        the implicit revision the original build already used), so apt sees
+        it as a genuine upgrade. Must be chosen by hand — it is not
+        auto-detected from what is already in dest_root.
         """
         result = BatchResult()
         jobs = jobs if jobs is not None else release_queue()
         if skip_existing:
-            jobs = [j for j in jobs if not job_already_built(dest_root, version, j)]
+            jobs = [j for j in jobs if not job_already_built(dest_root, version, j, revision)]
         total = len(jobs)
 
         if total == 0:
@@ -252,6 +284,7 @@ class BatchBuilder:
                 march_level=job.march,
                 enable_sched_ext=True,
                 cpu_count=cpu_count,
+                kdeb_pkgversion=kdeb_pkgversion(revision),
             )
 
             if self._is_cancelled():
@@ -267,7 +300,7 @@ class BatchBuilder:
                 )
                 return result
 
-            saved = self._save_packages(version, job, dest_root)
+            saved = self._save_packages(version, job, dest_root, revision)
             if saved is None:
                 result.failed = job.name
                 result.failed_log = os.path.join(self._build_dir, "build.log")
@@ -323,7 +356,8 @@ class BatchBuilder:
             debs.append(path)
         return list(dict.fromkeys(debs))
 
-    def _build_metapackage(self, version: str, custom_name: str) -> Optional[str]:
+    def _build_metapackage(self, version: str, custom_name: str,
+                           revision: int = 0) -> Optional[str]:
         """Create the linux-soplos* metapackage that pulls image and headers."""
         kernel_release = self._kernel_release(version)
         if not kernel_release:
@@ -331,7 +365,8 @@ class BatchBuilder:
 
         pkg_name = f"linux-{custom_name}"
         display_name = _display_name(pkg_name)
-        meta_path = os.path.join(self._build_dir, f"{pkg_name}_{version}_amd64.deb")
+        version_str = _versioned(version, revision)
+        meta_path = os.path.join(self._build_dir, f"{pkg_name}_{version_str}_amd64.deb")
 
         try:
             with tempfile.TemporaryDirectory() as tmp:
@@ -339,7 +374,7 @@ class BatchBuilder:
                 os.makedirs(debian_dir)
                 control = (
                     f"Package: {pkg_name}\n"
-                    f"Version: {version}\n"
+                    f"Version: {version_str}\n"
                     f"Architecture: amd64\n"
                     f"Maintainer: Soplos Linux Team <info@soplos.org>\n"
                     f"Depends: linux-image-{kernel_release}, linux-headers-{kernel_release}\n"
@@ -364,7 +399,7 @@ class BatchBuilder:
         return meta_path if os.path.exists(meta_path) else None
 
     def _save_packages(self, version: str, job: BatchJob,
-                       dest_root: str) -> Optional[str]:
+                       dest_root: str, revision: int = 0) -> Optional[str]:
         """Copy the packages of a finished build to dest_root/<version>/V<n>/.
 
         Returns the destination directory, or None if there was nothing to save.
@@ -373,7 +408,7 @@ class BatchBuilder:
         if not debs:
             return None
 
-        meta = self._build_metapackage(version, job.name)
+        meta = self._build_metapackage(version, job.name, revision)
         if meta:
             debs.append(meta)
 

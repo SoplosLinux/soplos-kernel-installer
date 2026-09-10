@@ -1149,6 +1149,28 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
         inner.pack_start(dest_row, False, False, 0)
 
+        # Recompile counter for this whole run. 0 (default) means a brand
+        # new kernel version that was never built before — no extra number
+        # anywhere in the resulting .deb files. 1, 2, 3... mean this is the
+        # 1st, 2nd, 3rd recompile of the SAME kernel version with different
+        # patches/fixes, so apt sees each one as a real upgrade over the
+        # previous build. Chosen by hand — not auto-detected from what
+        # already exists in the destination folder.
+        revision_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        revision_label = Gtk.Label(label=_("Revision:"))
+        revision_label.get_style_context().add_class('dim-label')
+        revision_row.pack_start(revision_label, False, False, 0)
+        self._batch_revision_spin = Gtk.SpinButton.new_with_range(0, 98, 1)
+        self._batch_revision_spin.set_value(0)
+        self._batch_revision_spin.set_tooltip_text(
+            _("0 = new kernel version, never built before. Raise it only "
+              "when recompiling the SAME kernel version with different "
+              "patches (1 = first recompile, 2 = second...), so apt sees "
+              "it as a real upgrade.")
+        )
+        revision_row.pack_start(self._batch_revision_spin, False, False, 0)
+        inner.pack_start(revision_row, False, False, 0)
+
         # Which jobs of the 26-kernel release queue to build. Defaults to
         # all of them; the selection dialog can narrow it down.
         self._batch_selected_jobs = release_queue()
@@ -1272,13 +1294,17 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
         jobs = list(self._batch_selected_jobs)
         skip_existing = self._batch_resume_check.get_active()
+        revision = int(self._batch_revision_spin.get_value())
 
         if not jobs:
             self._show_error(_("Select at least one kernel to build."))
             return
 
         if skip_existing:
-            jobs = [j for j in jobs if not job_already_built(self._batch_dest, version, j)]
+            jobs = [
+                j for j in jobs
+                if not job_already_built(self._batch_dest, version, j, revision)
+            ]
             if not jobs:
                 self._show_error(
                     _("Every selected kernel is already built in the destination folder.")
@@ -1291,11 +1317,12 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             buttons=Gtk.ButtonsType.NONE,
             text=_("Build the whole release?")
         )
+        version_label = f"{version} (recompile #{revision})" if revision > 0 else version
         dialog.format_secondary_text(
             _("%(n)d kernels of version %(version)s will be built one after "
               "another and saved to %(dest)s\n\n"
               "The build directory is deleted before and after every kernel.")
-            % {'n': len(jobs), 'version': version, 'dest': self._batch_dest}
+            % {'n': len(jobs), 'version': version_label, 'dest': self._batch_dest}
         )
         dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
         dialog.add_button(_("Start"), Gtk.ResponseType.OK)
@@ -1351,6 +1378,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
                 dest_root=self._batch_dest,
                 cpu_count=cpu_count,
                 jobs=jobs,
+                revision=revision,
             )
             GLib.idle_add(self._on_batch_finished, result)
 

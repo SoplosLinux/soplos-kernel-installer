@@ -267,6 +267,7 @@ class KernelManager:
         march_level: Optional[str] = None,
         enable_sched_ext: bool = False,
         cpu_count: Optional[int] = None,
+        kdeb_pkgversion: int = 1,
     ) -> bool:
         """
         Full kernel install:
@@ -276,6 +277,11 @@ class KernelManager:
           4. Build
           5. Install (.deb → dracut → update-grub)
           6. Sign (if Secure Boot)
+
+        kdeb_pkgversion: Debian revision of the .deb (its Version: field).
+        Defaults to 1, unchanged for the normal single-kernel flow; only the
+        Stock batch builder passes a different value to recompile the same
+        kernel version as a real apt upgrade.
         """
         patch_ids = patch_ids or []
 
@@ -371,7 +377,7 @@ class KernelManager:
 
             # 4. Build
             self._report_progress("Building kernel...", 30)
-            if not self._installer.build(version, cpu_count):
+            if not self._installer.build(version, cpu_count, kdeb_pkgversion):
                 return False
 
             if is_cancelled():

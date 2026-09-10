@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2-5] - 2026-09-10
+
+### Fixed
+
+- **`CONFIG_ANDROID_BINDER_IPC`** is a plain `bool` in Kconfig
+  (`drivers/android/Kconfig`), not a tristate. The 1.0.2-4 attempt to enable
+  it as a module (`--module`, i.e. `=m`) was an invalid value for a bool
+  symbol, silently normalized back to `n` by `make olddefconfig` — every
+  7.2.4 kernel already published with that build never actually had Waydroid
+  support. Now enabled with `--enable` (the only valid form for this
+  symbol), plus a post-`olddefconfig` check that warns instead of failing
+  silently if it's ever dropped again for any other reason.
+
+### Added
+
+- Stock batch build (`core/batch.py`, `BatchBuilder.run()`) gained a
+  `revision` counter: 0 (default) means a brand new kernel version that was
+  never built before — no extra number anywhere in the resulting `.deb`
+  files, unchanged from before. 1, 2, 3... mean this is the 1st, 2nd, 3rd
+  recompile of the SAME kernel version with different patches/fixes, so
+  `apt`/`reprepro` see the new build as a real upgrade instead of colliding
+  on an identical package name+version with the previous one. The internal
+  Debian revision (`KDEB_PKGVERSION`) is offset by one from what the user
+  enters, since the very first build of any version already implicitly uses
+  revision 1 — entering "1" for the first recompile is guaranteed to produce
+  a genuinely new, working package on its own. New "Revision" spinner in the
+  batch build page of the UI.
+
 ## [1.0.2-4] - 2026-09-09
 
 ### Added
