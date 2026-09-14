@@ -49,16 +49,24 @@ _X3D_MIN_MARCH = MarchLevel.V3
 _MARCH_LABELS = {"v1", "v2", "v3", "v4"}
 
 
-def kernel_name(patch_ids: List[str], march: str) -> str:
+def kernel_name(patch_ids: List[str], march: str, channel: str = "") -> str:
     """Compose the package name for a Stock build, e.g. soplos-bore-ntsync-v3.
 
     X3D is always packaged as soplos-x3d because bore and ntsync are implicit.
+
+    channel: "rc", "lts" or "eol" for a kernel of that channel — empty for the
+    regular stable line. RC/LTS/EOL must never share a package name with the
+    stable line: RC could silently replace a stable kernel on a plain apt
+    upgrade, and LTS/EOL version numbers compare as *lower* than the current
+    stable, which reprepro refuses to publish over an already-published
+    higher version.
     """
     ordered = sorted(patch_ids, key=lambda p: _NAME_ORDER.get(p, 99))
+    channel_part = [channel] if channel else []
     if "x3d" in ordered:
-        parts = ["soplos", "x3d", march]
+        parts = ["soplos"] + channel_part + ["x3d", march]
     else:
-        parts = ["soplos"] + ordered + [march]
+        parts = ["soplos"] + channel_part + ordered + [march]
     return "-".join(parts)
 
 
@@ -88,10 +96,11 @@ class BatchJob:
     """A single kernel of the release queue."""
     patch_ids: List[str]
     march: str
+    channel: str = ""
 
     @property
     def name(self) -> str:
-        return kernel_name(self.patch_ids, self.march)
+        return kernel_name(self.patch_ids, self.march, self.channel)
 
     @property
     def folder(self) -> str:
@@ -113,14 +122,19 @@ class BatchResult:
         return self.failed is None and not self.cancelled and self.error is None
 
 
-def release_queue() -> List[BatchJob]:
-    """Return the full release queue, 26 jobs ordered from v1 to v4."""
+def release_queue(channel: str = "") -> List[BatchJob]:
+    """Return the full release queue, 26 jobs ordered from v1 to v4.
+
+    channel: "rc", "lts" or "eol" to build that channel's queue instead of
+    the regular stable line — see kernel_name() for why this must never
+    share a package name with a stable build.
+    """
     jobs: List[BatchJob] = []
     for march in MarchLevel.ALL:
         for patches in _VARIANTS:
-            jobs.append(BatchJob(patch_ids=list(patches), march=march))
+            jobs.append(BatchJob(patch_ids=list(patches), march=march, channel=channel))
         if MarchLevel.ALL.index(march) >= MarchLevel.ALL.index(_X3D_MIN_MARCH):
-            jobs.append(BatchJob(patch_ids=list(_X3D_VARIANT), march=march))
+            jobs.append(BatchJob(patch_ids=list(_X3D_VARIANT), march=march, channel=channel))
     return jobs
 
 

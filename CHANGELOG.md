@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2-6] - 2026-09-14
+
+### Fixed
+
+- RC, LTS and EOL kernels shared the exact same Stock package name as the regular stable line (e.g. `linux-soplos-v1`), only the kernel version differing. That is unsafe two ways over: an RC build could silently replace a stable kernel on a plain `apt upgrade`, and LTS/EOL kernel versions compare as *lower* than the current stable in Debian version ordering, so reprepro refused to publish them at all ("as it has already <higher version>"). Stock builds (both the single-kernel flow and the batch release queue) now insert a channel marker into the package name — `linux-soplos-rc-v1`, `linux-soplos-lts-v1`, `linux-soplos-eol-v1` — based on the selected kernel's real channel from kernel.org, so each channel gets its own package identity instead of colliding with stable.
+
 ## [1.0.2-5] - 2026-09-10
 
 ### Fixed

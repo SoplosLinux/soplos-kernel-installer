@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.2--5-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.2--6-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.2-5)
+### 🚀 Recent Updates (v1.0.2-6)
+- **Fixed**: RC, LTS and EOL kernels shared the exact same Stock package name as the regular stable line (e.g. `linux-soplos-v1`), only the kernel version differing. An RC build could silently replace a stable kernel on a plain `apt upgrade`, and LTS/EOL kernel versions compare as *lower* than the current stable in Debian version ordering, so `reprepro` refused to publish them at all. Stock builds and the batch release queue now insert a channel marker into the package name (`linux-soplos-rc-v1`, `linux-soplos-lts-v1`, `linux-soplos-eol-v1`) based on the selected kernel's real channel from kernel.org.
+
+### Previous Updates (v1.0.2-5)
 - **Fixed**: `CONFIG_ANDROID_BINDER_IPC` is a plain `bool` in Kconfig (drivers/android/Kconfig), not a tristate — the 1.0.2-4 attempt to build it as a module (`=m`) was silently dropped by `olddefconfig` back to `n`, so every 7.2.4 kernel already published never actually had Waydroid support. Now enabled with `--enable` (the only valid form), plus a post-`olddefconfig` check that warns instead of failing silently if it's ever dropped again.
 - **Added**: Stock batch build gained a "Revision" counter (0 = new kernel version, 1/2/3... = 1st/2nd/3rd recompile of the same version with different patches). Lets `apt`/`reprepro` see a recompiled kernel as a real upgrade instead of colliding on an identical name+version with the previous build.
 

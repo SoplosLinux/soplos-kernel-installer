@@ -13,6 +13,7 @@ import re
 import shlex
 import glob
 import shutil
+from typing import List
 import subprocess
 import tempfile
 
@@ -1093,6 +1094,29 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         else:
             self._update_name_hint()
 
+    def _current_channel(self) -> str:
+        """Channel of the selected kernel version — "rc"/"lts"/"eol", or ""
+        for the regular stable line. RC/LTS/EOL must never share a package
+        name with the stable line: RC could silently replace a stable kernel
+        on a plain apt upgrade, and LTS/EOL version numbers compare as
+        *lower* than the current stable, which reprepro refuses to publish
+        over an already-published higher version. Same precedence order as
+        the info label in version_picker.py."""
+        info = self._version_picker.get_selected_version_info()
+        if not info:
+            return ""
+        if info.is_rc:
+            return "rc"
+        if info.is_longterm:
+            return "lts"
+        if info.is_eol:
+            return "eol"
+        return ""
+
+    def _stock_channel_prefix(self) -> List[str]:
+        channel = self._current_channel()
+        return [channel] if channel else []
+
     def _update_stock_name(self) -> None:
         _ORDER = {"bore": 0, "rt": 1, "zen": 2, "ntsync": 3, "x3d": 4}
         patch_ids = sorted(
@@ -1100,11 +1124,12 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             key=lambda p: _ORDER.get(p, 99)
         )
         march = self._march_selector.get_march_level()
+        channel = self._stock_channel_prefix()
         # x3d is always packaged as "soplos-x3d" — bore+ntsync are implicit
         if "x3d" in patch_ids:
-            parts = ["soplos", "x3d", march]
+            parts = ["soplos"] + channel + ["x3d", march]
         else:
-            parts = ["soplos"] + patch_ids + [march]
+            parts = ["soplos"] + channel + patch_ids + [march]
         self._kernel_name_entry.set_text("-".join(parts))
         self._update_name_hint()
 
@@ -1173,7 +1198,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
         # Which jobs of the 26-kernel release queue to build. Defaults to
         # all of them; the selection dialog can narrow it down.
-        self._batch_selected_jobs = release_queue()
+        self._batch_selected_jobs = release_queue(channel=self._current_channel())
 
         select_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         self._batch_selection_label = Gtk.Label(
@@ -1193,7 +1218,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         inner.pack_start(self._batch_resume_check, False, False, 0)
 
         self._batch_start_btn = Gtk.Button(
-            label=_("Build all {n} kernels").format(n=len(release_queue()))
+            label=_("Build all {n} kernels").format(n=len(self._batch_selected_jobs))
         )
         self._batch_start_btn.connect('clicked', self._on_batch_start)
         inner.pack_start(self._batch_start_btn, False, False, 0)
@@ -1228,7 +1253,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
         scroller.add(list_box)
         content.pack_start(scroller, True, True, 0)
 
-        all_jobs = release_queue()
+        all_jobs = release_queue(channel=self._current_channel())
         selected_names = {j.name for j in self._batch_selected_jobs}
         checks = []
         for job in all_jobs:
@@ -1257,7 +1282,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
     def _update_batch_start_label(self) -> None:
         n = len(self._batch_selected_jobs)
-        if n == len(release_queue()):
+        if n == len(release_queue(channel=self._current_channel())):
             self._batch_start_btn.set_label(_("Build all {n} kernels").format(n=n))
         else:
             self._batch_start_btn.set_label(_("Build {n} selected kernels").format(n=n))
@@ -1449,11 +1474,27 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
     def _on_version_changed(self, picker, version: str) -> None:
         self._update_name_hint()
         self._patch_selector.update_for_version(version)
+        # The channel marker (rc/lts/eol) in the Stock name depends on which
+        # kernel version is selected — without this, the name stays frozen
+        # at whatever channel was computed the last time _update_stock_name()
+        # ran, regardless of which version gets picked afterwards.
+        profile = self._profile_selector.get_selected_profile()
+        if profile and profile.id == ProfileType.STOCK:
+            self._update_stock_name()
         # Revision is a per-version concept — carrying over a value left
         # from a previous recompile onto a newly picked kernel version would
         # silently number a genuine first build as if it were a recompile.
         if hasattr(self, '_batch_revision_spin'):
             self._batch_revision_spin.set_value(0)
+        # The release queue's package names depend on the selected version's
+        # channel (rc/lts/eol) too — reset the selection to "all" for the new
+        # channel instead of keeping a stale queue built for a different one.
+        if hasattr(self, '_batch_selected_jobs'):
+            self._batch_selected_jobs = release_queue(channel=self._current_channel())
+            self._batch_selection_label.set_text(
+                _("All {n} kernels selected").format(n=len(self._batch_selected_jobs))
+            )
+            self._update_batch_start_label()
 
     def _on_version_loading_started(self, picker) -> None:
         self._install_btn.set_sensitive(False)
