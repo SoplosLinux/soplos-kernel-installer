@@ -189,6 +189,20 @@ class SoplosInstaller:
                 )
                 return False
 
+        # Mainline declares DRM_I915 as depends on !PREEMPT_RT, so olddefconfig
+        # drops it silently on every RT build unless the rt-i915 patch removed
+        # that dependency. An RT kernel without it boots to a black screen on
+        # any Intel iGPU, so unlike CGROUP_DMEM this aborts instead of warning.
+        if patch_ids and "rt" in patch_ids:
+            state = run_command("./scripts/config --state DRM_I915", cwd=source_dir)
+            if state.stdout.strip() not in ("y", "m"):
+                self._report_progress(
+                    "Error: DRM_I915 was dropped by olddefconfig — the rt-i915 "
+                    "patch is missing or did not apply. Refusing to build an RT "
+                    "kernel without the Intel graphics driver.", -1
+                )
+                return False
+
         # Unlike the march level, a dropped CGROUP_DMEM does not mislabel or
         # break the kernel — nothing uses it yet — so this only warns instead
         # of aborting the build.

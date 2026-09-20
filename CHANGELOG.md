@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2-7] - 2026-09-20
+
+### Fixed
+
+- RT kernels shipped without the Intel graphics driver. Mainline declares `DRM_I915` as `depends on !PREEMPT_RT`, so `olddefconfig` dropped it silently on every RT build (7.0.3 through 7.2.6), and any machine with an Intel iGPU booted to a black screen with a blinking cursor. The only fix the installer knew, a third-party `rt-i915` patch, was downloaded only when the machine doing the build had an Intel GPU, which the build VM does not. RT builds now always apply Soplos' own patch from `SoplosLinux/rt-i915-soplos` (checked with a dry-run apply before it is accepted), and stop after `olddefconfig` if `DRM_I915` did not survive, instead of producing a kernel that cannot boot on Intel. The third-party download was removed.
+
+### Notes
+
+- The patch is compile-tested on 7.2.6 with and without PREEMPT_RT, but not boot-tested yet: see the rt-i915-soplos README before publishing an RT kernel built with it.
+- There is only a 7.2 patch so far. An RT build of any other kernel line stops at the `DRM_I915` check until a patch for that line exists.
+
 ## [1.0.2-6] - 2026-09-14
 
 ### Fixed

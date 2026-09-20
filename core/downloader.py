@@ -31,6 +31,7 @@ X3D_PATCH_URL = "https://raw.githubusercontent.com/SoplosLinux/x3d-soplos/main/p
 MARCH_PATCH_URL = "https://raw.githubusercontent.com/SoplosLinux/soplos-cpu-kernel-patch/main/patches/0001-x86-64-isa-level-{tag}.patch"
 BORE_SOPLOS_URL = "https://raw.githubusercontent.com/SoplosLinux/bore-soplos/main/patches/0001-bore-{major_minor}.patch"
 ZEN_SOPLOS_URL = "https://raw.githubusercontent.com/SoplosLinux/zen-soplos/main/patches/0001-zen-{major_minor}.patch"
+RT_I915_SOPLOS_URL = "https://raw.githubusercontent.com/SoplosLinux/rt-i915-soplos/main/patches/0001-rt-i915-{major_minor}.patch"
 
 DEBIAN_PACKAGES_INDEX = "https://deb.debian.org/debian/dists/sid/main/binary-amd64/Packages.xz"
 DEBIAN_POOL_ROOT = "https://deb.debian.org/debian/"
@@ -296,16 +297,16 @@ class KernelDownloader:
                     )
                 continue
             elif patch_id == "rt" and self._rt_is_builtin(version):
-                # PREEMPT_RT is mainlined since 6.12 — no patch file needed.
-                # On Intel GPU systems, apply the CachyOS rt-i915 fix.
+                # PREEMPT_RT is mainlined since 6.12 — no RT patch file needed.
+                # Mainline still marks i915 as depends on !PREEMPT_RT, so an RT
+                # kernel silently loses the Intel driver. Soplos' own fix is
+                # always applied, whatever GPU the build machine has.
                 self._report_progress(
-                    f"PREEMPT_RT is built into kernel {version} — no patch needed.", -1
+                    f"PREEMPT_RT is built into kernel {version} — no RT patch needed.", -1
                 )
-                from .nvidia import has_intel_gpu
-                if has_intel_gpu():
-                    rt_i915 = self._download_rt_i915_cachy(major_minor, patches_dir)
-                    if rt_i915:
-                        downloaded["rt"] = rt_i915
+                rt_i915 = self._download_rt_i915_soplos(version, major_minor, patches_dir)
+                if rt_i915:
+                    downloaded["rt"] = rt_i915
                 continue
             elif patch_id == "bore":
                 paths = self._download_bore(version, major_minor, patches_dir)
@@ -500,23 +501,34 @@ class KernelDownloader:
         print(f"CachyOS: no bore patch for {major_minor}", file=sys.stderr)
         return None
 
-    def _download_rt_i915_cachy(self, major_minor: str, patches_dir: str) -> Optional[List[str]]:
+    def _download_rt_i915_soplos(self, version: str, major_minor: str,
+                                 patches_dir: str) -> Optional[List[str]]:
         """
-        Download the CachyOS rt-i915 fix patch (misc/0001-rt-i915.patch).
-        Fixes DRM/i915 compatibility issues with PREEMPT_RT on hybrid Intel+NVIDIA systems.
+        Download the rt-i915 patch from SoplosLinux/rt-i915-soplos, which lets
+        i915 build on PREEMPT_RT. Without it the RT kernel loses the driver at
+        olddefconfig and an Intel iGPU boots to a black screen. The patch is
+        verified with a dry-run apply before being accepted. If it cannot be
+        obtained, the RT build stops at the DRM_I915 check in configure().
         """
-        filename = "0001-rt-i915.patch"
-        raw_url = CACHY_RAW_BASE.format(
-            major_minor=major_minor, subdir="misc", filename=filename
-        )
-        dest = os.path.join(patches_dir, f"rt-i915-cachy-{major_minor}.patch")
-        if self._download_file(raw_url, dest):
-            self._report_progress(f"CachyOS rt-i915 patch downloaded for {major_minor}.", -1)
-            return [dest]
+        raw_url = RT_I915_SOPLOS_URL.format(major_minor=major_minor)
+        dest = os.path.join(patches_dir, f"rt-i915-soplos-{major_minor}.patch")
+        if not self._download_file(raw_url, dest):
+            self._report_progress(
+                f"Warning: no rt-i915-soplos patch for {major_minor} — the RT "
+                f"build will stop at the Intel graphics driver check.", -1
+            )
+            print(f"SoplosLinux/rt-i915-soplos: no patch for {major_minor}", file=sys.stderr)
+            return None
 
-        # Not available for this version — not critical, skip silently
-        print(f"CachyOS: no rt-i915 patch for {major_minor}", file=sys.stderr)
-        return None
+        if not self._patches_apply(version, [dest]):
+            self._report_progress(
+                f"Warning: rt-i915-soplos patch does not apply to {version} — the "
+                f"RT build will stop at the Intel graphics driver check.", -1
+            )
+            return None
+
+        self._report_progress(f"rt-i915-soplos patch ready for {version}.", -1)
+        return [dest]
 
     def _download_rt(self, version: str, major_minor: str,
                      patches_dir: str) -> Optional[List[str]]:

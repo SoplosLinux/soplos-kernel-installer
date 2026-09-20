@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.2--6-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.2--7-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.2-6)
+### 🚀 Recent Updates (v1.0.2-7)
+- **Fixed**: RT kernels shipped without the Intel graphics driver. Mainline declares `DRM_I915` as `depends on !PREEMPT_RT`, so `olddefconfig` dropped it silently on every RT build, and any machine with an Intel iGPU booted to a black screen. The only fix the installer knew, a third-party `rt-i915` patch, was downloaded only when the build machine had an Intel GPU, which the build VM does not. RT builds now always apply Soplos' own patch from [rt-i915-soplos](https://github.com/SoplosLinux/rt-i915-soplos) (checked with a dry-run apply first) and stop after `olddefconfig` if `DRM_I915` did not survive. The patch is compile-tested but not boot-tested yet, and only exists for 7.2 so far.
+
+### Previous Updates (v1.0.2-6)
 - **Fixed**: RC, LTS and EOL kernels shared the exact same Stock package name as the regular stable line (e.g. `linux-soplos-v1`), only the kernel version differing. An RC build could silently replace a stable kernel on a plain `apt upgrade`, and LTS/EOL kernel versions compare as *lower* than the current stable in Debian version ordering, so `reprepro` refused to publish them at all. Stock builds and the batch release queue now insert a channel marker into the package name (`linux-soplos-rc-v1`, `linux-soplos-lts-v1`, `linux-soplos-eol-v1`) based on the selected kernel's real channel from kernel.org.
 
 ### Previous Updates (v1.0.2-5)
