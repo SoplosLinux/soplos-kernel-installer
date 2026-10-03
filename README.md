@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.2--7-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.2--8-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -14,10 +14,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 ## ✨ Features
 
 - 📥 **Multiple channels**: Stable, LTS, RC, and Soplos Featured (curated versions)
-- 🔧 **Patch support**, preferring original upstream sources, with a Soplos-maintained fallback for point releases upstream hasn't caught up with yet:
+- 🔧 **Patch support**, preferring Soplos-maintained sources where one exists, with upstream as fallback:
   - [BORE](https://github.com/firelzrd/bore-scheduler) — Burst-Oriented Response Enhancer (fallback: [bore-soplos](https://github.com/SoplosLinux/bore-soplos))
   - [PREEMPT_RT](https://cdn.kernel.org/pub/linux/kernel/projects/rt) — Full real-time preemption
-  - [Zen](https://github.com/zen-kernel/zen-kernel) — Desktop/gaming optimizations (fallback: [zen-soplos](https://github.com/SoplosLinux/zen-soplos))
+  - [Zen](https://github.com/SoplosLinux/zen-soplos) — Desktop/gaming optimizations, from Soplos' own [zen-soplos](https://github.com/SoplosLinux/zen-soplos) rebase (fallback: [zen-kernel/zen-kernel](https://github.com/zen-kernel/zen-kernel) upstream releases)
   - [NTSYNC](https://www.kernel.org) — NT synchronization primitives
   - [X3D VCache](https://github.com/SoplosLinux/x3d-soplos) — AMD Ryzen X3D dual-CCD scheduler preference (Stock mode)
 - 🎯 **Kernel profiles**: Gaming · Audio/Video · Minimal/Office · Automatic
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.2-7)
+### 🚀 Recent Updates (v1.0.2-8)
+- **Fixed**: Zen patch source priority was backwards — upstream [zen-kernel/zen-kernel](https://github.com/zen-kernel/zen-kernel) was tried first and [zen-soplos](https://github.com/SoplosLinux/zen-soplos) only as fallback. Kernel 7.2.9 V3/V4 builds failed because zen-kernel's own release for that version carries its own march mechanism in `arch/x86/Makefile`, conflicting with Soplos' x86-64 ISA-level patch applied afterward. zen-soplos is now tried first; zen-kernel/zen-kernel is only a fallback when zen-soplos has no patch for the line yet or it doesn't apply.
+
+### Previous Updates (v1.0.2-7)
 - **Fixed**: RT kernels shipped without the Intel graphics driver. Mainline declares `DRM_I915` as `depends on !PREEMPT_RT`, so `olddefconfig` dropped it silently on every RT build, and any machine with an Intel iGPU booted to a black screen. The only fix the installer knew, a third-party `rt-i915` patch, was downloaded only when the build machine had an Intel GPU, which the build VM does not. RT builds now always apply Soplos' own patch from [rt-i915-soplos](https://github.com/SoplosLinux/rt-i915-soplos) (checked with a dry-run apply first) and stop after `olddefconfig` if `DRM_I915` did not survive. The patch is compile-tested but not boot-tested yet, and only exists for 7.2 so far.
 
 ### Previous Updates (v1.0.2-6)

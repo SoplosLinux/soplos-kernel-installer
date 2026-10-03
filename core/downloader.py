@@ -717,7 +717,10 @@ class KernelDownloader:
     def _download_zen(self, version: str, major_minor: str,
                       patches_dir: str) -> Optional[List[str]]:
         """
-        Download Zen kernel patch via GitHub API with pagination.
+        Download Zen kernel patch. SoplosLinux/zen-soplos (Soplos-maintained
+        rebase) is tried FIRST; zen-kernel/zen-kernel's own GitHub releases
+        are only a fallback when zen-soplos has no patch for this line yet,
+        or the one it has doesn't apply to this exact point release.
         RC kernels are skipped — Zen only patches stable releases.
         """
         if '-rc' in version:
@@ -729,6 +732,17 @@ class KernelDownloader:
 
         self._report_progress(f"Downloading Zen patch for {version}...", -1)
 
+        # --- Source 1: SoplosLinux/zen-soplos (Soplos-maintained) ---
+        soplos_paths = self._download_zen_soplos(major_minor, patches_dir)
+        if soplos_paths:
+            if self._patches_apply(version, soplos_paths):
+                return soplos_paths
+            self._report_progress(
+                f"SoplosLinux/zen-soplos patch doesn't apply to {version} — "
+                f"trying zen-kernel/zen-kernel fallback...", -1
+            )
+
+        # --- Source 2: zen-kernel/zen-kernel upstream releases (fallback) ---
         target_prefix = f"v{version}-zen"
         asset_url = None
         asset_name = None
@@ -769,18 +783,11 @@ class KernelDownloader:
         if not asset_url:
             self._report_progress(
                 f"⚠ Zen patch not found for kernel {version} "
-                f"(no release matching {target_prefix} in zen-kernel/zen-kernel) — "
-                f"trying SoplosLinux/zen-soplos fallback...", -1
+                f"(no release matching {target_prefix} in zen-kernel/zen-kernel either) — "
+                f"no working Zen source found.", -1
             )
             print(f"No Zen release matching {target_prefix} found", file=sys.stderr)
-            soplos_paths = self._download_zen_soplos(major_minor, patches_dir)
-            if soplos_paths and not self._patches_apply(version, soplos_paths):
-                self._report_progress(
-                    f"⚠ SoplosLinux/zen-soplos patch doesn't apply to {version} either — "
-                    f"no working Zen source found.", -1
-                )
-                return None
-            return soplos_paths
+            return None
 
         zst_dest = os.path.join(patches_dir, asset_name)
         dest = os.path.join(patches_dir, f"zen-{version}.patch")
@@ -794,18 +801,18 @@ class KernelDownloader:
             if self._patches_apply(version, [dest]):
                 return [dest]
             self._report_progress(
-                f"Zen release {asset_name} downloaded but doesn't apply to {version} — "
-                f"trying SoplosLinux/zen-soplos fallback...", -1
+                f"⚠ Zen release {asset_name} doesn't apply to {version} either — "
+                f"no working Zen source found.", -1
             )
-            return self._download_zen_soplos(major_minor, patches_dir)
+            return None
 
         return None
 
     def _download_zen_soplos(self, major_minor: str, patches_dir: str) -> Optional[List[str]]:
         """
-        Download Zen from SoplosLinux/zen-soplos — a Soplos-maintained rebase
-        used only when zen-kernel/zen-kernel hasn't published a release for
-        this kernel line yet. Not build/boot verified upstream: see
+        Download Zen from SoplosLinux/zen-soplos — the Soplos-maintained
+        rebase, tried before zen-kernel/zen-kernel's own upstream releases.
+        Not build/boot verified upstream: see
         github.com/SoplosLinux/zen-soplos README before trusting a build made
         from this source — it's a much larger patch surface than BORE/x3d.
         """

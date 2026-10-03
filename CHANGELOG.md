@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2-8] - 2026-10-03
+
+### Fixed
+
+- Zen patch source priority was backwards: `_download_zen()` tried zen-kernel/zen-kernel's own upstream releases first and only fell back to `SoplosLinux/zen-soplos` if no matching release existed. Kernel 7.2.9 V3/V4 builds failed because the official zen-kernel release for that version carries its own `CONFIG_X86_64_VERSION` march mechanism in `arch/x86/Makefile`, which conflicts with Soplos' own x86-64 ISA-level patch applied afterward. `zen-soplos` is now tried first; zen-kernel/zen-kernel is only a fallback when zen-soplos has no patch for the line yet or it doesn't apply.
+
 ## [1.0.2-7] - 2026-09-20
 
 ### Fixed
