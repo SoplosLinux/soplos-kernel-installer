@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.2-9] - 2026-10-04
+
+### Added
+
+- Support for Linux 7.2.9 Zen kernel patch (`0001-zen-7.2.9.patch`) in `_download_zen_soplos()`.
+
+### Fixed
+
+- Enhanced Zen patch downloader (`_download_zen_soplos()`) to check for exact kernel version patches (`0001-zen-{version}.patch`) before falling back to major_minor line patches (`0001-zen-{major_minor}.patch`).
+
 ## [1.0.2-8] - 2026-10-03
 
 ### Fixed

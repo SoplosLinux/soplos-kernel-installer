@@ -733,7 +733,7 @@ class KernelDownloader:
         self._report_progress(f"Downloading Zen patch for {version}...", -1)
 
         # --- Source 1: SoplosLinux/zen-soplos (Soplos-maintained) ---
-        soplos_paths = self._download_zen_soplos(major_minor, patches_dir)
+        soplos_paths = self._download_zen_soplos(version, major_minor, patches_dir)
         if soplos_paths:
             if self._patches_apply(version, soplos_paths):
                 return soplos_paths
@@ -808,19 +808,25 @@ class KernelDownloader:
 
         return None
 
-    def _download_zen_soplos(self, major_minor: str, patches_dir: str) -> Optional[List[str]]:
+    def _download_zen_soplos(self, version: str, major_minor: str,
+                             patches_dir: str) -> Optional[List[str]]:
         """
         Download Zen from SoplosLinux/zen-soplos — the Soplos-maintained
         rebase, tried before zen-kernel/zen-kernel's own upstream releases.
-        Not build/boot verified upstream: see
-        github.com/SoplosLinux/zen-soplos README before trusting a build made
-        from this source — it's a much larger patch surface than BORE/x3d.
+        Checks for exact version patch first (e.g. 0001-zen-7.2.9.patch),
+        falling back to major_minor patch (0001-zen-7.2.patch).
         """
+        full_ver_url = f"https://raw.githubusercontent.com/SoplosLinux/zen-soplos/main/patches/0001-zen-{version}.patch"
+        dest_ver = os.path.join(patches_dir, f"zen-soplos-{version}.patch")
+        if self._download_file(full_ver_url, dest_ver):
+            self._report_progress(f"SoplosLinux/zen-soplos patch downloaded for {version}.", -1)
+            return [dest_ver]
+
         raw_url = ZEN_SOPLOS_URL.format(major_minor=major_minor)
         dest = os.path.join(patches_dir, f"zen-soplos-{major_minor}.patch")
         if self._download_file(raw_url, dest):
             self._report_progress(f"SoplosLinux/zen-soplos patch downloaded for {major_minor}.", -1)
             return [dest]
 
-        print(f"SoplosLinux/zen-soplos: no patch for {major_minor}", file=sys.stderr)
+        print(f"SoplosLinux/zen-soplos: no patch for {version} or {major_minor}", file=sys.stderr)
         return None

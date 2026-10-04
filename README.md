@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.2--8-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.2--9-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,11 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.2-8)
+### 🚀 Recent Updates (v1.0.2-9)
+- **Added**: Full support for Linux 7.2.9 Zen kernel patch (`0001-zen-7.2.9.patch`) in `_download_zen_soplos()`.
+- **Fixed**: Enhanced Zen patch downloader to check for exact kernel version patches (`0001-zen-{version}.patch`) before falling back to major_minor line patches (`0001-zen-{major_minor}.patch`).
+
+### Previous Updates (v1.0.2-8)
 - **Fixed**: Zen patch source priority was backwards — upstream [zen-kernel/zen-kernel](https://github.com/zen-kernel/zen-kernel) was tried first and [zen-soplos](https://github.com/SoplosLinux/zen-soplos) only as fallback. Kernel 7.2.9 V3/V4 builds failed because zen-kernel's own release for that version carries its own march mechanism in `arch/x86/Makefile`, conflicting with Soplos' x86-64 ISA-level patch applied afterward. zen-soplos is now tried first; zen-kernel/zen-kernel is only a fallback when zen-soplos has no patch for the line yet or it doesn't apply.
 
 ### Previous Updates (v1.0.2-7)
