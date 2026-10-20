@@ -89,16 +89,50 @@ NV_STRING_H_PATCH = r"""--- a/nvidia/os-interface.c
 """
 
 
+# Fixes dmem_cgroup_register_region() API change on Linux 7.3+:
+# kernel commit e11640b9cea4 ("cgroup/dmem: Introduce struct dmem_cgroup_init
+# for region initialization") changed the first argument from a bare u64 size
+# to a const struct dmem_cgroup_init *.  NVIDIA 610 (open) passes size
+# directly, which GCC rejects with -Wint-conversion on kernel 7.3+.
+#
+# The LINUX_VERSION_CODE guard is safe: struct dmem_cgroup_init does not exist
+# on 7.2, so the #else branch keeps the old call on 7.2 and below.  The patch
+# only activates inside the NV_USE_DMEM_CGROUP_API block (defined only when
+# the dmem cgroup subsystem is present, i.e. Turing+ with the open driver),
+# so 550/580/590 and the proprietary driver are completely unaffected.
+NV_DMEM_CGROUP_INIT_PATCH = r"""--- a/nvidia/os-interface.c
++++ b/nvidia/os-interface.c
+@@ -2818,7 +2818,17 @@
+ void* NV_API_CALL os_dmem_cgroup_register_region(NvU64 size, const char *name)
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0)
++    struct dmem_cgroup_init init = {
++        .size = size,
++        .ops  = NULL,
++        .reclaim_priv = NULL,
++    };
++    void *region = dmem_cgroup_register_region(&init, name);
++#else
+     void *region = dmem_cgroup_register_region(size, name);
++#endif
+     if (IS_ERR(region))
+     {
+         return NULL;
+"""
+
+
 def get_nvidia_dkms_patch_commands() -> str:
     """
     Return a shell script fragment that applies NVIDIA DKMS compatibility
     patches to all installed NVIDIA source trees under /usr/src/nvidia-*/.
 
-    Safe to run on any kernel version — the patch uses #ifndef guards.
+    Safe to run on any kernel version — patches use #ifndef / LINUX_VERSION_CODE
+    guards so they are no-ops on kernels that don't need them.
     Skips source trees that are already patched (idempotent).
     """
     mmap_patch = NV_MMAP_VMA_LOCK_PATCH.replace("'", "'\\''")
     string_h_patch = NV_STRING_H_PATCH.replace("'", "'\\''")
+    dmem_patch = NV_DMEM_CGROUP_INIT_PATCH.replace("'", "'\\''")
 
     # The proprietary driver keeps its sources at <src>/nvidia/, the open kernel
     # modules (nvidia-open-590, nvidia-open-610) at <src>/kernel-open/nvidia/.
@@ -133,6 +167,16 @@ def get_nvidia_dkms_patch_commands() -> str:
         f"        printf '%s' '{string_h_patch}' | patch --fuzz=5 -p1 -d \"$NV_ROOT\" && "
         "        echo \"NVIDIA string.h patch applied successfully.\" || "
         "        echo \"Warning: NVIDIA string.h patch failed for ${NV_ROOT} — DKMS may fail.\"; "
+        "      fi; "
+        "      if grep -q 'NV_USE_DMEM_CGROUP_API' \"$NV_OSIF\" 2>/dev/null; then "
+        "        if grep -q 'dmem_cgroup_register_region(&init' \"$NV_OSIF\" 2>/dev/null; then "
+        "          echo \"NVIDIA dmem cgroup init patch already applied in ${NV_ROOT} — skipping.\"; "
+        "        elif grep -q 'dmem_cgroup_register_region(size' \"$NV_OSIF\" 2>/dev/null; then "
+        "          echo \"Applying NVIDIA dmem cgroup init patch to ${NV_ROOT}...\"; "
+        f"          printf '%s' '{dmem_patch}' | patch --fuzz=5 -p1 -d \"$NV_ROOT\" && "
+        "          echo \"NVIDIA dmem cgroup init patch applied successfully.\" || "
+        "          echo \"Warning: NVIDIA dmem cgroup init patch failed for ${NV_ROOT} — DKMS may fail.\"; "
+        "        fi; "
         "      fi; "
         "    fi; "
         "  done; "

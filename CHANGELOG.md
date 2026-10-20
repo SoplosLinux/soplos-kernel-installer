@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.3] - 2026-10-20
+
+### Fixed
+
+- Added NVIDIA DKMS compatibility patch for Linux 7.3+ kernels (`NV_DMEM_CGROUP_INIT_PATCH`). Fixes `-Wint-conversion` build error in `nvidia/os-interface.c` (`dmem_cgroup_register_region` API signature update introduced in kernel 7.3).
+
 ## [1.0.2-9] - 2026-10-04
 
 ### Added

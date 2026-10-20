@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.2-9)
+### 🚀 Recent Updates (v1.0.3)
+- **Fixed**: Added NVIDIA DKMS compatibility patch for Linux 7.3+ kernels (`NV_DMEM_CGROUP_INIT_PATCH`), resolving `dmem_cgroup_register_region` API changes on 610/Turing+ open modules.
+
+### Previous Updates (v1.0.2-9)
 - **Added**: Full support for Linux 7.2.9 Zen kernel patch (`0001-zen-7.2.9.patch`) in `_download_zen_soplos()`.
 - **Fixed**: Enhanced Zen patch downloader to check for exact kernel version patches (`0001-zen-{version}.patch`) before falling back to major_minor line patches (`0001-zen-{major_minor}.patch`).
 
