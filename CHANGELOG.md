@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.3-2] - 2026-10-22
+
+### Added
+
+- NVIDIA DKMS patch for the Debian 550 driver on Linux 7.2+ (`NV_550_KERNEL72_COMPAT_PATCH`, Fix 6, same patch as `nvidia-patches/patches/nvidia-550-kernel7.2-compat.patch`): `linux/of_gpio.h` removed, `strncpy()` removed from `linux/string.h`, and `struct drm_atomic_state` renamed `struct drm_atomic_commit`.
+- NVIDIA DKMS patch for the 590 open modules on Linux 7.2+ (`NV_590_KERNEL72_COMPAT_PATCH`, Fix 7, same patch as `nvidia-patches/patches/nvidia-590-kernel7.2-compat.patch`): the Fix 6 changes plus the `nvidia-uvm` changes NVIDIA 610 already has (`page_free` renamed `folio_free`, three-argument `zone_device_page_init()`), backported through two `conftest.sh` probes.
+- Each patch is applied only when the source tree still has the text it fixes and `patch --dry-run` succeeds, so 580, 610 and already patched trees are left alone. Both build against `7.3.0-soplos-bore-ntsync-v4` and `7.2.11-soplos-bore-ntsync-v4`.
+
 ## [1.0.3-1] - 2026-10-21
 
 ### Fixed

@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.2--9-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.3--2-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.3-1)
+### 🚀 Recent Updates (v1.0.3-2)
+- **Added**: NVIDIA DKMS patches for kernels 7.2+: Fix 6 for the Debian 550 driver and Fix 7 for the 590 open modules (`of_gpio.h`, `strncpy()` and DRM atomic commit changes, plus the `nvidia-uvm` `folio_free` and `zone_device_page_init()` changes for 590). They are applied to the installed NVIDIA sources before a kernel is installed or updated, and both build against the Linux 7.3 and 7.2.11 headers.
+
+### Previous Updates (v1.0.3-1)
 - **Fixed**: the NVIDIA DKMS patch for the `dmem_cgroup_register_region` change in Linux 7.3+ was never applied, because its hunk header did not match its body and `patch` rejected it. Corrected; it now applies to NVIDIA 610.57.04 and the module builds against Linux 7.3.
 
 ### Previous Updates (v1.0.3)
