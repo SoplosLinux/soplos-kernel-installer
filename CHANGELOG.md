@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.3-1] - 2026-10-21
+
+### Fixed
+
+- The NVIDIA DKMS patch for the `dmem_cgroup_register_region` change in Linux 7.3+ (`NV_DMEM_CGROUP_INIT_PATCH`) was never applied: its hunk header declared 7 old and 17 new lines while the body has 6 and 15, so `patch` rejected it as malformed and the installer only printed a warning. The header is corrected (`@@ -2818,6 +2818,15 @@`). Checked against the real NVIDIA 610.57.04 sources: it applies cleanly and the module builds against the Linux 7.3 headers, where the unpatched sources fail with `-Wint-conversion` at `os-interface.c:2820`.
+
 ## [1.0.3] - 2026-10-20
 
 ### Fixed

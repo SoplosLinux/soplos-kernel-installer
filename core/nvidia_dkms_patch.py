@@ -102,7 +102,7 @@ NV_STRING_H_PATCH = r"""--- a/nvidia/os-interface.c
 # so 550/580/590 and the proprietary driver are completely unaffected.
 NV_DMEM_CGROUP_INIT_PATCH = r"""--- a/nvidia/os-interface.c
 +++ b/nvidia/os-interface.c
-@@ -2818,7 +2818,17 @@
+@@ -2818,6 +2818,15 @@
  void* NV_API_CALL os_dmem_cgroup_register_region(NvU64 size, const char *name)
  {
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0)
