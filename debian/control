@@ -11,7 +11,7 @@ Homepage: https://github.com/SoplosLinux/soplos-kernel-installer
 Rules-Requires-Root: no
 
 Package: soplos-kernel-installer
-Version: 1.0.3-2
+Version: 1.0.3-3
 Architecture: all
 Depends: ${misc:Depends},
          python3,

@@ -202,6 +202,8 @@ class KernelManager:
     # Files that must exist on disk for a package to be considered healthy
     _PACKAGE_INTEGRITY: dict = {
         'libssl-dev': '/usr/include/openssl/opensslv.h',
+        # objtool includes <gelf.h>; a libelf-dev without it breaks the build.
+        'libelf-dev': '/usr/include/gelf.h',
     }
 
     def _is_package_healthy(self, package: str) -> bool:
@@ -233,7 +235,9 @@ class KernelManager:
         # Build a single script so pkexec is only invoked once
         parts = []
         if missing or corrupted:
-            parts.append("apt-get update -qq")
+            # A repository that cannot be reached must not stop the install of
+            # packages that are already in the local lists.
+            parts.append("(apt-get update -qq || true)")
         if missing:
             pkgs = ' '.join(missing)
             self._report_progress(f"Installing missing packages: {pkgs}...")
@@ -304,8 +308,14 @@ class KernelManager:
         self._installer.set_cancel_check(is_cancelled)
 
         try:
-            # 0. Verify/repair headers and dependencies
-            self.check_and_install_dependencies()
+            # 0. Verify/repair headers and dependencies. Building without
+            # them only fails much later, deep in the compilation.
+            if not self.check_and_install_dependencies():
+                self._report_progress(
+                    "Could not install the build dependencies; check the "
+                    "network and the package sources and try again."
+                )
+                return False
 
             # 1. Download sources
             self._report_progress("Downloading kernel sources...", 0)

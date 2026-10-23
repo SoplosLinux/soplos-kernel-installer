@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.3-3] - 2026-10-23
+
+### Fixed
+
+- A build could start without its dependencies. `full_install` ignored the result of the dependency check, so when the pkexec call failed or was cancelled the installer went on, and a missing `libelf-dev` only showed up deep in the compilation (`gelf.h: No such file or directory` while building objtool, Linux 7.3). It now stops with a message before downloading anything.
+- `libelf-dev` was only reinstalled when it was missing, not when it was installed without `/usr/include/gelf.h`, as already done for `libssl-dev`. It is now.
+- The dependency install was `apt-get update && apt-get install`, so an `apt-get update` that failed (an unreachable repository, no network) stopped the install of the missing packages. The update can now fail and the install still runs with the lists the system has.
+
 ## [1.0.3-2] - 2026-10-22
 
 ### Added
