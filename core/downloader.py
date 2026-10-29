@@ -674,12 +674,13 @@ class KernelDownloader:
                       patches_dir: str) -> Optional[List[str]]:
         """
         Download the Soplos AMD X3D VCache scheduler patch.
-        A separate patch file is maintained per kernel line — 6.x, 7.0, 7.1 — since
-        the hunk offsets differ between them (fair.c changes between releases).
+        A separate patch file is maintained per kernel line — 6.12, 7.0, 7.1,
+        7.2 — since fair.c changes between releases; 6.x covers 6.18 and
+        7.x covers 7.3 and later.
         Source: github.com/SoplosLinux/x3d-soplos
         """
         major = version.split('.')[0]
-        tag = major_minor if major_minor in ("7.0", "7.1") else f"{major}.x"
+        tag = major_minor if major_minor in ("6.12", "7.0", "7.1", "7.2") else f"{major}.x"
 
         self._report_progress(f"Downloading X3D VCache scheduler patch ({tag})...", -1)
         dest = os.path.join(patches_dir, f"soplos-x3d-vcache-{tag}.patch")
