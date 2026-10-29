@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.3--5-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.3--6-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,10 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.3-5)
+### 🚀 Recent Updates (v1.0.3-6)
+- **Fixed**: the CPU temperature in the build panel could show a fixed board value (`acpitz`) instead of the CPU. Sensors are now picked in order — `k10temp`, `coretemp`, `nct6775`, `it87`, `acpitz` last — using the `Tctl`/`Package` reading, as Soplos Sys Cleaner does.
+
+### Previous Updates (v1.0.3-5)
 - **Changed**: every kernel must have Binder for Waydroid — a kernel without it, or without the `hwbinder`/`vndbinder` devices, stops the build. The C driver is used while the kernel has it, and the Rust driver once mainline removes the C one; the Rust toolchain (`rustc`, `rust-src`, `bindgen`, `libclang-dev`) is now a build dependency. `MODVERSIONS` stays off so Rust never needs debug info.
 - **Changed**: X3D VCache uses the new x3d-soplos files for 6.12 and 7.2, with the CCD load counter fix.
 

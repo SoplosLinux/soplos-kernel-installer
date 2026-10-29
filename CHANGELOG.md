@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.3-6] - 2026-10-29
+
+### Fixed
+
+- The CPU temperature in the build panel could be a fixed board value instead of the CPU (16.8 C at full load on a Gigabyte board, 20 C on the Zyren). It took the first `coretemp`, `k10temp` or `acpitz` sensor in `/sys/class/hwmon`, whose order is not stable, and `acpitz` is often an ACPI stub. Sensors are now searched in a fixed order, `k10temp`, `coretemp`, `nct6775`, `it87` and `acpitz` last, and within a sensor the `Tctl` (AMD) or `Package`/`Core 0` (Intel) input is used, as Soplos Sys Cleaner already does.
+
 ## [1.0.3-5] - 2026-10-29
 
 ### Changed
