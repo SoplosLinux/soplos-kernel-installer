@@ -4,7 +4,7 @@ GTK Application class for Soplos Kernel Installer.
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk, Gio, GLib
+from gi.repository import Gtk, Gdk, Gio
 
 from pathlib import Path
 
@@ -32,15 +32,10 @@ class SoplosKernelInstallerApp(Gtk.Application):
         if not self._window:
             self._window = SoplosKernelInstallerWindow(self)
             self._window.connect('key-press-event', self._on_key_press)
-            GLib.idle_add(self._check_headers_threaded)
+        # Build dependencies are checked when a build starts (full_install and
+        # the batch builder), not at launch: opening the app only to install a
+        # kernel from the repository must not ask for a password.
         self._window.present()
-
-    def _check_headers_threaded(self) -> bool:
-        import threading
-        def run_check():
-            self._kernel_manager.check_and_install_dependencies()
-        threading.Thread(target=run_check, daemon=True).start()
-        return False
 
     def do_startup(self) -> None:
         Gtk.Application.do_startup(self)

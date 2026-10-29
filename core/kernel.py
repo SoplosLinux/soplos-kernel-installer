@@ -352,6 +352,22 @@ class KernelManager:
                 if is_cancelled():
                     return False
 
+                # A patch that could not be obtained must stop the build: going
+                # on without it ships a kernel named after a patch it does not
+                # carry (it happened with the 7.3 BORE, Zen and X3D builds).
+                # NTSYNC is a config option, not a patch file.
+                missing = [
+                    p for p in build_patch_ids
+                    if p != "ntsync" and p not in downloaded
+                ]
+                if missing:
+                    self._report_progress(
+                        "Error: patch not available for kernel {v}: {p}. "
+                        "Refusing to build a mislabelled kernel.".format(
+                            v=version, p=", ".join(missing)), -1
+                    )
+                    return False
+
                 if downloaded:
                     self._report_progress("Applying patches...", 24)
                     if not self._patcher.apply_patches(version, downloaded):
@@ -457,9 +473,6 @@ class KernelManager:
 
     def sb_delete_keys(self) -> bool:
         return self._secure_boot.delete_local_keys()
-
-    def sb_get_delete_mok_command(self) -> Optional[str]:
-        return self._secure_boot.get_delete_mok_command()
 
     def sb_has_mok_signed_kernels(self, exclude_version: str = "") -> bool:
         if self._history.has_mok_signed_kernels(exclude_version):

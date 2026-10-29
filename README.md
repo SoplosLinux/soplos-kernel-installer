@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.3--3-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.3--4-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -15,7 +15,7 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 
 - 📥 **Multiple channels**: Stable, LTS, RC, and Soplos Featured (curated versions)
 - 🔧 **Patch support**, preferring Soplos-maintained sources where one exists, with upstream as fallback:
-  - [BORE](https://github.com/firelzrd/bore-scheduler) — Burst-Oriented Response Enhancer (fallback: [bore-soplos](https://github.com/SoplosLinux/bore-soplos))
+  - [BORE](https://github.com/SoplosLinux/bore-soplos) — Burst-Oriented Response Enhancer, from Soplos' own [bore-soplos](https://github.com/SoplosLinux/bore-soplos) rebase (fallback: [firelzrd/bore-scheduler](https://github.com/firelzrd/bore-scheduler) and CachyOS)
   - [PREEMPT_RT](https://cdn.kernel.org/pub/linux/kernel/projects/rt) — Full real-time preemption
   - [Zen](https://github.com/SoplosLinux/zen-soplos) — Desktop/gaming optimizations, from Soplos' own [zen-soplos](https://github.com/SoplosLinux/zen-soplos) rebase (fallback: [zen-kernel/zen-kernel](https://github.com/zen-kernel/zen-kernel) upstream releases)
   - [NTSYNC](https://www.kernel.org) — NT synchronization primitives
@@ -28,7 +28,13 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.3-3)
+### 🚀 Recent Updates (v1.0.3-4)
+- **Fixed**: a kernel could be built without a selected patch (BORE, Zen and X3D on Linux 7.3 had no patch yet). A missing patch now stops the build, and so does a configuration where `SCHED_BORE` or `SCHED_ALT` ended up disabled.
+- **Fixed**: kernels built without a Secure Boot key tainted the kernel on every module load, because lockdown turned module signing back on. Lockdown is now disabled with it, and the build stops if module signing is still on.
+- **Fixed**: removing a kernel no longer runs `apt autoremove --purge`; apt progress is read correctly in every language; every `grubx64.efi` is signed; NVIDIA DKMS patches that do not apply leave the sources untouched.
+- **Changed**: BORE comes from Soplos' own bore-soplos first; stock builds always run with Secure Boot signing off.
+
+### Previous Updates (v1.0.3-3)
 - **Fixed**: a build could start without its dependencies. The installer ignored a failed dependency check, so a missing `libelf-dev` only showed up deep in the compilation (`gelf.h: No such file or directory` while building objtool). It now stops with a message, reinstalls `libelf-dev` when it is installed without `/usr/include/gelf.h`, and a failing `apt-get update` (an unreachable repository) no longer stops the install of the missing packages.
 
 ### Previous Updates (v1.0.3-2)

@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.3-4] - 2026-10-29
+
+### Fixed
+
+- A kernel could be built without a patch that was selected for it. When no source had a BORE, Zen or X3D patch for the kernel line (Linux 7.3), the build went on without it and the package still carried the patch name. A selected patch that cannot be downloaded now stops the build, and after the configuration step the build stops if `SCHED_BORE` (BORE, X3D) or `SCHED_ALT` (Zen) is not enabled.
+- Kernels built without a Secure Boot key tainted the kernel (`8192`) on every module load. `SECURITY_LOCKDOWN_LSM` selects `MODULE_SIG`, so `olddefconfig` turned module signing back on after it was disabled. Lockdown is now disabled together with module signing when there is no key, and the build stops if `MODULE_SIG` is still enabled.
+- `DRM_PANIC_SCREEN` is set to `user`. The QR code panic screen needs Rust, which Soplos kernels are built without.
+- Removing a kernel no longer runs `apt autoremove --purge`, which could remove packages unrelated to the kernel.
+- `apt install` and `apt remove` run with `LC_ALL=C`, so the progress is read from the English output in every interface language.
+- Secure Boot signing now covers every `grubx64.efi` under `/boot/efi/EFI/`, not only the first one, for systems with more than one boot entry.
+- The NVIDIA DKMS patches for VMA, `string.h` and dmem are tried with `--dry-run` first; when one does not apply the source tree is left untouched with a warning, instead of being half patched.
+- Running as root no longer goes through `pkexec`, and a failed privileged command now kills its whole process group.
+- Revoking the MOK key goes through the same delete routine as the rest of the MOK actions.
+
+### Changed
+
+- BORE is downloaded from Soplos' own bore-soplos first, then firelzrd and CachyOS, as Zen already did with zen-soplos.
+- Stock builds always run with Secure Boot signing off.
+- The dependency check at startup was removed; the check before each build (1.0.3-3) covers it.
+- `debian/control`: added `pciutils` (`lspci` is used to detect the GPU).
+
+### Removed
+
+- Unused NVIDIA module signing code and `has_intel_gpu()` in `core/nvidia.py`.
+
 ## [1.0.3-3] - 2026-10-23
 
 ### Fixed

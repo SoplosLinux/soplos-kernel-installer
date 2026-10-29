@@ -11,7 +11,7 @@ Homepage: https://github.com/SoplosLinux/soplos-kernel-installer
 Rules-Requires-Root: no
 
 Package: soplos-kernel-installer
-Version: 1.0.3-3
+Version: 1.0.3-4
 Architecture: all
 Depends: ${misc:Depends},
          python3,
@@ -47,6 +47,7 @@ Depends: ${misc:Depends},
          mokutil,
          sbsigntool,
          patch,
+         pciutils,
          dracut,
          dkms
 Description: Soplos Linux Kernel Installer
@@ -60,5 +61,5 @@ Description: Soplos Linux Kernel Installer
   - Patch support from official sources (BORE, PREEMPT_RT, Zen, NTSYNC)
   - Dracut initramfs generation
   - Secure Boot signing via MOK
-  - NVIDIA DKMS module signing
+  - NVIDIA DKMS compatibility patches for new kernels
   - 8-language interface

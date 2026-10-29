@@ -122,12 +122,6 @@ class SecureBootManager:
         except Exception:
             return False
 
-    def get_delete_mok_command(self) -> Optional[str]:
-        """Return the command to revoke the key from the UEFI MOK database."""
-        if not self.der_key.exists():
-            return None
-        return f'pkexec mokutil --delete "{self.der_key}"'
-
     def get_signing_commands(self, kernel_release: str) -> List[str]:
         """
         Build list of shell commands to sign the kernel and GRUB EFI binaries.
@@ -152,19 +146,18 @@ class SecureBootManager:
             f'fi'
         )
 
-        # Sign GRUB EFI binary if present
-        for grub_efi in [
-            "/boot/efi/EFI/soplos/grubx64.efi",
-            "/boot/efi/EFI/debian/grubx64.efi",
-        ]:
-            cmds.append(
-                f'if [ -f "{grub_efi}" ]; then '
-                f'  if ! sbverify --cert "{pem}" "{grub_efi}" 2>/dev/null; then '
-                f'    echo "Signing {grub_efi}..." && '
-                f'    sbsign --key "{priv}" --cert "{pem}" '
-                f'      --output "{grub_efi}" "{grub_efi}"; '
-                f'  fi; '
-                f'fi'
-            )
+        # Sign every GRUB EFI binary on the ESP. Each Soplos edition installs
+        # its bootloader under its own id (EFI/boro, EFI/tyson, EFI/tyron...),
+        # so a fixed list of paths silently misses them.
+        cmds.append(
+            'for GRUB_EFI in /boot/efi/EFI/*/grubx64.efi; do '
+            '  [ -f "$GRUB_EFI" ] || continue; '
+            f'  if ! sbverify --cert "{pem}" "$GRUB_EFI" 2>/dev/null; then '
+            '    echo "Signing $GRUB_EFI..." && '
+            f'    sbsign --key "{priv}" --cert "{pem}" '
+            '      --output "$GRUB_EFI" "$GRUB_EFI"; '
+            '  fi; '
+            'done'
+        )
 
         return cmds

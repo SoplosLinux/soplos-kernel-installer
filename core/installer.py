@@ -189,6 +189,33 @@ class SoplosInstaller:
                 )
                 return False
 
+        # Without a Secure Boot key the kernel must not check module
+        # signatures at all: its modules are never signed.
+        if not sb_key:
+            state = run_command("./scripts/config --state MODULE_SIG", cwd=source_dir)
+            if state.stdout.strip() == "y":
+                self._report_progress(
+                    "Error: MODULE_SIG is still enabled after olddefconfig — "
+                    "something selects it again. Refusing to build a kernel "
+                    "that taints itself with every unsigned module.", -1
+                )
+                return False
+
+        # The patched schedulers add their own Kconfig symbol: if it is not
+        # there, the patch did not apply and the kernel would carry the
+        # patch's name without the scheduler. X3D always includes BORE.
+        _SCHED_SYMBOLS = {"bore": "SCHED_BORE", "x3d": "SCHED_BORE", "zen": "SCHED_ALT"}
+        for patch_id, symbol in _SCHED_SYMBOLS.items():
+            if patch_ids and patch_id in patch_ids:
+                state = run_command(f"./scripts/config --state {symbol}", cwd=source_dir)
+                if state.stdout.strip() != "y":
+                    self._report_progress(
+                        f"Error: {symbol} is not enabled — the {patch_id} patch "
+                        f"is missing or did not apply. Refusing to build a "
+                        f"mislabelled kernel.", -1
+                    )
+                    return False
+
         # Mainline declares DRM_I915 as depends on !PREEMPT_RT, so olddefconfig
         # drops it silently on every RT build unless the rt-i915 patch removed
         # that dependency. An RT kernel without it boots to a black screen on
@@ -275,6 +302,10 @@ class SoplosInstaller:
         fixes = [
             './scripts/config --set-str SYSTEM_TRUSTED_KEYS ""',
             './scripts/config --set-str SYSTEM_REVOCATION_KEYS ""',
+            # The Debian base config asks for the QR code panic screen, which
+            # needs Rust support this build does not have: the kernel then logs
+            # "Unsupported value" at every boot and falls back to "user".
+            './scripts/config --set-str DRM_PANIC_SCREEN "user"',
         ] + self._get_debug_info_fixes() + self._get_handheld_fixes()
         if secure_boot_key:
             fixes += [
@@ -284,6 +315,12 @@ class SoplosInstaller:
             ]
         else:
             fixes += [
+                # The lockdown LSM selects MODULE_SIG, so olddefconfig turned
+                # it back on: kernels shipped checking signatures with unsigned
+                # modules, and every one of them tainted the kernel (8192).
+                # Lockdown is never active here anyway (LOCK_DOWN_KERNEL_FORCE_NONE).
+                "./scripts/config --disable SECURITY_LOCKDOWN_LSM",
+                "./scripts/config --disable SECURITY_LOCKDOWN_LSM_EARLY",
                 "./scripts/config --disable MODULE_SIG",
                 "./scripts/config --disable MODULE_SIG_ALL",
                 # Reset to the kernel's own default path — certs/Makefile knows
@@ -602,8 +639,10 @@ class SoplosInstaller:
             return False
         self._report_progress(f"Removing kernel {kernel_release}...", -1)
         cmd = (
-            # Remove .deb packages correctly using apt so metapackages are uninstalled automatically
-            f"apt remove --purge -y linux-image-{kernel_release} linux-headers-{kernel_release} && apt autoremove --purge -y && "
+            # Remove only this kernel's packages. apt also removes the metapackage
+            # that depends on them; a system-wide autoremove would purge unrelated
+            # packages the user never asked to remove.
+            f"apt remove --purge -y linux-image-{kernel_release} linux-headers-{kernel_release} && "
             # Remove any leftover boot files
             f"rm -f /boot/vmlinuz-{kernel_release} "
             f"/boot/initrd.img-{kernel_release} "

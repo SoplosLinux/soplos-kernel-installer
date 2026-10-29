@@ -116,6 +116,14 @@ def run_command_with_callback(cmd: str, cwd: Optional[str] = None,
         return process.returncode
     except Exception as e:
         print(f"Error running command: {e}", file=sys.stderr)
+        # Do not leave the command running in the background
+        try:
+            if os.name != 'nt':
+                os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+            else:
+                process.terminate()
+        except Exception:
+            pass
         return 1
 
 
@@ -130,7 +138,9 @@ def run_privileged(command: str) -> CommandResult:
 def run_privileged_with_callback(cmd: str,
                                   line_callback: Optional[Callable[[str], None]] = None,
                                   stop_check: Optional[Callable[[], bool]] = None) -> int:
-    if shutil.which('pkexec'):
+    if os.geteuid() == 0:
+        full_cmd = cmd
+    elif shutil.which('pkexec'):
         full_cmd = f"pkexec /bin/sh -c {shlex.quote(cmd)}"
     else:
         full_cmd = f"sudo /bin/sh -c {shlex.quote(cmd)}"

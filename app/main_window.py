@@ -935,7 +935,7 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
 
         if not installed:
             nvidia_patch = get_nvidia_dkms_patch_commands() + " && " if has_nvidia_gpu() else ""
-            cmd = f"{nvidia_patch}apt install -y {package}"
+            cmd = f"{nvidia_patch}LC_ALL=C apt install -y {package}"
         else:
             suffix = next((s for pkg, _n, _d, s in self._soplos_packages if pkg == package), "")
             extra_pkgs = []
@@ -950,7 +950,9 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             except Exception:
                 pass
             all_pkgs = " ".join([package] + extra_pkgs)
-            cmd = f"apt remove -y {all_pkgs} && apt autoremove --purge -y"
+            # Only this kernel's packages: a system-wide autoremove would purge
+            # unrelated packages the user never asked to remove.
+            cmd = f"LC_ALL=C apt remove --purge -y {all_pkgs}"
 
         for b in self._kernel_action_btns.values():
             b.set_sensitive(False)
@@ -971,19 +973,20 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
                     if m:
                         try:
                             val = min(max(int(m.group(1)) / 100.0, 0.0), 1.0)
-                            if "Leyendo la base" in clean_line:
+                            # apt runs with LC_ALL=C, so its output is always English
+                            if "Reading database" in clean_line:
                                 new_frac = max(new_frac, val * 0.3)
                             else:
                                 new_frac = max(new_frac, val)
                         except ValueError:
                             pass
-                    elif "Desempaquetando" in clean_line or "Unpacking" in clean_line:
+                    elif "Unpacking" in clean_line:
                         new_frac = max(new_frac, 0.4)
                     elif "dracut" in clean_line.lower() or "initramfs" in clean_line.lower():
                         new_frac = max(new_frac, 0.8)
                     elif "grub" in clean_line.lower() or "GRUB" in clean_line:
                         new_frac = max(new_frac, 0.9)
-                    elif "Configurando" in clean_line or "Setting up" in clean_line:
+                    elif "Setting up" in clean_line:
                         if "linux-soplos" in clean_line and progress_state["frac"] >= 0.9:
                             new_frac = max(new_frac, 0.95)
                         else:
@@ -2177,6 +2180,10 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
             custom_name = f"{custom_name}-{march_for_name}"
         patch_ids = self._patch_selector.get_selected_patch_ids()
         secure_boot = self._secure_boot_check.get_active()
+        # Stock builds are packages for the repository, the same as the batch
+        # builder makes: never signed with this machine's own MOK key.
+        if is_stock:
+            secure_boot = False
 
         build_dir = os.path.join(get_build_directory(), f"linux-{version}")
         reuse_source = False
@@ -2463,11 +2470,10 @@ class SoplosKernelInstallerWindow(Gtk.ApplicationWindow):
                 mok_resp = mok_dialog.run()
                 mok_dialog.destroy()
                 if mok_resp == Gtk.ResponseType.YES:
-                    cmd = self._kernel_manager.sb_get_delete_mok_command()
-                    if cmd:
-                        import subprocess
-                        subprocess.Popen(cmd, shell=True)
-                    self._kernel_manager.sb_delete_keys()
+                    # mokutil --delete needs a password for the next reboot;
+                    # _do_delete_mok asks for it and only deletes the local
+                    # keys once the unenrollment was actually queued.
+                    self._do_delete_mok(self)
         else:
             self._show_error(_("Failed to remove kernel."))
 

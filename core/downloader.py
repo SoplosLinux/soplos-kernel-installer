@@ -396,14 +396,25 @@ class KernelDownloader:
                        patches_dir: str) -> Optional[List[str]]:
         """
         Download BORE scheduler patches.
-        Tries: firelzrd/bore-scheduler (stable → legacy) → CachyOS/kernel-patches
-        → SoplosLinux/bore-soplos. Each candidate is verified with a dry-run
-        apply before being accepted — a source that downloads fine but doesn't
-        actually apply to this point release falls through to the next one.
+        Tries: SoplosLinux/bore-soplos → firelzrd/bore-scheduler (stable →
+        legacy) → CachyOS/kernel-patches. Each candidate is verified with a
+        dry-run apply before being accepted — a source that downloads fine but
+        doesn't actually apply to this point release falls through to the next
+        one. Same order as Zen: the Soplos rebase comes first.
         """
         self._report_progress(f"Downloading BORE patch for {version}...", -1)
 
-        # --- Source 1: firelzrd/bore-scheduler (stable, then legacy) ---
+        # --- Source 1: SoplosLinux/bore-soplos (Soplos-maintained) ---
+        soplos_paths = self._download_bore_soplos(major_minor, patches_dir)
+        if soplos_paths:
+            if self._patches_apply(version, soplos_paths):
+                return soplos_paths
+            self._report_progress(
+                f"SoplosLinux/bore-soplos patch doesn't apply to {version} — "
+                f"trying firelzrd/bore-scheduler...", -1
+            )
+
+        # --- Source 2: firelzrd/bore-scheduler (stable, then legacy) ---
         for tree in ("stable", "legacy"):
             web_url = BORE_GITHUB_TREE.format(tree=tree, major_minor=major_minor)
             try:
@@ -438,7 +449,7 @@ class KernelDownloader:
                     f"to {version} — trying next source...", -1
                 )
 
-        # --- Source 2: CachyOS/kernel-patches fallback ---
+        # --- Source 3: CachyOS/kernel-patches fallback ---
         self._report_progress(
             f"BORE not found in firelzrd repo — trying CachyOS fallback for {major_minor}...", -1
         )
@@ -447,20 +458,7 @@ class KernelDownloader:
             if self._patches_apply(version, cachy_paths):
                 return cachy_paths
             self._report_progress(
-                f"CachyOS BORE patch downloaded but doesn't apply to {version} — "
-                f"trying next source...", -1
-            )
-
-        # --- Source 3: SoplosLinux/bore-soplos rebase fallback ---
-        self._report_progress(
-            f"BORE not found upstream — trying SoplosLinux/bore-soplos fallback for {major_minor}...", -1
-        )
-        soplos_paths = self._download_bore_soplos(major_minor, patches_dir)
-        if soplos_paths:
-            if self._patches_apply(version, soplos_paths):
-                return soplos_paths
-            self._report_progress(
-                f"⚠ SoplosLinux/bore-soplos patch doesn't apply to {version} either — "
+                f"⚠ CachyOS BORE patch doesn't apply to {version} either — "
                 f"no working BORE source found.", -1
             )
 
