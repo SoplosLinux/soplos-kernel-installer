@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/lang/en/).
 
+## [1.0.3-5] - 2026-10-29
+
+### Changed
+
+- Every kernel must have Binder (Waydroid). A kernel whose Binder driver is dropped by `olddefconfig`, or whose `ANDROID_BINDER_DEVICES` lacks `hwbinder`/`vndbinder`, now stops the build instead of only showing a warning.
+- The Binder driver is chosen from the kernel source: the C driver (`ANDROID_BINDER_IPC`) while `drivers/android/Kconfig` still has it, and the Rust driver (`ANDROID_BINDER_IPC_RUST`, with `RUST`) once mainline removes the C one. Kernels with the C driver keep building without Rust, as before. When `RUST` cannot be enabled, the error shows the output of `make rustavailable`.
+- `MODVERSIONS` is always disabled. With it, Rust requires `GENDWARFKSYMS`, which requires debug info, and debug info multiplies the build time.
+- The X3D VCache patch uses the dedicated x3d-soplos files for 6.12 and 7.2; `6.x` now covers 6.18 and `7.x` covers 7.3 and later (x3d-soplos 1.3.0, which fixes the CCD load counters).
+
+### Added
+
+- Build dependencies for the Rust Binder driver: `rustc`, `rust-src`, `bindgen` and `libclang-dev`.
+
 ## [1.0.3-4] - 2026-10-29
 
 ### Fixed

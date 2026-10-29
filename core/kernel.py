@@ -156,6 +156,12 @@ class KernelManager:
         'grub-common',
         'sbsigntool',
         'mokutil',
+        # Rust toolchain for CONFIG_RUST: the Rust Binder driver (Waydroid)
+        # is the only one left once mainline removes the C driver.
+        'rustc',
+        'rust-src',
+        'bindgen',
+        'libclang-dev',
     ]
 
     @staticmethod

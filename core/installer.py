@@ -133,12 +133,23 @@ class SoplosInstaller:
         self._report_progress("Enabling DMEM cgroup...", 28)
         run_command("./scripts/config --enable CGROUP_DMEM", cwd=source_dir)
 
-        # Android Binder IPC — required for Waydroid. This symbol is a plain
-        # bool in Kconfig (drivers/android/Kconfig), not a tristate: it can
+        # Android Binder IPC — required for Waydroid. Both symbols are plain
+        # bools in Kconfig (drivers/android/Kconfig), not tristates: they can
         # only be y or n, there is no module form. --enable is the only
         # valid choice here.
+        binder_symbol = self._binder_symbol(source_dir)
         self._report_progress("Enabling Android Binder IPC (Waydroid)...", 28)
-        run_command("./scripts/config --enable ANDROID_BINDER_IPC", cwd=source_dir)
+        if binder_symbol == "ANDROID_BINDER_IPC":
+            # The C driver is still there: keep the build without Rust, as
+            # before. The Debian base config enables RUST, so without this a
+            # Rust toolchain on the build machine would silently change every
+            # kernel built from it.
+            run_command("./scripts/config --disable RUST", cwd=source_dir)
+        else:
+            # Mainline removed the C driver (and ANDROID_BINDERFS): the Rust
+            # driver is the only one left and builds its own binderfs.
+            run_command("./scripts/config --enable RUST", cwd=source_dir)
+        run_command(f"./scripts/config --enable {binder_symbol}", cwd=source_dir)
         # The Debian base .config already carries this string set to just
         # "binder" (confirmed on a real built kernel), overriding the
         # upstream Kconfig default of all three devices — fix it explicitly
@@ -241,29 +252,56 @@ class SoplosInstaller:
                 -1
             )
 
-        # Same soft check for Binder — nothing depends on it at boot, so a
-        # dropped symbol should not abort the build, only be visible instead
-        # of silently shipping a kernel without Waydroid support.
-        state = run_command("./scripts/config --state ANDROID_BINDER_IPC", cwd=source_dir)
+        # Every Soplos kernel must ship Binder: Waydroid depends on it, so a
+        # kernel without it aborts the build like a missing patch does.
+        state = run_command(f"./scripts/config --state {binder_symbol}", cwd=source_dir)
         if state.stdout.strip() != "y":
+            reason = "missing dependency"
+            if binder_symbol == "ANDROID_BINDER_IPC_RUST":
+                rust = run_command("./scripts/config --state RUST", cwd=source_dir)
+                if rust.stdout.strip() != "y":
+                    # RUST_IS_AVAILABLE is false when the toolchain is missing
+                    # or too old; rustavailable says which part fails.
+                    check = run_command("make rustavailable", cwd=source_dir)
+                    detail = (check.stdout + "\n" + check.stderr).strip()
+                    reason = f"RUST is not available: {detail}" if detail else "RUST is not available"
             self._report_progress(
-                "Warning: ANDROID_BINDER_IPC was dropped by olddefconfig "
-                "(missing dependency) — this kernel will not have Waydroid "
-                "support.",
-                -1
+                f"Error: {binder_symbol} was dropped by olddefconfig "
+                f"({reason}). Refusing to build a kernel without Waydroid "
+                f"support.", -1
             )
+            return False
 
         # ANDROID_BINDER_DEVICES is a string, not a tristate/bool, so
         # --state doesn't apply — read it straight from .config instead.
         cfg = run_command('grep "^CONFIG_ANDROID_BINDER_DEVICES=" .config', cwd=source_dir)
         if 'hwbinder' not in cfg.stdout or 'vndbinder' not in cfg.stdout:
             self._report_progress(
-                "Warning: ANDROID_BINDER_DEVICES does not list hwbinder/"
-                "vndbinder — Waydroid will likely still fail to start.",
-                -1
+                "Error: ANDROID_BINDER_DEVICES does not list hwbinder/"
+                "vndbinder — Waydroid would fail to start. Refusing to "
+                "build.", -1
             )
+            return False
 
         return True
+
+    @staticmethod
+    def _binder_symbol(source_dir: str) -> str:
+        """Binder driver to enable for this tree.
+
+        The C driver (ANDROID_BINDER_IPC) while the tree still has it; the
+        Rust driver (ANDROID_BINDER_IPC_RUST, needs CONFIG_RUST) once
+        mainline removed the C one. Read from the tree rather than guessed
+        from the version number.
+        """
+        kconfig = os.path.join(source_dir, "drivers", "android", "Kconfig")
+        try:
+            with open(kconfig) as f:
+                if re.search(r'^config ANDROID_BINDER_IPC$', f.read(), re.MULTILINE):
+                    return "ANDROID_BINDER_IPC"
+        except OSError:
+            pass
+        return "ANDROID_BINDER_IPC_RUST"
 
     @staticmethod
     def _kernel_supports_ntsync(version: str) -> bool:
@@ -306,6 +344,11 @@ class SoplosInstaller:
             # needs Rust support this build does not have: the kernel then logs
             # "Unsupported value" at every boot and falls back to "user".
             './scripts/config --set-str DRM_PANIC_SCREEN "user"',
+            # With MODVERSIONS, RUST requires GENDWARFKSYMS, which requires
+            # DEBUG_INFO — and debug info triples the build time. The Debian
+            # base config already has it off; keep it off explicitly so the
+            # Rust binder never depends on what the base config carries.
+            "./scripts/config --disable MODVERSIONS",
         ] + self._get_debug_info_fixes() + self._get_handheld_fixes()
         if secure_boot_key:
             fixes += [

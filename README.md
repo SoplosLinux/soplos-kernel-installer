@@ -1,7 +1,7 @@
 # Soplos Kernel Installer
 
 [![License: GPL-3.0+](https://img.shields.io/badge/License-GPL--3.0%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Version](https://img.shields.io/badge/version-1.0.3--4-green.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.3--5-green.svg)]()
 
 GTK3 graphical frontend for downloading, patching, compiling and installing the Linux kernel on Soplos Linux.
 
@@ -28,7 +28,11 @@ Soplos Kernel Installer is a comprehensive graphical tool for downloading, patch
 - 📦 **Soplos Kernels**: Install pre-built Stock, BORE, BORE+NTSYNC, Zen, NTSYNC and Real-Time (PREEMPT_RT) kernels from the official Soplos repository — no compilation required, list loaded dynamically from apt-cache
 - 🌍 **8-language interface**: 🇩🇪 🇬🇧 🇪🇸 🇫🇷 🇮🇹 🇵🇹 🇷🇴 🇷🇺
 
-### 🚀 Recent Updates (v1.0.3-4)
+### 🚀 Recent Updates (v1.0.3-5)
+- **Changed**: every kernel must have Binder for Waydroid — a kernel without it, or without the `hwbinder`/`vndbinder` devices, stops the build. The C driver is used while the kernel has it, and the Rust driver once mainline removes the C one; the Rust toolchain (`rustc`, `rust-src`, `bindgen`, `libclang-dev`) is now a build dependency. `MODVERSIONS` stays off so Rust never needs debug info.
+- **Changed**: X3D VCache uses the new x3d-soplos files for 6.12 and 7.2, with the CCD load counter fix.
+
+### Previous Updates (v1.0.3-4)
 - **Fixed**: a kernel could be built without a selected patch (BORE, Zen and X3D on Linux 7.3 had no patch yet). A missing patch now stops the build, and so does a configuration where `SCHED_BORE` or `SCHED_ALT` ended up disabled.
 - **Fixed**: kernels built without a Secure Boot key tainted the kernel on every module load, because lockdown turned module signing back on. Lockdown is now disabled with it, and the build stops if module signing is still on.
 - **Fixed**: removing a kernel no longer runs `apt autoremove --purge`; apt progress is read correctly in every language; every `grubx64.efi` is signed; NVIDIA DKMS patches that do not apply leave the sources untouched.
