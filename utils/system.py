@@ -217,18 +217,56 @@ def get_cpu_model() -> str:
     return ''
 
 
+# Preferred hwmon driver names, in order (same as Soplos Sys Cleaner).
+# k10temp (AMD Ryzen Tctl) and coretemp (Intel) give real CPU readings.
+# acpitz is the board's ACPI thermal zone: often a stub with a fixed value
+# (20 C on the Zyren, 16.8 C on a Gigabyte board), so it is the last resort.
+# The /sys/class/hwmon order is not stable, so the first match is not enough.
+_HWMON_PRIORITY = ('k10temp', 'coretemp', 'nct6775', 'it87', 'acpitz')
+
+
+def _hwmon_read_temp(hwmon_path: str) -> Optional[float]:
+    """Best CPU temperature in one hwmon directory: the input labelled Tctl
+    (AMD) or Package / Core 0 (Intel), else the lowest-numbered input."""
+    inputs = {}
+    try:
+        for fname in os.listdir(hwmon_path):
+            if fname.startswith('temp') and fname.endswith('_input') and fname[4:-6].isdigit():
+                try:
+                    with open(os.path.join(hwmon_path, fname)) as f:
+                        inputs[int(fname[4:-6])] = int(f.read().strip()) / 1000
+                except Exception:
+                    continue
+    except Exception:
+        return None
+    if not inputs:
+        return None
+
+    for idx in sorted(inputs):
+        try:
+            with open(os.path.join(hwmon_path, f'temp{idx}_label')) as f:
+                label = f.read().strip().lower()
+            if any(k in label for k in ('tctl', 'package', 'core 0')):
+                return inputs[idx]
+        except Exception:
+            pass
+    return inputs[min(inputs)]
+
+
 def get_cpu_temp() -> float:
     hwmon_base = '/sys/class/hwmon'
     if os.path.exists(hwmon_base):
+        hwmons: dict = {}
         for hwmon in os.listdir(hwmon_base):
             path = os.path.join(hwmon_base, hwmon)
             try:
                 with open(os.path.join(path, "name"), "r") as f:
-                    if f.read().strip() in ('coretemp', 'k10temp', 'acpitz'):
-                        for entry in os.listdir(path):
-                            if entry.startswith('temp') and entry.endswith('_input'):
-                                with open(os.path.join(path, entry), 'r') as tf:
-                                    return int(tf.read().strip()) / 1000
+                    hwmons.setdefault(f.read().strip(), []).append(path)
             except Exception:
                 pass
+        for driver in _HWMON_PRIORITY:
+            for path in sorted(hwmons.get(driver, [])):
+                temp = _hwmon_read_temp(path)
+                if temp is not None:
+                    return temp
     return -1.0
